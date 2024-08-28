@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 export const AuthContext = createContext();
 
@@ -6,6 +6,12 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
+  // Проверка статуса авторизации при загрузке компонента
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  // Функция проверки текущего статуса авторизации
   const checkAuthStatus = () => {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
@@ -16,16 +22,15 @@ export const AuthProvider = ({ children }) => {
         setUser(parsedUser);
       } catch (error) {
         console.error('Ошибка при разборе JSON:', error);
-        setIsLoggedIn(false);
-        setUser(null);
+        logout();
       }
     } else {
-      setIsLoggedIn(false);
-      setUser(null);
+      logout();
     }
   };
 
-  const fetchUserData = async () => {
+  // Функция получения данных пользователя с сервера
+  const fetchUserData = useCallback(async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
@@ -43,24 +48,24 @@ export const AuthProvider = ({ children }) => {
         setUser(data);
         localStorage.setItem('user', JSON.stringify(data));
       } else if (response.status === 401) {
-        // Если токен недействителен, выполняем выход
-        logout();
+        logout(); // Выполняем выход при недействительном токене
       } else {
         console.error('Ошибка при обновлении данных пользователя');
       }
     } catch (error) {
       console.error('Ошибка при обновлении данных пользователя:', error);
     }
-  };
+  }, []);
 
+  // Функция входа
   const login = (userData, token) => {
     localStorage.setItem('user', JSON.stringify(userData));
     localStorage.setItem('token', token);
     setIsLoggedIn(true);
     setUser(userData);
-    fetchUserData(); // Добавлено: обновление данных пользователя сразу после входа
   };
 
+  // Функция выхода
   const logout = async () => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -82,12 +87,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, checkAuthStatus, fetchUserData, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, login, logout, fetchUserData }}>
       {children}
     </AuthContext.Provider>
   );

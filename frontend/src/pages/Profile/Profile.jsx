@@ -1,57 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './Profile.module.scss';
 import Modal from '../../components/Modal/Modal.jsx';
 
 const Profile = () => {
-  const { user, setIsLoggedIn, fetchUserData } = useAuth();
+  const { user, fetchUserData, logout } = useAuth();
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isProfileFetched, setIsProfileFetched] = useState(false); // Новое состояние для управления вызовами
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      setIsLoading(true);
-      try {
-        await fetchUserData();
+  // Функция для обновления данных пользователя и аватара
+  const fetchUserDetails = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await fetchUserData();
+      if (user) {
+        const avatarResponse = await fetch('http://localhost:8000/api/profile/avatar/', {
+          headers: {
+            'Authorization': `Token ${localStorage.getItem('token')}`,
+          },
+        });
 
-        if (user) {
-          try {
-            const avatarResponse = await fetch('http://localhost:8000/api/profile/avatar/', {
-              headers: {
-                'Authorization': `Token ${localStorage.getItem('token')}`
-              }
-            });
-
-            if (avatarResponse.ok) {
-              const data = await avatarResponse.json();
-              setAvatarUrl(`http://localhost:8000${data.avatar}`);
-            } else {
-              console.error('Error fetching avatar:', avatarResponse.statusText);
-            }
-          } catch (error) {
-            console.error('Error fetching avatar:', error);
-            setAvatarUrl(null);
-          }
+        if (avatarResponse.ok) {
+          const data = await avatarResponse.json();
+          setAvatarUrl(`http://localhost:8000${data.avatar}`);
+        } else {
+          console.error('Ошибка при получении аватара:', avatarResponse.statusText);
         }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      } finally {
-        setIsLoading(false);
       }
-    };
-
-    fetchUserDetails();
+    } catch (error) {
+      console.error('Ошибка при получении данных пользователя:', error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [fetchUserData, user]);
 
+  // Вызывается только один раз при монтировании компонента
+  useEffect(() => {
+    if (!isProfileFetched) {
+      fetchUserDetails();
+      setIsProfileFetched(true); // Устанавливаем флаг, чтобы предотвратить повторные вызовы
+    }
+  }, [fetchUserDetails, isProfileFetched]);
+
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    logout();
     navigate('/auth');
   };
 
@@ -85,9 +83,9 @@ const Profile = () => {
         const response = await fetch('http://localhost:8000/api/profile/avatar/', {
           method: 'PUT',
           headers: {
-            'Authorization': `Token ${localStorage.getItem('token')}`
+            'Authorization': `Token ${localStorage.getItem('token')}`,
           },
-          body: formData
+          body: formData,
         });
 
         if (response.ok) {
@@ -97,7 +95,7 @@ const Profile = () => {
         }
       } catch (error) {
         alert('Ошибка при загрузке аватара.');
-        console.error('Error uploading avatar:', error);
+        console.error('Ошибка при загрузке аватара:', error);
       }
     }
   };
