@@ -1,0 +1,51 @@
+# Node.js
+/node_modules
+/.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+*.mo
+backend/venv
+!backend/main/migrations/
+!backend/media/
+
+# IDEs
+.idea/
+.vscode/
+
+# Ignore built ts files
+frontend/build
+frontend/node_modules/
+
+# React Stuff
+.eslintcache
+!frontend/public/images/
+!frontend/public/videos/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Environments
+backend/.env
+.pytest_cache/
+*.pytest_cache/
+
+# Explicitly ignore videos and images in public folder
+frontend/public/videos/
+frontend/public/images/
