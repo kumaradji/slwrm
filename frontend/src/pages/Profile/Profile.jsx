@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './Profile.module.scss';
 import Modal from '../../components/Modal/Modal.jsx';
+import defaultAvatar from '../../assets/default_user_icon.png';
 
 const Profile = () => {
   const { user, fetchUserData, logout } = useAuth();
@@ -113,10 +114,14 @@ const Profile = () => {
       <div className={styles.cardProfile}>
         <h3>Профиль</h3>
         <div className={styles.profileInfo}>
-          {avatarUrl && <img src={avatarUrl} alt="User" className={styles.userIcon} />}
+          <img
+            src={avatarUrl || defaultAvatar}
+            alt="User"
+            className={styles.userIcon}
+          />
           <div className={styles.userInfo}>
             <p className={styles.userName}><strong>Имя пользователя:</strong> {user.username}</p>
-            <br />
+            <br/>
             <p className={styles.userName}><strong>Email:</strong> {user.email}</p>
           </div>
         </div>

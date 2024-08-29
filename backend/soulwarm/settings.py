@@ -34,7 +34,7 @@ env = environ.Env(
 )
 
 # Чтение файла .env
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, 'soulwarm', '.env'))
 
 # Определение PRODUCTION
 PRODUCTION = env('DJANGO_ENV') == 'production'

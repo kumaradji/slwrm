@@ -396,25 +396,6 @@ class UpdateEmailView(APIView):
         return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ActivateUser(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, token):
-        print('Полученный токен:', token)
-        activation = get_object_or_404(Activation, token=token)
-        user = activation.user
-        if not user.is_active:
-            user.is_active = True
-            user.save()
-            activation.delete()
-            print('Пользователь активирован:', user.username)
-        else:
-            print('Аккаунт уже активирован')
-
-        # Рендерим страницу с благодарностью
-        return render(request, 'activation_success.html', {'username': user.username})
-
-
 class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -424,8 +405,6 @@ class UserDetailView(APIView):
             'id': user.id,
             'username': user.username,
             'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
             'groups': [group.name for group in user.groups.all()],
         }
         return Response(user_data)
