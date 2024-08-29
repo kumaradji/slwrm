@@ -7,16 +7,18 @@ from .views import (
     CartListView, CartCreateView, TelegramWebhookView, VIPMessageListView, VIPMessageCreateView, LongPollingMessageView,
     CartRemoveView, verify_token
 )
-
 urlpatterns = [
     path('', landing_page, name='landing_page'),
     path('register/', UserRegistrationView.as_view(), name='register'),
+    path('verify-token/', verify_token, name='verify_token'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('user/', UserDetailView.as_view(), name='user_detail'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
     path('profile/avatar/', AvatarUpdateView.as_view(), name='avatar-update'),
+
     path('reset-password/', ResetPasswordView.as_view(), name='reset_password'),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
-    path('profile/', UserProfileView.as_view(), name='profile'),
+
     path('categories/', category_list, name='category_list'),
     path('categories/<int:category_id>/', category_detail, name='category_detail'),
 
@@ -34,5 +36,6 @@ urlpatterns = [
     path('cart/', CartListView.as_view(), name='cart-list'),
     path('cart/create/', CartCreateView.as_view(), name='cart-create'),
     path('cart/remove/<int:item_id>/', CartRemoveView.as_view(), name='cart-remove'),
-    path('verify-token/', verify_token, name='verify_token'),
+
 ]
+

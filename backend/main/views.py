@@ -243,11 +243,21 @@ class AvatarUpdateView(APIView):
 
     def put(self, request, *args, **kwargs):
         profile = Profile.objects.get(user=request.user)
+        if profile.avatar:
+            profile.avatar.delete()
         serializer = ProfileSerializer(profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        profile = Profile.objects.get(user=request.user)
+        if profile.avatar:
+            profile.avatar.delete()
+        profile.avatar = None
+        profile.save()
+        return Response({"message": "Avatar deleted successfully"}, status=status.HTTP_200_OK)
 
 
 class AvatarDeleteView(APIView):

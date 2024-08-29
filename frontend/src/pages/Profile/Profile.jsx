@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import React, {useState, useEffect, useCallback} from 'react';
+import {useAuth} from '../../context/AuthContext';
+import {useNavigate, Link} from 'react-router-dom';
 import styles from './Profile.module.scss';
 import Modal from '../../components/Modal/Modal.jsx';
 import defaultAvatar from '../../assets/default_user_icon.png';
 
 const Profile = () => {
-  const { user, fetchUserData, logout } = useAuth();
+  const {user, fetchUserData, logout} = useAuth();
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [isProfileFetched, setIsProfileFetched] = useState(false); // Новое состояние для управления вызовами
+  const [isProfileFetched, setIsProfileFetched] = useState(false);
+  const [isAvatarSelected, setIsAvatarSelected] = useState(false);
 
-  // Функция для обновления данных пользователя и аватара
   const fetchUserDetails = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -41,11 +41,10 @@ const Profile = () => {
     }
   }, [fetchUserData, user]);
 
-  // Вызывается только один раз при монтировании компонента
   useEffect(() => {
     if (!isProfileFetched) {
       fetchUserDetails();
-      setIsProfileFetched(true); // Устанавливаем флаг, чтобы предотвратить повторные вызовы
+      setIsProfileFetched(true);
     }
   }, [fetchUserDetails, isProfileFetched]);
 
@@ -70,6 +69,7 @@ const Profile = () => {
       reader.onloadend = () => {
         setAvatarUrl(reader.result);
         setAvatar(file);
+        setIsAvatarSelected(true);
       };
       reader.readAsDataURL(file);
     }
@@ -91,6 +91,8 @@ const Profile = () => {
 
         if (response.ok) {
           alert('Аватар успешно загружен.');
+          setIsAvatarSelected(false);
+          fetchUserDetails();
         } else {
           alert('Ошибка при загрузке аватара.');
         }
@@ -138,12 +140,26 @@ const Profile = () => {
         />
         <div className={styles.textAvatarAdd}>чтобы загрузить или изменить аватар</div>
         <div className={styles.textAvatarAddBlock}>
-          <label htmlFor="avatarUpload" className={styles.customFileUpload}>
-            Выберите файл
-          </label>
-          <div className={styles.profile__addButton} onClick={handleAvatarUpload}>
-            Загрузить аватар
-          </div>
+          {!avatarUrl && !isAvatarSelected ? (
+            <label htmlFor="avatarUpload" className={styles.customFileUpload}>
+              Выберите файл
+            </label>
+          ) : isAvatarSelected ? (
+            <div className={styles.profile__addButton} onClick={handleAvatarUpload}>
+              Загрузить аватар
+            </div>
+          ) : (
+            <label htmlFor="avatarUpload" className={styles.customFileUpload}>
+              Изменить аватар
+            </label>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            style={{display: 'none'}}
+            id="avatarUpload"
+          />
           <Link to="/change-password" className={styles.profile__link}>Изменить пароль</Link>
           <div onClick={handleLogout} className={styles.profile__logoutButton}>
             Выйти
