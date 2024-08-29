@@ -118,6 +118,10 @@ const Profile = () => {
             src={avatarUrl || defaultAvatar}
             alt="User"
             className={styles.userIcon}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = defaultAvatar;
+            }}
           />
           <div className={styles.userInfo}>
             <p className={styles.userName}><strong>Имя пользователя:</strong> {user.username}</p>
@@ -129,7 +133,7 @@ const Profile = () => {
           type="file"
           accept="image/*"
           onChange={handleAvatarChange}
-          style={{ display: 'none' }}
+          style={{display: 'none'}}
           id="avatarUpload"
         />
         <div className={styles.textAvatarAdd}>чтобы загрузить или изменить аватар</div>

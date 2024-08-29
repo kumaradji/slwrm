@@ -1,10 +1,8 @@
 # urls.py в приложении main
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
 from .views import (
     UserRegistrationView, UserLoginView, ResetPasswordView, ChangePasswordView,
-    UserProfileView, ActivateUser, landing_page, category_list, category_detail, product_list, product_detail,
+    UserProfileView, landing_page, category_list, category_detail, product_list, product_detail,
     UserDetailView, AvatarUpdateView, MessageListView, MessageCreateView,
     CartListView, CartCreateView, TelegramWebhookView, VIPMessageListView, VIPMessageCreateView, LongPollingMessageView,
     CartRemoveView, verify_token
@@ -19,7 +17,6 @@ urlpatterns = [
     path('reset-password/', ResetPasswordView.as_view(), name='reset_password'),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('profile/', UserProfileView.as_view(), name='profile'),
-    path('activate/<str:token>/', ActivateUser.as_view(), name='activate_user'),
     path('categories/', category_list, name='category_list'),
     path('categories/<int:category_id>/', category_detail, name='category_detail'),
 
@@ -38,4 +35,4 @@ urlpatterns = [
     path('cart/create/', CartCreateView.as_view(), name='cart-create'),
     path('cart/remove/<int:item_id>/', CartRemoveView.as_view(), name='cart-remove'),
     path('verify-token/', verify_token, name='verify_token'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

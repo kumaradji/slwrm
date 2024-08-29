@@ -75,7 +75,7 @@ GENERAL_TELEGRAM_CHAT_ID = 707268574
 
 # Основные настройки
 SECRET_KEY = env('SECRET_KEY')
-ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS')
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 LOGGING = {
     'version': 1,

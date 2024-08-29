@@ -24,7 +24,7 @@ const UserBlock = ({ userName, setMode }) => {
         })
         .then(data => {
           if (data.avatar) {
-            setAvatarUrl(`http://localhost${data.avatar}`);
+            setAvatarUrl(data.avatar);
           }
         })
         .catch(error => {
@@ -56,7 +56,7 @@ const UserBlock = ({ userName, setMode }) => {
               <div
                 className={styles.userInfo__userName}
                 onClick={handleProfileClick}
-                style={{ cursor: 'pointer' }}
+                style={{cursor: 'pointer'}}
               >
                 {userName || 'Пользователь'}
               </div>
@@ -64,6 +64,10 @@ const UserBlock = ({ userName, setMode }) => {
                 src={avatarUrl}
                 alt="User"
                 className={styles.userInfo__userIcon}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = user_icon;
+                }}
               />
             </div>
           </div>
