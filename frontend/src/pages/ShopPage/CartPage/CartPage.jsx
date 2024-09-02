@@ -1,14 +1,16 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState, useContext} from 'react';
+import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styles from './CartPage.module.scss';
-import { CartContext } from '../../../context/CartContext';
+import {CartContext} from '../../../context/CartContext';
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
-  const { updateCartCount } = useContext(CartContext);
+  const {updateCartCount} = useContext(CartContext);
+  const navigate = useNavigate();
 
   const fetchCart = async () => {
     try {
@@ -69,6 +71,13 @@ const CartPage = () => {
   if (error) return <div>Ошибка: {error}</div>;
   if (!cart || !cart.items || cart.items.length === 0) return <div>Корзина пуста.</div>;
 
+  const handleCheckout = () => {
+    if (isAgreementChecked) {
+      localStorage.setItem('agreementChecked', 'true');
+      navigate('/payment-instructions', { state: { totalAmount: calculateTotal() } });
+    }
+  };
+
   return (
     <div className={styles.cartPage}>
       <h1>Корзина</h1>
@@ -79,7 +88,11 @@ const CartPage = () => {
             <div className={styles.totalItems}>Количество товаров: {cart.items.length} шт.</div>
           </div>
           <div className={styles.summaryRight}>
-            <button className={styles.checkoutButton} disabled={!isAgreementChecked}>
+            <button
+              className={styles.checkoutButton}
+              disabled={!isAgreementChecked}
+              onClick={handleCheckout}
+            >
               Перейти к оформлению
             </button>
             <div className={styles.agreement}>
@@ -90,9 +103,12 @@ const CartPage = () => {
                   checked={isAgreementChecked}
                   onChange={handleAgreementChange}
                 />
-                Продолжая оформление я соглашаюсь с
-                <br />
-                <Link className={styles.privacyPolicyLink} to="/offer-agreement">договором оферты</Link>.
+                <span>
+                  Продолжая оформление я соглашаюсь с{' '}
+                  <Link className={styles.offerLink} to="/offer-agreement">
+                    договором оферты
+                  </Link>
+                </span>
               </label>
             </div>
           </div>
@@ -106,9 +122,9 @@ const CartPage = () => {
                     <img src={item.images[0].image} alt={item.title} onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = 'https://via.placeholder.com/100';
-                    }} />
+                    }}/>
                   ) : (
-                    <img src='https://via.placeholder.com/100' alt={item.title} />
+                    <img src='https://via.placeholder.com/100' alt={item.title}/>
                   )}
                 </Link>
               </div>

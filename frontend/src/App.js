@@ -30,6 +30,7 @@ import CartPage from './pages/ShopPage/CartPage/CartPage';
 import ConspectPage from './pages/MarenGarden/MarenGardenContent/ConspectPage/ConspectPage';
 import { CartProvider } from './context/CartContext';
 import OfferAgreement from './pages/ShopPage/OfferAgreement/OfferAgreement';
+import PaymentInstructionsPage from "./pages/ShopPage/PaymentInstructionsPage/PaymentInstructionsPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -86,6 +87,7 @@ function App() {
               <Route path="/gallery" element={<GalleryList galleries={galleries} />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/offer-agreement" element={<OfferAgreement />} />
+              <Route path="/payment-instructions" element={<PaymentInstructionsPage />} />
             </Routes>
             <ChatButton />
           </div>
