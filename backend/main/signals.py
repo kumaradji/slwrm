@@ -1,4 +1,5 @@
 # signals.py
+
 import os
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
@@ -25,3 +26,13 @@ def delete_avatar_on_profile_delete(sender, instance, **kwargs):
     if instance.avatar:
         if os.path.isfile(instance.avatar.path):
             os.remove(instance.avatar.path)
+
+# Обработчики сигналов:
+# create_user_profile: Срабатывает при сохранении нового пользователя (User).
+# Если пользователь создается (created), то создается связанный с ним профиль (Profile).
+#
+# save_user_profile: Срабатывает каждый раз при сохранении объекта пользователя (User).
+# Пытается сохранить связанный профиль (Profile). Если профиль не существует, он создается.
+#
+# delete_avatar_on_profile_delete: Срабатывает при удалении объекта профиля (Profile).
+# Если профиль имеет аватар (файл), и он существует, этот файл удаляется с диска.

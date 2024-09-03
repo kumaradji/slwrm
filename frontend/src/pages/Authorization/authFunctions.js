@@ -1,27 +1,32 @@
-export const handleLogin = async (e, email, username, password, login, navigate, setError, setLoginAttempts) => {
-  e.preventDefault();
-
+export const handleLogin = async (email, username, password, login, navigate, setError, setLoginAttempts) => {
   try {
     const response = await fetch('http://localhost:8000/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ login: email || username, password }),
+      body: JSON.stringify({ username: username || null, email: email || null, password }),
+      credentials: 'include'
     });
 
     if (response.ok) {
       const data = await response.json();
-      login(data.user, data.user.token); // Сохраняем данные пользователя и токен в контексте
-      navigate('/');
+      const userData = {
+        id: data.user_id,
+        email: data.email,
+        // Добавьте другие необходимые поля пользователя
+      };
+      login(userData, data.token);  // Вызываем функцию login из контекста
+      navigate('/');  // Перенаправляем на главную страницу после успешного входа
     } else {
-      setError('Неверный логин или пароль');
-      setLoginAttempts(prevAttempts => prevAttempts + 1); // Увеличиваем количество попыток входа
+      const errorData = await response.json();
+      setError(errorData.error || 'Неверный логин или пароль');
+      setLoginAttempts(prevAttempts => prevAttempts + 1);
     }
   } catch (error) {
     console.error('Ошибка входа:', error);
     setError('Ошибка входа');
-    setLoginAttempts(prevAttempts => prevAttempts + 1); // Увеличиваем количество попыток входа
+    setLoginAttempts(prevAttempts => prevAttempts + 1);
   }
 };
 
