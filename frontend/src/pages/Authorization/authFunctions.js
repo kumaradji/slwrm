@@ -14,21 +14,22 @@ export const handleLogin = async (email, username, password, login, navigate, se
       const userData = {
         id: data.user_id,
         email: data.email,
-        // Добавьте другие необходимые поля пользователя
+        // Другие поля пользователя
       };
-      login(userData, data.token);  // Вызываем функцию login из контекста
-      navigate('/');  // Перенаправляем на главную страницу после успешного входа
+      login(userData, data.token);
+      navigate('/');
     } else {
       const errorData = await response.json();
       setError(errorData.error || 'Неверный логин или пароль');
-      setLoginAttempts(prevAttempts => prevAttempts + 1);
+      setLoginAttempts((prevAttempts) => prevAttempts + 1);
     }
   } catch (error) {
     console.error('Ошибка входа:', error);
     setError('Ошибка входа');
-    setLoginAttempts(prevAttempts => prevAttempts + 1);
+    setLoginAttempts((prevAttempts) => prevAttempts + 1);
   }
 };
+
 
 export const handleRegistration = async (password, confirmPassword, username, email, setError, setModalMessage, setIsModalOpen, login, navigate) => {
   if (password !== confirmPassword) {

@@ -7,14 +7,16 @@ from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
+from django.utils.encoding import force_str
+
 from rest_framework.views import APIView
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
-from django.core.mail import send_mail
 from django.contrib.auth import authenticate, update_session_auth_hash
 from django.contrib.auth.models import User, Group
+from django.core.mail import send_mail, BadHeaderError
 from .models import Category, Activation, EcoStaff, Profile, Message, Cart, VIPMessage
 from .serializers import UserRegistrationSerializer, EcoStaffSerializer, UserSerializer, ChangePasswordSerializer, \
     CategorySerializer, ProfileSerializer, MessageSerializer, CartSerializer, VIPMessageSerializer, \
@@ -218,7 +220,7 @@ class UserRegistrationView(APIView):
                 logger.error(f'Error sending admin notification: {e}')
 
             return Response(
-               {"message": "Пользователь успешно зарегистрирован.", "token": token.key},
+                {"message": "Пользователь успешно зарегистрирован.", "token": token.key},
                 status=status.HTTP_201_CREATED
             )
         logger.error(f'Registration errors: {serializer.errors}')
@@ -279,7 +281,8 @@ class UserLoginView(APIView):
         password = request.data.get('password')
 
         if not (username or email) or not password:
-            return Response({'error': 'Пожалуйста, укажите имя пользователя/email и пароль'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Пожалуйста, укажите имя пользователя/email и пароль'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         user = None
         if email:
@@ -319,6 +322,7 @@ class ChangePasswordView(APIView):
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
 
+    # Отправка письма для сброса пароля
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
         user = User.objects.filter(email=email).first()
@@ -326,49 +330,70 @@ class ResetPasswordView(APIView):
         if not user:
             return Response({"message": "Пользователь с таким email не найден"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Генерация временного пароля
-        temp_password = secrets.token_urlsafe(12)
-        user.set_password(temp_password)
-        user.save()
-
-        # Создание токена для сброса пароля
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-        # Формирование URL для сброса пароля
-        reset_url = request.build_absolute_uri(
-            reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-        )
+        # Изменяем URL на тот, который ведет на фронтенд
+        reset_url = f"http://localhost:3000/reset-password/{uid}/{token}/"
 
-        # Отправка письма
-        subject = 'Сброс пароля на сайте Soulwarm'
+        subject = 'Сброс пароля на сайте ДушуГрею'
         message = f'''
-Здравствуйте!
+            Здравствуйте!
+            Вы запросили сброс пароля на сайте ДушуГрею.
+            Для установки нового пароля, пожалуйста, перейдите по следующей ссылке:
+            {reset_url}
 
-Вы запросили сброс пароля на сайте Soulwarm. 
+            Если вы не запрашивали сброс пароля, проигнорируйте это письмо.
 
-Ваш временный пароль: {temp_password}
-
-Для установки нового пароля, пожалуйста, перейдите по следующей ссылке:
-{reset_url}
-
-Если вы не запрашивали сброс пароля, проигнорируйте это письмо.
-
-С уважением,
-Команда Soulwarm
+            С уважением,
+            Нина Кольцова
         '''
 
-        send_mail(
-            subject,
-            message,
-            'koltsovaecoprint@yandex.ru',
-            [user.email],
-            fail_silently=False,
-        )
+        try:
+            send_mail(
+                subject,
+                message,
+                'koltsovaecoprint@yandex.ru',
+                [user.email],
+                fail_silently=False,
+            )
+        except BadHeaderError:
+            return Response({"message": "Неправильный заголовок письма."}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"message": f"Ошибка при отправке письма: {str(e)}"},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({
             "message": "Инструкции по сбросу пароля отправлены на ваш email"
         }, status=status.HTTP_200_OK)
+
+    # Обработка запроса на изменение пароля
+    def put(self, request, *args, **kwargs):
+        uid = request.data.get('uid')
+        token = request.data.get('token')
+        password = request.data.get('password')
+
+        # Проверка всех необходимых данных
+        if not uid or not token or not password:
+            return Response({"message": "Все поля (uid, token, password) обязательны."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user_id = urlsafe_base64_decode(uid).decode()
+            user = User.objects.get(pk=user_id)
+
+            if not default_token_generator.check_token(user, token):
+                return Response({"message": "Неверный или устаревший токен."}, status=status.HTTP_400_BAD_REQUEST)
+
+            user.set_password(password)
+            user.save()
+
+            return Response({"message": "Пароль успешно изменен."}, status=status.HTTP_200_OK)
+
+        except User.DoesNotExist:
+            return Response({"message": "Пользователь не найден."}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"message": f"Ошибка: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ConfirmPasswordResetView(APIView):
@@ -376,21 +401,31 @@ class ConfirmPasswordResetView(APIView):
 
     def post(self, request, uidb64, token):
         try:
+            # Декодируем uid из строки
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
 
+        # Проверяем, существует ли пользователь и валиден ли токен
         if user is not None and default_token_generator.check_token(user, token):
             new_password = request.data.get('new_password')
             if new_password:
+                # Устанавливаем новый пароль
                 user.set_password(new_password)
                 user.save()
-                return Response({"message": "Password has been reset successfully"}, status=status.HTTP_200_OK)
+
+                # Создание или обновление токена для API
+                token, _ = Token.objects.get_or_create(user=user)
+
+                return Response({
+                    "message": "Пароль успешно сброшен и выполнен вход",
+                    "token": token.key
+                }, status=status.HTTP_200_OK)
             else:
-                return Response({"error": "New password is required"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Требуется новый пароль"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"error": "Invalid reset link"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Неверная ссылка для сброса пароля"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateEmailView(APIView):

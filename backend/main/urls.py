@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     UserRegistrationView, UserLoginView, ResetPasswordView, ChangePasswordView,
     UserProfileView, landing_page, category_list, category_detail, product_list, product_detail,
-    UserDetailView, AvatarUpdateView, MessageListView, MessageCreateView,
+    UserDetailView, AvatarUpdateView, MessageListView, MessageCreateView, ConfirmPasswordResetView,
     CartListView, CartCreateView, TelegramWebhookView, VIPMessageListView, VIPMessageCreateView, LongPollingMessageView,
     CartRemoveView, verify_token
 )
@@ -17,6 +17,7 @@ urlpatterns = [
     path('profile/avatar/', AvatarUpdateView.as_view(), name='avatar-update'),
 
     path('reset-password/', ResetPasswordView.as_view(), name='reset_password'),
+    path('reset-password-confirm/<uidb64>/<token>/', ConfirmPasswordResetView.as_view(), name='password_reset_confirm'),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
 
     path('categories/', category_list, name='category_list'),

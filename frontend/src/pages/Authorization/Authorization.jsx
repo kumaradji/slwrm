@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import styles from './Authorization.module.scss';
-import Modal from '../../components/Modal/Modal.jsx';
+import ModalResetPass from '../../components/ModalResetPass/ModalResetPass.jsx';
 import { handleLogin, handleRegistration, handleResetPassword } from './authFunctions';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
@@ -16,6 +16,7 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [resetEmail, setResetEmail] = useState(''); // Добавлено для хранения email для сброса пароля
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +36,8 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
 
   const validateUsername = (username) => {
     if (username.includes(' ')) {
-      setError('Имя пользователя не должно содержать пробелов');
+      setModalMessage('Имя пользователя не должно содержать пробелов');
+      setIsModalOpen(true);
       return false;
     }
     return true;
@@ -44,10 +46,9 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setModalMessage('');
 
     if (mode === 'register' && !validateUsername(username)) {
-      setIsModalOpen(true);
-      setModalMessage('Имя пользователя не должно содержать пробелов');
       return;
     }
 
@@ -55,6 +56,10 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
       switch (mode) {
         case 'login':
           await handleLogin(email, username, password, login, navigate, setError, setLoginAttempts);
+          if (loginAttempts + 1 >= 3) { // Показать модальное окно после 3 попыток
+            setModalMessage('Неверные учетные данные. Хотите сбросить пароль?');
+            setIsModalOpen(true);
+          }
           break;
         case 'register':
           if (isCheckboxChecked) {
@@ -70,7 +75,8 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
               navigate
             );
           } else {
-            setError('Пожалуйста, дайте согласие на обработку персональных данных');
+            setModalMessage('Пожалуйста, дайте согласие на обработку персональных данных');
+            setIsModalOpen(true);
           }
           break;
         default:
@@ -78,8 +84,51 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
       }
     } catch (error) {
       console.error('Ошибка при обработке формы:', error);
-      setError('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
+      setModalMessage('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
+      setIsModalOpen(true);
     }
+  };
+
+  const handleResetPasswordClick = async () => {
+    try {
+      console.log('Начинаем запрос на сброс пароля...');
+
+      const response = await fetch('/api/reset-password/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: resetEmail }), // Используем resetEmail вместо username
+      });
+
+      console.log('Ответ от сервера получен:', response);
+
+      if (response.ok) {
+        console.log('Запрос завершен успешно, письмо отправлено.');
+        setModalMessage('На ваш email отправлено письмо с инструкциями по сбросу пароля.');
+      } else {
+        console.log('Ответ от сервера не ок, пробуем распарсить как JSON...');
+
+        const text = await response.text();
+        console.log('Текст ответа от сервера:', text);
+
+        try {
+          const errorData = JSON.parse(text);
+          console.log('Распарсенные данные ошибки:', errorData);
+          setModalMessage(errorData.message || 'Произошла ошибка при отправке письма для сброса пароля.');
+        } catch (parseError) {
+          console.error('Ошибка парсинга JSON:', parseError);
+          setModalMessage('Ошибка: ' + text);
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка при запросе сброса пароля:', error);
+      setModalMessage('Произошла ошибка при отправке запроса на сброс пароля.');
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -125,7 +174,7 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
                   className={styles.passwordToggle}
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <FaEyeSlash/> : <FaEye/>}
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
               {mode === 'register' && (
@@ -142,7 +191,7 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
                     className={styles.passwordToggle}
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <FaEyeSlash/> : <FaEye/>}
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </span>
                 </div>
               )}
@@ -158,9 +207,8 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
                 />
                 <label htmlFor="agreement">
                   Я даю согласие на обработку персональных данных и соглашаюсь с
-                  <br/>
-                  <Link className={styles.privacyPolicyLink} to="/privacy-policy"> Политикой обработки персональных
-                    данных</Link>
+                  <br />
+                  <Link className={styles.privacyPolicyLink} to="/privacy-policy"> Политикой обработки персональных данных</Link>
                 </label>
               </div>
             )}
@@ -177,18 +225,13 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
           </form>
         </div>
       </div>
-      {loginAttempts >= 5 && (
-        <div className={styles.passwordOptions}>
-          <button type="button"
-                  onClick={(e) => handleResetPassword(e, email, setError, setModalMessage, setIsModalOpen, setMode)}>Сбросить
-            пароль
-          </button>
-        </div>
-      )}
-      <Modal
+      <ModalResetPass
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleModalClose}
         message={modalMessage}
+        email={resetEmail} // Передаем email в модальное окно
+        setEmail={setResetEmail} // Функция для обновления email
+        onResetPassword={loginAttempts >= 3 ? handleResetPasswordClick : undefined}
       />
     </div>
   );

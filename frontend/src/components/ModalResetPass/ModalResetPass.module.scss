@@ -1,26 +1,28 @@
 @import '../../styles/media';
 @import '../../styles/variables';
+@import '../../styles/mixins';
 
-.resetPassword {
-	width: 100%;
-	padding: 120px 0 30px 0;
+.modalOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	margin: 0 auto;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	background-color: var(--color-light-main);
-	text-align: center;
+	justify-content: center;
 }
 
+.modal {
+	background: var(--color-main);
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
-input {
-	width: 300px;
-	padding: 10px;
-	margin: 10px 20px 10px 0;
-	border: 1px solid #ccc;
-	border-radius: 5px;
+.modalContent {
+	text-align: center;
 }
 
 .button_reset {
@@ -32,7 +34,7 @@ input {
 	border-radius: 5px;
 	font-size: 16px;
 	cursor: pointer;
-	margin: 0 5px;
+	margin: 10px 5px;
 
 	&:hover {
 		background-color: var(--color-blue);
@@ -49,7 +51,10 @@ input {
 	}
 }
 
-p {
+.emailInput {
+	width: 100%;
+	padding: 10px;
 	margin-top: 10px;
-	color: red;
+	border: 1px solid #ccc;
+	border-radius: 5px;
 }

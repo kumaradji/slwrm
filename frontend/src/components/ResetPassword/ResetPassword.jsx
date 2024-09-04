@@ -1,77 +1,64 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
 import styles from './ResetPassword.module.scss';
+import Modal from '../../components/Modal/Modal';
 
 const ResetPassword = () => {
-  const [newPassword, setNewPassword] = useState('');
+  const {uid, token} = useParams(); // Получаем uid и token из URL
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-  const { token } = useParams();
-  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handlePasswordReset = async (e) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      setError('Пароли не совпадают');
+
+    if (password !== confirmPassword) {
+      setMessage('Пароли не совпадают.');
       return;
     }
 
     try {
-      const response = await fetch('/api/reset-password-confirm/', {
+      // Отправляем запрос на сервер для сброса пароля
+      const response = await fetch('http://localhost:8000/api/reset-password/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ token, new_password: newPassword }),
+        body: JSON.stringify({uid, token, password})
       });
 
       if (response.ok) {
-        setSuccess(true);
-        setTimeout(() => navigate('/login'), 3000);
+        setMessage('Пароль успешно изменен.');
       } else {
-        const errorData = await response.json();
-        setError(errorData.error || 'Ошибка при сбросе пароля');
+        setMessage('Ошибка при изменении пароля.');
       }
     } catch (error) {
-      console.error('Ошибка при сбросе пароля:', error);
-      setError('Произошла ошибка при попытке сброса пароля');
+      setMessage('Произошла ошибка. Попробуйте позже.');
     }
   };
 
   return (
     <div className={styles.resetPassword}>
-      <h2>Сброс пароля</h2>
-      {error && <div className={styles.error}>{error}</div>}
-      {success ? (
-        <div className={styles.success}>
-          Пароль успешно изменен. Вы будете перенаправлены на страницу входа.
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label htmlFor="newPassword">Новый пароль:</label>
-            <input
-              type="password"
-              id="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="confirmPassword">Подтвердите пароль:</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Сбросить пароль</button>
+      <div> <h2>Сброс пароля</h2>
+        <form onSubmit={handlePasswordReset}>
+          <input
+            type="text"
+            placeholder="Новый пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Подтвердите новый пароль"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+          <button className={styles.button_reset} type="submit">Изменить пароль</button>
         </form>
-      )}
+        {message && <p>{message}</p>}
+      </div>
     </div>
   );
 };
