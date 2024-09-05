@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import styles from './ChangePassword.module.scss';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const ChangePassword = () => {
+const ChangePassword = ({ isResetPassword = false, uidb64, token }) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -23,55 +23,68 @@ const ChangePassword = () => {
     }
 
     try {
-      const token = localStorage.getItem('token'); // Получаем токен из локального хранилища
-      const response = await fetch('/api/change-password/', {
+      let url = '/api/change-password/';
+      let headers = {
+        'Content-Type': 'application/json',
+      };
+      let body = { new_password: newPassword }; // Изменено на new_password
+
+      if (isResetPassword) {
+        url = `/api/reset-password/${uidb64}/${token}/`;
+      } else {
+        const token = localStorage.getItem('token');
+        headers['Authorization'] = `Token ${token}`;
+        body.current_password = currentPassword; // Изменено на current_password
+      }
+
+      const response = await fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`, // Передаем токен в заголовке
-        },
-        body: JSON.stringify({ currentPassword, newPassword }),
+        headers: headers,
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
         setSuccess('Пароль успешно изменен');
-        setTimeout(() => navigate('/profile'), 2000); // Перенаправляем на профиль через 2 секунды
+        setTimeout(() => navigate('/login'), 2000);
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Ошибка при изменении пароля');
       }
     } catch (error) {
       console.error('Ошибка при изменении пароля:', error);
-      setError('Ошибка при изменении пароля');
+      setError(error.message || 'Ошибка при изменении пароля');
     }
   };
+
 
   return (
     <div className={styles.changePassword}>
       <div className={styles.changePasswordContainer}>
         <div className={styles.changePasswordFormWrapper}>
-          <h2>Изменить пароль</h2>
+          <h2>{isResetPassword ? 'Сброс пароля' : 'Изменить пароль'}</h2>
           {error && <div className={styles.error}>{error}</div>}
           {success && <div className={styles.success}>{success}</div>}
           <form onSubmit={handleChangePassword}>
-            <div className={styles.formGroup}>
-              <label htmlFor="currentPassword">Текущий пароль:</label>
-              <div className={styles.passwordWrapper}>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="currentPassword"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  required
-                />
-                <span
-                  className={styles.passwordToggle}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
+            {!isResetPassword && (
+              <div className={styles.formGroup}>
+                <label htmlFor="currentPassword">Текущий пароль:</label>
+                <div className={styles.passwordWrapper}>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="currentPassword"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                  />
+                  <span
+                    className={styles.passwordToggle}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
             <div className={styles.formGroup}>
               <label htmlFor="newPassword">Новый пароль:</label>
               <div className={styles.passwordWrapper}>
@@ -108,7 +121,9 @@ const ChangePassword = () => {
                 </span>
               </div>
             </div>
-            <button type="submit">Изменить пароль</button>
+            <button type="submit">
+              {isResetPassword ? 'Сбросить пароль' : 'Изменить пароль'}
+            </button>
           </form>
         </div>
       </div>

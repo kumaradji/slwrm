@@ -17,7 +17,7 @@ urlpatterns = [
     path('profile/avatar/', AvatarUpdateView.as_view(), name='avatar-update'),
 
     path('reset-password/', ResetPasswordView.as_view(), name='reset_password'),
-    path('reset-password-confirm/<uidb64>/<token>/', ConfirmPasswordResetView.as_view(), name='password_reset_confirm'),
+    path('reset-password/<str:uidb64>/<str:token>/', ConfirmPasswordResetView.as_view(), name='password_reset_confirm'),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
 
     path('categories/', category_list, name='category_list'),

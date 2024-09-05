@@ -69,7 +69,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<Authorization />} />
               <Route path="/change-password" element={<ChangePassword />} />
-              <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
+              <Route path="/reset-password/:uidb64/:token" element={<ResetPassword />} />
               <Route path="/profile" element={isLoggedIn ? <Profile /> : <Authorization redirectBack="/profile" />} />
               <Route path="/lessons" element={<LessonsPage />} />
               <Route path="/lesson/:lessonId" element={<LessonPage />} />

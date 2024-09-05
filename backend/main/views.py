@@ -399,33 +399,45 @@ class ResetPasswordView(APIView):
 class ConfirmPasswordResetView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request, uidb64, token):
+    def get(self, request, uidb64, token):
+        logger.info(f"Received GET request for password reset. uidb64: {uidb64}, token: {token}")
         try:
-            # Декодируем uid из строки
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+            if default_token_generator.check_token(user, token):
+                return Response({"message": "Токен действителен"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Неверная ссылка для сброса пароля или срок действия истек"},
+                                status=status.HTTP_400_BAD_REQUEST)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return Response({"error": "Недействительный идентификатор пользователя"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request, uidb64, token):
+        logger.info(f"Received POST request for password reset. uidb64: {uidb64}, token: {token}")
+        try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
+            return Response({"error": "Недействительный идентификатор пользователя"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-        # Проверяем, существует ли пользователь и валиден ли токен
-        if user is not None and default_token_generator.check_token(user, token):
+        if default_token_generator.check_token(user, token):
             new_password = request.data.get('new_password')
             if new_password:
-                # Устанавливаем новый пароль
                 user.set_password(new_password)
                 user.save()
-
-                # Создание или обновление токена для API
+                # Генерация нового токена после успешного сброса пароля
                 token, _ = Token.objects.get_or_create(user=user)
-
                 return Response({
-                    "message": "Пароль успешно сброшен и выполнен вход",
+                    "message": "Пароль успешно сброшен",
                     "token": token.key
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "Требуется новый пароль"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"error": "Неверная ссылка для сброса пароля"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Неверная ссылка для сброса пароля или срок действия истек"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateEmailView(APIView):

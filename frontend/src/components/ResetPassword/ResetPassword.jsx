@@ -1,64 +1,51 @@
-import React, {useState} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from './ResetPassword.module.scss';
-import Modal from '../../components/Modal/Modal';
+import ChangePassword from '../ChangePassword/ChangePassword';
 
 const ResetPassword = () => {
-  const {uid, token} = useParams(); // Получаем uid и token из URL
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { uidb64, token } = useParams();
+  const [isValidToken, setIsValidToken] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handlePasswordReset = async (e) => {
-    e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setMessage('Пароли не совпадают.');
-      return;
-    }
-
-    try {
-      // Отправляем запрос на сервер для сброса пароля
-      const response = await fetch('http://localhost:8000/api/reset-password/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({uid, token, password})
-      });
-
-      if (response.ok) {
-        setMessage('Пароль успешно изменен.');
-      } else {
-        setMessage('Ошибка при изменении пароля.');
+  useEffect(() => {
+    const validateToken = async () => {
+      if (!uidb64 || !token) {
+        setMessage('Неверная ссылка для сброса пароля.');
+        return;
       }
-    } catch (error) {
-      setMessage('Произошла ошибка. Попробуйте позже.');
-    }
-  };
+
+      try {
+        const response = await fetch(`http://localhost:8000/api/reset-password/${uidb64}/${token}/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          setIsValidToken(true);
+        } else {
+          setMessage('Ссылка для сброса пароля недействительна или устарела.');
+        }
+      } catch (error) {
+        setMessage('Произошла ошибка при проверке ссылки. Попробуйте позже.');
+      }
+    };
+
+    validateToken();
+  }, [uidb64, token]);
+
+  if (isValidToken) {
+    return <ChangePassword isResetPassword={true} uidb64={uidb64} token={token} />;
+  }
 
   return (
     <div className={styles.resetPassword}>
-      <div> <h2>Сброс пароля</h2>
-        <form onSubmit={handlePasswordReset}>
-          <input
-            type="text"
-            placeholder="Новый пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Подтвердите новый пароль"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-          <button className={styles.button_reset} type="submit">Изменить пароль</button>
-        </form>
-        {message && <p>{message}</p>}
-      </div>
+      <h2>Сброс пароля</h2>
+      {message && <p className={styles.message}>{message}</p>}
+      {!isValidToken && !message && <p>Проверка ссылки для сброса пароля...</p>}
     </div>
   );
 };
