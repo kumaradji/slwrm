@@ -24,6 +24,7 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
 
   useEffect(() => {
     if (isLoggedIn && mode !== 'changePassword') {
+      console.log('User is logged in, redirecting to home page');
       navigate('/');
     }
   }, [isLoggedIn, navigate, mode]);

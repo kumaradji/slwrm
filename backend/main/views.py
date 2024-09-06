@@ -427,30 +427,19 @@ class ConfirmPasswordResetView(APIView):
             if new_password:
                 user.set_password(new_password)
                 user.save()
-                # Генерация нового токена после успешного сброса пароля
-                token, _ = Token.objects.get_or_create(user=user)
+                # Очистка всех существующих токенов пользователя
+                Token.objects.filter(user=user).delete()
+                # Создание нового токена
+                new_token = Token.objects.create(user=user)
                 return Response({
                     "message": "Пароль успешно сброшен",
-                    "token": token.key
+                    "token": new_token.key
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "Требуется новый пароль"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Неверная ссылка для сброса пароля или срок действия истек"},
                             status=status.HTTP_400_BAD_REQUEST)
-
-
-class UpdateEmailView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        new_email = request.data.get('email')
-        if new_email:
-            user = request.user
-            user.email = new_email
-            user.save()
-            return Response({"message": "Email updated successfully"}, status=status.HTTP_200_OK)
-        return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ActivateUser(APIView):

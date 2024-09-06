@@ -44,6 +44,8 @@ const ChangePassword = ({ isResetPassword = false, uidb64, token }) => {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
         setSuccess('Пароль успешно изменен');
         setTimeout(() => navigate('/login'), 2000);
       } else {

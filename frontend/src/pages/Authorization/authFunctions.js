@@ -56,13 +56,10 @@ export const handleRegistration = async (password, confirmPassword, username, em
       setIsModalOpen(true);
 
       // Автоматический вход пользователя
-      await login(data.user, data.token);
+      login({ id: data.user_id, email: data.email }, data.token);
 
-      // Закрытие модального окна и перенаправление на главную страницу
-      setTimeout(() => {
-        setIsModalOpen(false);
-        navigate('/');
-      }, 2000);
+      setIsModalOpen(false);
+      navigate('/');
     } else {
       setError(data.error || JSON.stringify(data) || 'Ошибка регистрации');
       setIsModalOpen(true);

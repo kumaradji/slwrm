@@ -27,9 +27,11 @@ const ResetPassword = () => {
         if (response.ok) {
           setIsValidToken(true);
         } else {
-          setMessage('Ссылка для сброса пароля недействительна или устарела.');
+          const errorData = await response.json();
+          setMessage(errorData.error || 'Ссылка для сброса пароля недействительна или устарела.');
         }
       } catch (error) {
+        console.error('Error validating token:', error);
         setMessage('Произошла ошибка при проверке ссылки. Попробуйте позже.');
       }
     };
