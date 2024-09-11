@@ -58,7 +58,7 @@ const UserBlock = ({ userName, setMode }) => {
                 onClick={handleProfileClick}
                 style={{cursor: 'pointer'}}
               >
-                {userName || 'Пользователь'}
+                {userName}
               </div>
               <img
                 src={avatarUrl}

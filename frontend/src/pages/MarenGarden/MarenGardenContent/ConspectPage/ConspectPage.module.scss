@@ -8,6 +8,18 @@
 	margin: 0 auto;
 	text-align: left;
 
+	@include tablet {
+		padding: 110px 20px 0 20px;
+	}
+
+	@include mobile {
+		padding: 110px 10px 0 10px;
+	}
+
+	@include mobile-small {
+		padding: 110px 5px 0 5px;
+	}
+
 	h2 {
 		margin-bottom: 2rem;
 		text-align: center;
@@ -17,16 +29,28 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 20px;
+
+		@include mobile {
+			flex-direction: column;
+		}
 	}
 
 	.conspectItem {
-		flex: 1 1 calc(50% - 20px); // Две колонки по 50% ширины
+		flex: 1 1 calc(50% - 20px);
 		box-sizing: border-box;
 		margin-bottom: 2rem;
+
+		@include mobile {
+			flex: 1 1 100%;
+		}
 
 		h2 {
 			font-size: 1.5rem;
 			margin-bottom: 1rem;
+
+			@include mobile-small {
+				font-size: 1.2rem;
+			}
 		}
 
 		.iframeContainer {

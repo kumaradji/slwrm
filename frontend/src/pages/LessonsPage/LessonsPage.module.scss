@@ -10,7 +10,6 @@
 
 	@include tablet {
 		padding: 110px 20px 0 20px;
-		//text-align: left;
 	}
 
 	@include mobile {
@@ -48,9 +47,6 @@
 		justify-content: center;
 		align-items: center;
 
-		//@include tablet {
-		//	grid-template-columns: 1fr;
-		//}
 
 		@include mobile {
 			grid-template-columns: 1fr;

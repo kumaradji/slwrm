@@ -99,7 +99,9 @@ const CartPage = () => {
       <div className={styles.cartPage}>
         <div className={styles.emptyCart}>
           <h1>Ваша корзина пуста</h1>
-          <p>Добавьте товары в корзину, чтобы оформить заказ</p>
+          <h3>Добавьте товары в корзину, </h3>
+          <h3>чтобы оформить заказ</h3>
+          <br/>
           <Link to="/shop" className={styles.continueShopping}>
             Продолжить покупки
           </Link>

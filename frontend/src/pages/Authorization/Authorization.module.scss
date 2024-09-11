@@ -24,6 +24,11 @@
 	}
 }
 
+.formGroup input,
+.passwordWrapper input {
+	width: 100%;
+}
+
 .registrationFormWrapper {
 	display: flex;
 	flex-direction: column;
@@ -46,6 +51,7 @@
 		flex-wrap: wrap;
 		gap: 20px;
 
+
 		@include mobile {
 			flex-direction: column;
 			gap: 15px;
@@ -53,7 +59,7 @@
 
 		.formGroup {
 			flex: 1;
-			min-width: 45%;
+			width: 100%;
 			display: flex;
 			flex-direction: column;
 
@@ -63,14 +69,18 @@
 
 			input {
 				padding: 10px;
-				border: 1px solid #ddd;
+				border: 1px solid var(--color-light-grey);
 				border-radius: 5px;
 				font-size: 16px;
-				color: #333;
 				outline: none;
 
 				&:focus {
 					border-color: #d97340;
+				}
+
+				@include tablet {
+					font-size: 14px;
+					//margin-bottom: 15px;
 				}
 			}
 		}
@@ -78,7 +88,7 @@
 		.passwordWrapper {
 			position: relative;
 			width: 100%;
-			margin-bottom: 20px; /* Добавлено, чтобы увеличить расстояние между полями */
+			margin-bottom: 20px;
 
 			input {
 				width: 100%;

@@ -143,7 +143,7 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
               <input
                 type="text"
                 id="username"
-                placeholder="Имя пользователя или Email"
+                placeholder="Имя пользователя"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required

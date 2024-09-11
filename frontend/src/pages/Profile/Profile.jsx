@@ -138,7 +138,6 @@ const Profile = () => {
           style={{display: 'none'}}
           id="avatarUpload"
         />
-        <div className={styles.textAvatarAdd}>чтобы загрузить или изменить аватар</div>
         <div className={styles.textAvatarAddBlock}>
           {!avatarUrl && !isAvatarSelected ? (
             <label htmlFor="avatarUpload" className={styles.customFileUpload}>

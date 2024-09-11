@@ -6,13 +6,6 @@
 	position: relative;
 	overflow: hidden;
 	width: 100%; /* Используем 100% ширины контейнера */
-	height: 630px; /* Базовая высота для десктопов */
+	height: 100%; /* Базовая высота для десктопов */
 
-	@include tablet {
-		height: 370px; /* Высота для планшетов */
-	}
-
-	@include mobile {
-		height: 250px; /* Высота для мобильных устройств */
-	}
 }

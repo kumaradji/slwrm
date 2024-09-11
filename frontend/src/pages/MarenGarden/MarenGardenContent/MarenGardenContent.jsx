@@ -6,10 +6,14 @@ const MarenGardenContent = ({ marenGardenChapters = [] }) => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
 
-  const currentChapter = marenGardenChapters.find(ch => ch.id === parseInt(chapterId));
+  const currentChapter = marenGardenChapters.find((ch) => ch.id === parseInt(chapterId));
 
   const handleChapterChange = (newChapterId) => {
     navigate(`/masterclass/${newChapterId}`);
+  };
+
+  const handleGoBack = () => {
+    navigate('/masterclass'); // Путь к странице со списком мастерклассов
   };
 
   if (!currentChapter) {
@@ -18,7 +22,10 @@ const MarenGardenContent = ({ marenGardenChapters = [] }) => {
 
   return (
     <div className={styles.content}>
+
+
       <div className={styles.sidebar}>
+
         <ol>
           {marenGardenChapters.map((chapter) => (
             <li
@@ -30,10 +37,14 @@ const MarenGardenContent = ({ marenGardenChapters = [] }) => {
             </li>
           ))}
         </ol>
+        <button onClick={handleGoBack} className={styles.backButton}>
+          Назад
+        </button>
       </div>
       <div className={styles.chapterContent}>
         {currentChapter.content}
       </div>
+
     </div>
   );
 };
