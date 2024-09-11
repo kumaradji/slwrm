@@ -10,7 +10,6 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const addToCart = useCallback(async (item) => {
-    // Логика добавления товара в корзину
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('No token found');
@@ -32,7 +31,6 @@ export const CartProvider = ({ children }) => {
         throw new Error(errorData.detail || 'Ошибка при добавлении товара в корзину');
       }
 
-      // Обновляем состояние корзины
       const cartResponse = await fetch('/api/cart/', {
         headers: {
           'Authorization': `Token ${token}`
@@ -47,14 +45,17 @@ export const CartProvider = ({ children }) => {
       } else {
         console.error('Invalid cart data:', cartData);
       }
-
     } catch (error) {
       console.error('Error adding product to cart:', error);
     }
   }, [updateCartCount]);
 
+  const clearCart = useCallback(() => {
+    setCartCount(0); // Очистка количества товаров в корзине
+  }, []);
+
   return (
-    <CartContext.Provider value={{ cartCount, updateCartCount, addToCart }}>
+    <CartContext.Provider value={{ cartCount, updateCartCount, addToCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

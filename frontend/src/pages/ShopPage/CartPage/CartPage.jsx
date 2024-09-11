@@ -1,15 +1,14 @@
-import React, {useEffect, useState, useContext} from 'react';
-import {Link} from 'react-router-dom';
-import {useNavigate} from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './CartPage.module.scss';
-import {CartContext} from '../../../context/CartContext';
+import { CartContext } from '../../../context/CartContext';
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
-  const {updateCartCount} = useContext(CartContext);
+  const { updateCartCount, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
 
   const fetchCart = async () => {
@@ -20,21 +19,39 @@ const CartPage = () => {
         }
       });
       if (!response.ok) {
-        throw new Error('Failed to fetch cart');
+        throw new Error('Не удалось загрузить корзину');
       }
       const data = await response.json();
       setCart(Array.isArray(data) ? data[0] : data);
       updateCartCount(Array.isArray(data) ? data[0].items.length : data.items.length);
     } catch (error) {
-      console.error('Error fetching cart:', error);
+      console.error('Ошибка при загрузке корзины:', error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    clearCart();
+    navigate('/');
+  };
+
   useEffect(() => {
     fetchCart();
+
+    // Добавляем слушатель события для отслеживания выхода пользователя
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'token' && !event.newValue) {
+        handleLogout();
+      }
+    });
+
+    // Очистка слушателя при размонтировании компонента
+    return () => {
+      window.removeEventListener('storage', handleLogout);
+    };
   }, []);
 
   const removeFromCart = async (itemId) => {
@@ -46,11 +63,11 @@ const CartPage = () => {
         }
       });
       if (!response.ok) {
-        throw new Error('Failed to remove item from cart');
+        throw new Error('Не удалось удалить товар из корзины');
       }
       await fetchCart();
     } catch (error) {
-      console.error('Error removing item from cart:', error);
+      console.error('Ошибка при удалении товара из корзины:', error);
       setError(error.message);
     }
   };
@@ -67,16 +84,29 @@ const CartPage = () => {
     setIsAgreementChecked(event.target.checked);
   };
 
-  if (loading) return <div>Загрузка...</div>;
-  if (error) return <div>Ошибка: {error}</div>;
-  if (!cart || !cart.items || cart.items.length === 0) return <div>Корзина пуста.</div>;
-
   const handleCheckout = () => {
     if (isAgreementChecked) {
       localStorage.setItem('agreementChecked', 'true');
       navigate('/payment-instructions', { state: { totalAmount: calculateTotal() } });
     }
   };
+
+  if (loading) return <div className={styles.loading}>Загрузка...</div>;
+  if (error) return <div className={styles.error}>Ошибка: {error}</div>;
+
+  if (!cart || !cart.items || cart.items.length === 0) {
+    return (
+      <div className={styles.cartPage}>
+        <div className={styles.emptyCart}>
+          <h1>Ваша корзина пуста</h1>
+          <p>Добавьте товары в корзину, чтобы оформить заказ</p>
+          <Link to="/shop" className={styles.continueShopping}>
+            Продолжить покупки
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.cartPage}>

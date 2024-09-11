@@ -1,14 +1,12 @@
 # views.py
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
-from django.utils.encoding import force_str
-
+from django.contrib.auth import login as auth_login, logout
 from rest_framework.views import APIView
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
@@ -24,7 +22,6 @@ from .serializers import UserRegistrationSerializer, EcoStaffSerializer, UserSer
 import requests
 import logging
 import json
-import secrets
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -301,6 +298,25 @@ class UserLoginView(APIView):
             return Response({'error': 'Неверные учетные данные'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            cart = Cart.objects.get(user=request.user)
+            cart.items.clear()  # Очистить все товары из корзины
+            logger.info(f"User {request.user.id}: Cart cleared on logout")
+        except Cart.DoesNotExist:
+            logger.warning(f"User {request.user.id}: No cart to clear on logout")
+
+        try:
+            request.user.auth_token.delete()
+        except:
+            pass
+        logout(request)
+        return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
+
+
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -308,14 +324,27 @@ class ChangePasswordView(APIView):
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
             user = request.user
-            if not user.check_password(serializer.validated_data.get('currentPassword')):
+            if not user.check_password(serializer.validated_data.get('current_password')):
                 return Response({"message": "Текущий пароль неверен"}, status=status.HTTP_400_BAD_REQUEST)
 
-            user.set_password(serializer.validated_data.get('newPassword'))
+            new_password = serializer.validated_data.get('new_password')
+            user.set_password(new_password)
             user.save()
+
+            # Обновляем сессию
             update_session_auth_hash(request, user)
-            logger.info(f"User {user.username} changed password")
-            return Response({"message": "Пароль успешно изменен"}, status=status.HTTP_200_OK)
+
+            # Создаем новый токен
+            Token.objects.filter(user=user).delete()
+            new_token = Token.objects.create(user=user)
+
+            # Выполняем повторный вход пользователя
+            auth_login(request, user)
+
+            logger.info(f"User {user.username} changed password successfully")
+            return Response({"message": "Пароль успешно изменен", "token": new_token.key}, status=status.HTTP_200_OK)
+
+        logger.warning(f"Password change failed for user {request.user.username}. Errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -559,25 +588,25 @@ class CartCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        logger.info("Received request to add product to cart")
+        logger.info(f"User {request.user.id}: Received request to add product to cart")
         cart, created = Cart.objects.get_or_create(user=request.user)
         product_id = request.data.get('product_id')
 
         if not product_id:
-            logger.error("Product ID is missing in the request")
+            logger.error(f"User {request.user.id}: Product ID is missing in the request")
             return Response({"error": "Product ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             product = EcoStaff.objects.get(id=product_id)
-            logger.info(f"Product found: {product.title}")
+            logger.info(f"User {request.user.id}: Product found: {product.title}")
             cart.add_item(product)
-            logger.info("Product added to cart successfully")
+            logger.info(f"User {request.user.id}: Product added to cart successfully")
             return Response({"message": "Product added to cart"}, status=status.HTTP_201_CREATED)
         except EcoStaff.DoesNotExist:
-            logger.error(f"Product with ID {product_id} not found")
+            logger.error(f"User {request.user.id}: Product with ID {product_id} not found")
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger.error(f"Error adding product to cart: {str(e)}")
+            logger.error(f"User {request.user.id}: Error adding product to cart: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -589,12 +618,16 @@ class CartRemoveView(APIView):
             cart = Cart.objects.get(user=request.user)
             product = EcoStaff.objects.get(id=item_id)
             cart.remove_item(product)
+            logger.info(f"User {request.user.id}: Product removed from cart")
             return Response({"message": "Product removed from cart"}, status=status.HTTP_204_NO_CONTENT)
         except Cart.DoesNotExist:
+            logger.error(f"User {request.user.id}: Cart not found")
             return Response({"error": "Cart not found"}, status=status.HTTP_404_NOT_FOUND)
         except EcoStaff.DoesNotExist:
+            logger.error(f"User {request.user.id}: Product with ID {item_id} not found")
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            logger.error(f"User {request.user.id}: Error removing product from cart: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 

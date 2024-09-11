@@ -11,7 +11,7 @@ const ChangePassword = ({ isResetPassword = false, uidb64, token }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const { user } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChangePassword = async (e) => {
@@ -26,16 +26,12 @@ const ChangePassword = ({ isResetPassword = false, uidb64, token }) => {
       let url = '/api/change-password/';
       let headers = {
         'Content-Type': 'application/json',
+        'Authorization': `Token ${localStorage.getItem('token')}`
       };
-      let body = { new_password: newPassword }; // Изменено на new_password
-
-      if (isResetPassword) {
-        url = `/api/reset-password/${uidb64}/${token}/`;
-      } else {
-        const token = localStorage.getItem('token');
-        headers['Authorization'] = `Token ${token}`;
-        body.current_password = currentPassword; // Изменено на current_password
-      }
+      let body = {
+        new_password: newPassword,
+        current_password: currentPassword
+      };
 
       const response = await fetch(url, {
         method: 'POST',
@@ -43,21 +39,32 @@ const ChangePassword = ({ isResetPassword = false, uidb64, token }) => {
         body: JSON.stringify(body),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
+        // Обновляем токен в локальном хранилище
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          login({ id: data.user_id, email: data.email }, data.token); // автоматический вход
+        }
         setSuccess('Пароль успешно изменен');
-        setTimeout(() => navigate('/login'), 2000);
+        setTimeout(() => navigate('/'), 2000); // перенаправление на главную страницу
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Ошибка при изменении пароля');
+        if (data.current_password) {
+          setError(data.current_password[0]);
+        } else if (data.new_password) {
+          setError(data.new_password[0]);
+        } else if (data.message) {
+          setError(data.message);
+        } else {
+          setError('Произошла ошибка при изменении пароля');
+        }
       }
     } catch (error) {
       console.error('Ошибка при изменении пароля:', error);
-      setError(error.message || 'Ошибка при изменении пароля');
+      setError('Произошла ошибка при отправке запроса');
     }
   };
-
 
   return (
     <div className={styles.changePassword}>

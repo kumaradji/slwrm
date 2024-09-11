@@ -92,5 +92,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    currentPassword = serializers.CharField()
-    newPassword = serializers.CharField()
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+

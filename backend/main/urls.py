@@ -5,13 +5,14 @@ from .views import (
     UserProfileView, landing_page, category_list, category_detail, product_list, product_detail,
     UserDetailView, AvatarUpdateView, MessageListView, MessageCreateView, ConfirmPasswordResetView,
     CartListView, CartCreateView, TelegramWebhookView, VIPMessageListView, VIPMessageCreateView, LongPollingMessageView,
-    CartRemoveView, verify_token
+    CartRemoveView, verify_token, LogoutView
 )
 urlpatterns = [
     path('', landing_page, name='landing_page'),
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('verify-token/', verify_token, name='verify_token'),
     path('login/', UserLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('user/', UserDetailView.as_view(), name='user_detail'),
     path('profile/', UserProfileView.as_view(), name='profile'),
     path('profile/avatar/', AvatarUpdateView.as_view(), name='avatar-update'),

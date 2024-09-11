@@ -82,8 +82,8 @@ const ModalChat = ({ onClose }) => {
         }
       }
 
-      console.log('Waiting for 5 seconds before next poll...');
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      console.log('Waiting for 20 seconds before next poll...');
+      await new Promise(resolve => setTimeout(resolve, 20000));
     }
   };
 
