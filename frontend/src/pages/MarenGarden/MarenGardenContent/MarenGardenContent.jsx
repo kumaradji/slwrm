@@ -13,7 +13,7 @@ const MarenGardenContent = ({ marenGardenChapters = [] }) => {
   };
 
   const handleGoBack = () => {
-    navigate('/masterclass'); // Путь к странице со списком мастерклассов
+    navigate('/masterclass');
   };
 
   if (!currentChapter) {
@@ -22,10 +22,7 @@ const MarenGardenContent = ({ marenGardenChapters = [] }) => {
 
   return (
     <div className={styles.content}>
-
-
       <div className={styles.sidebar}>
-
         <ol>
           {marenGardenChapters.map((chapter) => (
             <li

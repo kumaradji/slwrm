@@ -241,6 +241,23 @@
 		}
 	}
 
+	.backButton {
+		width: 200px;
+		flex: 1;
+		padding: 10px;
+		background-color: var(--color-red);
+		color: var(--color-main);
+		border: none;
+		border-radius: 5px;
+		font-size: 16px;
+		cursor: pointer;
+		margin: 20px 5px 20px 5px;
+
+		&:hover {
+			background-color: var(--color-blue);
+		}
+	}
+
 	.privacyPolicyLink {
 		margin-top: 10px;
 		font-size: 1.2rem;

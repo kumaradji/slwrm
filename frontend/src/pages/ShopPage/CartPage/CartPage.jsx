@@ -84,6 +84,11 @@ const CartPage = () => {
     setIsAgreementChecked(event.target.checked);
   };
 
+  const handleGoBack = () => {
+    navigate('/shop');
+  };
+
+
   const handleCheckout = () => {
     if (isAgreementChecked) {
       localStorage.setItem('agreementChecked', 'true');
@@ -171,6 +176,9 @@ const CartPage = () => {
           ))}
         </div>
       </div>
+      <button onClick={handleGoBack} className={styles.backButton}>
+        Назад в магазин
+      </button>
     </div>
   );
 };

@@ -28,7 +28,6 @@
 	min-width: 100px;
 	height: 32px;
 	align-items: center;
-
 }
 
 .userInfo__details {
@@ -95,10 +94,8 @@
 		font-size: 10px;
 	}
 
-	@include mobile {
-		width: 75px;
-		height: 30px;
-		font-size: 14px;
+	@include mobile-small {
+		display: none;
 	}
 }
 

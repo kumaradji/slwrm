@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import styles from './UserBlock.module.scss';
 import user_icon from '../../../assets/user_icon.png';
+import CartButton from '../../../pages/ShopPage/CartButton/CartButton';
 
 const UserBlock = ({ userName, setMode }) => {
   const { isLoggedIn, logout, user } = useAuth();
@@ -74,7 +75,10 @@ const UserBlock = ({ userName, setMode }) => {
           <button className={styles.logoutButton} onClick={handleLogoutClick}>Выйти</button>
         </>
       ) : (
-        <button className={styles.loginButton} onClick={handleLoginClick}>Войти</button>
+        <>
+          <button className={styles.loginButton} onClick={handleLoginClick}>Войти</button>
+          <CartButton />
+        </>
       )}
     </div>
   );

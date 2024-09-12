@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import UserBlock from './UserBlock/UserBlock';
+import CartButton from '../../pages/ShopPage/CartButton/CartButton'; // Импортируем CartButton
 import { useAuth } from '../../context/AuthContext';
 import styles from './Header.module.scss';
 import useWindowSize from '../../hooks/useWindowSize';
@@ -34,6 +35,7 @@ const Header = () => {
     <header className={isMenuVisible && isMobile ? styles.menuVisible : ''}>
       <div className={styles.headerContent}>
         <img className={styles.headerLogo} src={isMenuVisible && isMobile ? logo_white : logo_black} alt="Logo ДушуГрею" />
+        <CartButton />
         {!isMobile && <Navbar />}
         <div className={`${styles.rightSection} ${isMobile ? styles.hideOnMobile : ''}`}>
           {isLoggedIn && user ? (

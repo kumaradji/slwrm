@@ -64,7 +64,6 @@ function App() {
         <div className="app-container">
           <div className="content">
             <Header isLoggedIn={isLoggedIn} userName={user?.username} />
-            <CartButton />
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<Authorization />} />

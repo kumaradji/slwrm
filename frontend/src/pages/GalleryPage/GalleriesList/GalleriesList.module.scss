@@ -1,3 +1,7 @@
+@import '../../../styles/media';
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
 .galleries {
 	max-width: 1440px;
 	padding: 100px 0 0 0;
@@ -17,6 +21,14 @@
 		grid-gap: 2rem;
 		justify-content: center;
 		align-items: center;
+
+		@include mobile {
+			grid-template-columns: 1fr;
+		}
+
+		@include mobile-small {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	&__item {
@@ -39,8 +51,8 @@
 		&_image {
 			position: relative;
 			display: block;
-			width: 300px; /* Устанавливаем ширину 100 пикселей */
-			height: 300px; /* Устанавливаем высоту 100 пикселей */
+			width: 300px;
+			height: 300px;
 			background: var(--color-main);
 			cursor: pointer;
 
