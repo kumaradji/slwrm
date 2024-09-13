@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './PrivacyPolicy.module.scss';
 
 const PrivacyPolicy = () => {
+
   return (
     <div className={styles.privacyPolicy}>
       <h1>Политика в отношении обработки персональных данных</h1>

@@ -142,7 +142,12 @@ const CartPage = () => {
                 />
                 <span>
                   Продолжая оформление я соглашаюсь с{' '}
-                  <Link className={styles.offerLink} to="/offer-agreement">
+                  <Link
+                    className={styles.offerLink}
+                    to="/offer-agreement"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     договором оферты
                   </Link>
                 </span>

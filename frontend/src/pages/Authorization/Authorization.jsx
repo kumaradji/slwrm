@@ -16,7 +16,7 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [resetEmail, setResetEmail] = useState(''); // Добавлено для хранения email для сброса пароля
+  const [resetEmail, setResetEmail] = useState('');
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const navigate = useNavigate();
@@ -34,6 +34,24 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
       setAuthMode(mode);
     }
   }, [mode, setAuthMode]);
+
+  useEffect(() => {
+    // Загрузка сохраненных данных при монтировании компонента
+    const savedData = JSON.parse(localStorage.getItem('registrationData'));
+    if (savedData) {
+      setUsername(savedData.username || '');
+      setEmail(savedData.email || '');
+      setPassword(savedData.password || '');
+      setConfirmPassword(savedData.confirmPassword || '');
+      setIsCheckboxChecked(savedData.isCheckboxChecked || false);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Сохранение данных при изменении полей формы
+    const dataToSave = { username, email, password, confirmPassword, isCheckboxChecked };
+    localStorage.setItem('registrationData', JSON.stringify(dataToSave));
+  }, [username, email, password, confirmPassword, isCheckboxChecked]);
 
   const validateUsername = (username) => {
     if (username.includes(' ')) {
@@ -57,7 +75,7 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
       switch (mode) {
         case 'login':
           await handleLogin(email, username, password, login, navigate, setError, setLoginAttempts);
-          if (loginAttempts + 1 >= 3) { // Показать модальное окно после 3 попыток
+          if (loginAttempts + 1 >= 3) {
             setModalMessage('Неверные учетные данные. Хотите сбросить пароль?');
             setIsModalOpen(true);
           }
@@ -75,6 +93,8 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
               login,
               navigate
             );
+            // Очистка localStorage после успешной регистрации
+            localStorage.removeItem('registrationData');
           } else {
             setModalMessage('Пожалуйста, дайте согласие на обработку персональных данных');
             setIsModalOpen(true);
@@ -99,7 +119,7 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: resetEmail }), // Используем resetEmail вместо username
+        body: JSON.stringify({ email: resetEmail }),
       });
 
       console.log('Ответ от сервера получен:', response);
@@ -209,7 +229,9 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
                 <label htmlFor="agreement">
                   Я даю согласие на обработку персональных данных и соглашаюсь с
                   <br />
-                  <Link className={styles.privacyPolicyLink} to="/privacy-policy"> Политикой обработки персональных данных</Link>
+                  <Link className={styles.privacyPolicyLink} to="/privacy-policy" target="_blank" rel="noopener noreferrer">
+                    Политикой обработки персональных данных
+                  </Link>
                 </label>
               </div>
             )}
@@ -230,8 +252,8 @@ const Authorization = ({ initialMode = 'login', setAuthMode }) => {
         isOpen={isModalOpen}
         onClose={handleModalClose}
         message={modalMessage}
-        email={resetEmail} // Передаем email в модальное окно
-        setEmail={setResetEmail} // Функция для обновления email
+        email={resetEmail}
+        setEmail={setResetEmail}
         onResetPassword={loginAttempts >= 3 ? handleResetPasswordClick : undefined}
       />
     </div>
