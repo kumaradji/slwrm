@@ -303,13 +303,6 @@ class LogoutView(APIView):
 
     def post(self, request):
         try:
-            cart = Cart.objects.get(user=request.user)
-            cart.items.clear()  # Очистить все товары из корзины
-            logger.info(f"User {request.user.id}: Cart cleared on logout")
-        except Cart.DoesNotExist:
-            logger.warning(f"User {request.user.id}: No cart to clear on logout")
-
-        try:
             request.user.auth_token.delete()
         except:
             pass
