@@ -56,6 +56,7 @@
 
 		@include tablet {
 			width: 100%;
+			max-width: none;
 		}
 
 		@include mobile {
@@ -74,6 +75,7 @@
 		}
 
 		.summaryRight {
+
 			.checkoutButton {
 				width: 100%;
 				padding: 10px;
@@ -99,26 +101,28 @@
 
 		.agreement {
 			margin-top: 10px;
-			font-size: 0.7rem;
+			font-size: 0.8rem; /* уменьшить шрифт */
 
 			label {
 				display: flex;
-				align-items: flex-start;
+				align-items: center; /* выровнять по центру по вертикали */
+				gap: 5px; /* уменьшить промежуток между чекбоксом и текстом */
 				cursor: pointer;
-
-				input[type="checkbox"] {
-					margin-right: 10px;
-					margin-top: 3px; // Выравнивание чекбокса с первой строкой текста
-				}
-
-				span {
-					font-size: 1.3rem;
-					flex: 1;
-					line-height: 1.4;
-				}
 			}
 
-			.offerLink {
+			input[type="checkbox"] {
+				margin-right: 5px;
+				margin-top: 0; /* выравнивание чекбокса */
+			}
+
+			span {
+				font-size: 0.9rem;
+				line-height: 1.2;
+			}
+		}
+
+
+		.offerLink {
 				color: var(--color-blue);
 				text-decoration: underline;
 				font-weight: bold;
@@ -128,7 +132,6 @@
 				}
 			}
 		}
-	}
 
 	.cartItems {
 		flex: 1;

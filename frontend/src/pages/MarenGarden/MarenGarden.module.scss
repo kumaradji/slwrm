@@ -7,6 +7,34 @@
 	margin: 0 auto;
 	text-align: left;
 
+	@include tablet {
+		padding: 110px 30px 20px 30px;
+	}
+
+	@include mobile {
+		padding: 110px 20px 20px 20px;
+	}
+
+	@include mobile-small {
+		padding: 110px 10px 20px 10px;
+	}
+
+	a {
+		margin-left: 30px;
+
+		@include tablet {
+			margin-left: 20px;
+		}
+
+		@include mobile {
+			margin-left: 10px;
+		}
+
+		@include mobile-small {
+			margin-left: 5px;
+		}
+	}
+
 	h2 {
 		margin-bottom: 2rem;
 		text-align: center;
@@ -55,14 +83,17 @@
 
 		@include tablet {
 			grid-template-columns: 1fr;
+			padding: 1rem 0.5rem;
 		}
 
 		@include mobile {
 			grid-template-columns: 1fr;
+			padding: 0.8rem 0.5rem;
 		}
 
 		@include mobile-small {
 			grid-template-columns: 1fr;
+			padding: 1rem 0.5rem;
 		}
 	}
 
@@ -83,14 +114,17 @@
 
 		@include desktop {
 			width: 450px;
+			padding: 0.5rem;
 		}
 
 		@include tablet {
-			width: 650px;
+			width: 680px;
+			padding: 0.5rem;
 		}
 
 		@include mobile {
-			width: 400px;
+			width: 450px;
+			padding: 0.5rem;
 		}
 
 		@include mobile-small {
@@ -142,6 +176,19 @@
 		align-items: flex-start;
 		text-align: left;
 
+
+		@include tablet {
+			margin-left: 20px;
+		}
+
+		@include mobile {
+			margin-left: 10px;
+		}
+
+		@include mobile-small {
+			margin-left: 10px;
+		}
+
 		h3 {
 			font-size: 1.5rem;
 			margin-bottom: 1rem;
@@ -160,7 +207,6 @@
 				font-size: 1rem;
 			}
 		}
-
 	}
 
 	&__videoContainer {

@@ -35,6 +35,18 @@
 		z-index: 1000;
 		rotate: -20deg;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+		@include tablet {
+			font-size: 30px;
+		}
+
+		@include mobile {
+			font-size: 20px;
+		}
+
+		@include mobile-small {
+			font-size: 15px;
+		}
 	}
 
 	.productContent {

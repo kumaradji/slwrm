@@ -38,7 +38,6 @@ const ProductDetail = () => {
       setNotification('Товар добавлен в корзину');
       setTimeout(() => setNotification(''), 3000);
     } else {
-      // Перенаправление на страницу входа
       navigate('/profile', { state: { from: location.pathname } });
     }
   };

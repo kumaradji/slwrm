@@ -7,11 +7,38 @@
 	padding: 110px 70px 0 70px;
 	margin: 0 auto;
 	text-align: left;
+
+	@include tablet {
+		flex-direction: column;
+		padding: 110px 0 0 0;
+	}
+
+	@include mobile {
+		flex-direction: column;
+		padding: 110px 0 0 0;
+	}
+
+	@include mobile-small {
+		flex-direction: column;
+		padding: 110px 0 0 0;
+	}
 }
 
 .sidebar {
 	width: 40%;
 	padding: 30px;
+
+	@include tablet {
+		display: none;
+	}
+
+	@include mobile {
+		display: none;
+	}
+
+	@include mobile-small {
+		display: none;
+	}
 
 	ol {
 		font-family: LetteraTrentadue, sans-serif;
@@ -34,6 +61,18 @@
 .chapterContent {
 	width: 65%; // Две трети ширины
 	padding: 20px;
+
+	@include tablet {
+		width: 100%;
+	}
+
+	@include mobile {
+		width: 100%;
+	}
+
+	@include mobile-small {
+		width: 100%;
+	}
 
 	h3 {
 		margin-bottom: 20px;
@@ -72,6 +111,21 @@
 	font-size: 16px;
 	cursor: pointer;
 	margin: 0 5px 20px 5px;
+
+	@include tablet {
+		width: 100%;
+		margin: 10px;
+	}
+
+	@include mobile {
+		width: 100%;
+		margin: 10px;
+	}
+
+	@include mobile-small {
+		width: 100%;
+		margin: 10px;
+	}
 
 	&:hover {
 		background-color: var(--color-blue);

@@ -14,9 +14,19 @@
 		width: 30px; // Размеры изображения кнопки
 		height: 30px;
 
+		@include tablet {
+			width: 25px;
+			height: 25px;
+		}
+
 		@include mobile {
 			width: 25px;
 			height: 25px;
+		}
+
+		@include mobile-small {
+			width: 20px;
+			height: 20px;
 		}
 	}
 

@@ -15,7 +15,7 @@
 	}
 
 	@include tablet {
-		flex: 0 0 480px;
+		flex: 0 0 420px;
 		font-size: 12px;
 	}
 
@@ -33,10 +33,23 @@
 	margin-right: 20px;
 	transition: opacity 0.3s ease;
 
+
+	@include desktop {
+		margin-right: 10px;
+	}
+
+	@include tablet {
+		margin-right: 5px;
+	}
+
 	@include mobile {
 		margin-right: 0;
 		margin-bottom: 10px;
 		font-size: 14px;
+	}
+
+	@include mobile-small {
+		font-size: 12px;
 	}
 }
 

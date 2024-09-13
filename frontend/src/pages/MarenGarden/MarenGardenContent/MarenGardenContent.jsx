@@ -22,6 +22,7 @@ const MarenGardenContent = ({ marenGardenChapters = [] }) => {
 
   return (
     <div className={styles.content}>
+      {/* Sidebar скрывается на мобильных устройствах */}
       <div className={styles.sidebar}>
         <ol>
           {marenGardenChapters.map((chapter) => (
@@ -38,10 +39,15 @@ const MarenGardenContent = ({ marenGardenChapters = [] }) => {
           Назад
         </button>
       </div>
+
+      {/* Контент раздела отображается в полном виде на мобильных устройствах */}
       <div className={styles.chapterContent}>
         {currentChapter.content}
+        {/* Кнопка назад для мобильных устройств */}
+        <button onClick={handleGoBack} className={styles.backButton}>
+          Назад
+        </button>
       </div>
-
     </div>
   );
 };

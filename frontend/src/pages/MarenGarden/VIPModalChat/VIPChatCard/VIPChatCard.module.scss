@@ -8,6 +8,7 @@
 	bottom: 160px;
 	right: 20px;
 	width: 160px;
+	height: 80px;
 	display: flex;
 	text-align: center;
 	color: var(--color-white);
@@ -16,9 +17,20 @@
 	box-shadow: var(--box-shadow);
 	padding: 0.7rem;
 	z-index: 2001;
-
 	text-decoration: none;
 	cursor: pointer;
+
+	@include tablet {
+		bottom: 120px;
+	}
+
+	@include mobile {
+		bottom: 100px;
+	}
+
+	@include mobile-small {
+		bottom: 80px;
+	}
 
 	h3 {
 		font-size: 1.2rem;

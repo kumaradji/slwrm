@@ -1,7 +1,7 @@
 // PaymentInstructionsPage.module.scss
-
-@import '../../../styles/variables.scss';
-
+@import '../../../styles/media';
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
 
 
 .paymentInstructionsPage {
@@ -31,7 +31,6 @@
 		padding-left: 20px;
 		font-family: 'Iosevka', sans-serif;
 	}
-
 }
 
 .backButton {
@@ -53,4 +52,64 @@
 
 .leaf {
 	width: 300px;
+}
+
+.mainLeaf01 {
+	position: absolute;
+	opacity: 0.1;
+	rotate: (300deg);
+	width: 500px;
+	height: auto;
+	top: -120px;
+	left: 500px;
+
+	@include desktop {
+		top: -90px;
+		width: 400px;
+		left: 150px;
+	}
+
+	@include tablet {
+		display: none;
+	}
+
+	@include mobile {
+		display: none;
+	}
+
+	@include mobile-small {
+		width: 100px;
+	}
+}
+
+.mainLeaf02 {
+	position: absolute;
+	opacity: 0.1;
+	rotate: (300deg);
+	width: 700px;
+	height: auto;
+	top: 700px;
+	left: 500px;
+
+	@include desktop {
+		top: 2000px;
+		width: 500px;
+		left: 400px;
+	}
+
+	@include tablet {
+		top: 800px;
+		width: 400px;
+		left: 300px;
+	}
+
+	@include mobile {
+		top: 700px;
+		width: 300px;
+		left: 200px;
+	}
+
+	@include mobile-small {
+		width: 100px;
+	}
 }

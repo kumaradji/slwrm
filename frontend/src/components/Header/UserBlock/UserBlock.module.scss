@@ -78,6 +78,7 @@
 	width: 75px;
 	height: 30px;
 	border-radius: 5px;
+	margin-right: 0;
 	box-shadow: 0 0 10px 0 #00000033;
 	background-color: var(--color-blue);
 	font-family: 'Montserrat', sans-serif;
@@ -89,6 +90,7 @@
 	}
 
 	@include tablet {
+		margin-right: 20px;
 		width: 45px;
 		height: 30px;
 		font-size: 10px;
