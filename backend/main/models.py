@@ -138,6 +138,7 @@ class EcoStaffImage(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(EcoStaff)
+    created_at = models.DateTimeField(auto_now_add=True)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def add_item(self, product):
