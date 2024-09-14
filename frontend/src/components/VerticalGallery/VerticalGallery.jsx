@@ -25,10 +25,7 @@ const VerticalGallery = ({ images }) => {
 
   return (
     <div className={styles.verticalGallery}>
-      <div className={styles.mainImage} onClick={() => openFullscreen(0)}>
-        <img src={images[0]} alt="Main" />
-      </div>
-      <div className={styles.thumbnails}>
+      <div >
         {images.map((image, index) => (
           <div key={index} className={styles.imageContainer} onClick={() => openFullscreen(index)}>
             <img src={image} alt={`Image ${index}`} className={styles.image} />
