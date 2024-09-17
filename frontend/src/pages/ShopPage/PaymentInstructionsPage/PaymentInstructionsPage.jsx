@@ -2,8 +2,6 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './PaymentInstructionsPage.module.scss';
 import Leaf from "../../../assets/logo_DushuGreu_black.png";
-import Leaf01 from "../../../assets/leaf_1.png";
-import Leaf02 from "../../../assets/leaf_2.png";
 
 const PaymentInstructionsPage = () => {
   const location = useLocation();
@@ -26,7 +24,6 @@ const PaymentInstructionsPage = () => {
         <p>От всего сердца благодарю вас за то, что вы обратили внимание на моё творчество и решили приобрести эти
           уникальные изделия. Ваш выбор – это не просто покупка, это инвестиция в красоту и вдохновение, которые
           теперь будут окружать вас каждый день.</p>
-        <img className={styles.mainLeaf01} src={Leaf01} alt="Leaf image" />
         <h2>Инструкции по оплате</h2>
         <p>Чтобы завершить процесс покупки, выполните следующие шаги:</p>
         <ol>
@@ -46,7 +43,6 @@ const PaymentInstructionsPage = () => {
               email: <strong>koltsovaecoprint@yandex.ru</strong></p>
             Вы также можете подтвердить оплату через любой другой способ связи на нашем сайте.
           </li>
-          <img className={styles.mainLeaf02} src={Leaf02} alt="Leaf image" />
         </ol>
         <h2>Что дальше?</h2>
         <p>После получения подтверждения оплаты, мы незамедлительно приступим к подготовке вашего заказа.</p>

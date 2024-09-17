@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../../context/CartContext';
 import Slider from "../../../components/Slider/Slider";
 import styles from './PromoPage.module.scss';
@@ -9,6 +10,7 @@ const PromoPage = () => {
   const { user } = useAuth();
   const { addToCart } = useContext(CartContext);
   const [notification, setNotification] = useState('');
+  const navigate = useNavigate(); // Используем useNavigate для редиректа
 
   const settings = {
     dots: false,
@@ -27,7 +29,12 @@ const PromoPage = () => {
   ];
 
   const handleAddToCart = async () => {
-    const masterClass = { id: 43, name: 'Мастер-класс "Цветной фон"' }; // Уникальный идентификатор мастер-класса "Мареновый сад"
+    if (!user || !user.isActive) { // Проверка на авторизацию и активность
+      navigate('/auth'); // Редирект на страницу авторизации
+      return;
+    }
+
+    const masterClass = { id: 43, name: 'Мастер-класс "Цветной фон"' }; // Уникальный идентификатор мастер-класса
 
     try {
       await addToCart(masterClass);
@@ -84,7 +91,7 @@ const PromoPage = () => {
         свои навыки и вдохновиться новыми идеями в области окрашивания ткани.</p>
       <button className={styles.buyButton} onClick={handleAddToCart}>Купить</button>
       <div className={styles.gallery}>
-        <Slider {...settings} autoPlay={true} autoPlayTime={6000} width="80%" height="700px" images={images} />
+        <Slider {...settings} autoPlay={true} autoPlayTime={6000} width="80%" height="700px" images={images}/>
       </div>
     </div>
   );
