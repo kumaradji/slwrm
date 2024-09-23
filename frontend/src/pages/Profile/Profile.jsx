@@ -21,7 +21,7 @@ const Profile = () => {
     try {
       await fetchUserData();
       if (user) {
-        const avatarResponse = await fetch('http://localhost:8000/api/profile/avatar/', {
+        const avatarResponse = await fetch('/api/profile/avatar/', {
           headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`,
           },
@@ -81,7 +81,7 @@ const Profile = () => {
       formData.append('avatar', avatar);
 
       try {
-        const response = await fetch('http://localhost:8000/api/profile/avatar/', {
+        const response = await fetch('/api/profile/avatar/', {
           method: 'PUT',
           headers: {
             'Authorization': `Token ${localStorage.getItem('token')}`,

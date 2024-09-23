@@ -1,6 +1,6 @@
 export const handleLogin = async (email, username, password, login, navigate, setError, setLoginAttempts) => {
   try {
-    const response = await fetch('http://localhost:8000/api/login/', {
+    const response = await fetch('/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export const handleRegistration = async (password, confirmPassword, username, em
   }
 
   try {
-    const response = await fetch('http://localhost:8000/api/register/', {
+    const response = await fetch('/api/register/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export const handleResetPassword = async (e, email, setError, setModalMessage, s
   e.preventDefault();
 
   try {
-    const response = await fetch('http://localhost:8000/api/reset-password/', {
+    const response = await fetch('/api/reset-password/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

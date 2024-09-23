@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     if (!token) return;
 
     try {
-      const response = await fetch('http://localhost:8000/api/user/', {
+      const response = await fetch('/api/user/', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        await fetch('http://localhost:8000/api/logout/', {
+        await fetch('/api/logout/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

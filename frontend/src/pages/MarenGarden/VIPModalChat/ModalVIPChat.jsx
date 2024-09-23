@@ -9,7 +9,7 @@ const ModalVIPChat = ({ onClose }) => {
     const token = localStorage.getItem('token');
     if (token) {
       const fetchMessages = async () => {
-        const response = await fetch('http://localhost:8000/api/vip-messages/', {
+        const response = await fetch('/api/vip-messages/', {
           headers: {
             'Authorization': `Token ${token}`
           }
@@ -35,7 +35,7 @@ const ModalVIPChat = ({ onClose }) => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:8000/api/vip-messages/create/', {
+    const response = await fetch('/api/vip-messages/create/', {
       method: 'POST',
       headers: {
         'Authorization': `Token ${token}`,

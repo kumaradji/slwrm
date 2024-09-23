@@ -17,7 +17,7 @@ const ResetPassword = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:8000/api/reset-password/${uidb64}/${token}/`, {
+        const response = await fetch(`/api/reset-password/${uidb64}/${token}/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
