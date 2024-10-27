@@ -2,36 +2,39 @@ version: "3.9"
 
 networks:
   soulwarm:
+  traefik-public:
+    external: true
 
 services:
   backend:
     image: ${REGISTRY}/backend:${IMAGE_TAG}
     networks:
       - soulwarm
+      - traefik-public
     volumes:
       - django_static:/app/backend/static
       - django_media:/app/backend/media
     environment:
-      - APP_ENV=production
-      - SECRET_KEY=django-insecure-xc7xublqj_u6jh&$$+++e-yrsm$$8ma*x_^4gxe%upd=-f7)1h_x
-      - DJANGO_ADMIN_USER=admin_ecoprint
-      - DJANGO_ADMIN_PASSWORD=Ku5609792
-      - EMAIL_HOST=smtp.yandex.ru
-      - EMAIL_PORT=587
-      - EMAIL_USE_TLS=True
-      - EMAIL_HOST_USER=koltsovaecoprint@yandex.ru
-      - EMAIL_HOST_PASSWORD='uxftjmkthdxbgfsj'
-      - DEFAULT_FROM_EMAIL=koltsovaecoprint@yandex.ru
-      - ADMIN_EMAIL=kumaradji@me.com
-      - GENERAL_TELEGRAM_BOT_TOKEN=7289275372:AAGDhyO9xRWsO2s55qfcEjr-b0RKJXA2QMM
-      - GENERAL_TELEGRAM_CHAT_ID=707268574
-      - DATABASE=postgres
-      - DB_ENGINE=django.db.backends.postgresql
-      - DB_DATABASE=soulwarm
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_HOST=db
-      - DB_PORT=5432
+      APP_ENV: production
+      SECRET_KEY: ${SECRET_KEY}
+      DJANGO_ADMIN_USER: ${DJANGO_ADMIN_USER}
+      DJANGO_ADMIN_PASSWORD: ${DJANGO_ADMIN_PASSWORD}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      GENERAL_TELEGRAM_BOT_TOKEN: ${GENERAL_TELEGRAM_BOT_TOKEN}
+      GENERAL_TELEGRAM_CHAT_ID: ${GENERAL_TELEGRAM_CHAT_ID}
+      DATABASE: ${DATABASE}
+      DB_ENGINE: ${DB_ENGINE}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
     command: gunicorn soulwarm.wsgi:application --bind 0.0.0.0:8000
     deploy:
       placement:
@@ -41,12 +44,13 @@ services:
     image: ${REGISTRY}/db:${IMAGE_TAG}
     networks:
       - soulwarm
+      - traefik-public
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=soulwarm
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     deploy:
       placement:
         constraints: [ node.role == manager ]
@@ -56,6 +60,7 @@ services:
     image: ${REGISTRY}/react:${IMAGE_TAG}
     networks:
       - soulwarm
+      - traefik-public
     volumes:
       - react_build:/app/frontend/build
     command: serve -s build -l 3000
@@ -67,15 +72,26 @@ services:
     image: ${REGISTRY}/nginx:${IMAGE_TAG}
     networks:
       - soulwarm
+      - traefik-public
     volumes:
       - django_static:/app/backend/static
       - django_media:/app/backend/media
       - react_build:/app/frontend/build
-    ports:
-      - 80:80
     deploy:
       placement:
         constraints: [ node.role == manager ]
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.http.routers.nginx.rule=Host(`koltsovaecoprint.ru`) || Host(`www.koltsovaecoprint.ru`)
+        - traefik.http.services.nginx.loadBalancer.server.port=80
+        - traefik.http.middlewares.nginx-redirect.redirectRegex.regex=^(https?://)www.koltsovaecoprint.ru/(.*)$$
+        - traefik.http.middlewares.nginx-redirect.redirectRegex.replacement=$${1}koltsovaecoprint.ru/$${2}
+        - traefik.http.middlewares.nginx-redirect.redirectRegex.permanent=true
+        - traefik.http.routers.nginx.middlewares=nginx-redirect,secure-headers
+        - traefik.http.routers.nginx.entryPoints=https
+        - traefik.http.routers.nginx.tls=true
+        - traefik.http.routers.nginx.tls.certResolver=letsEncrypt
 
 volumes:
   postgres_data:
