@@ -39,7 +39,7 @@
       "react-app/jest"
     ]
   },
-  "proxy": "http://31.129.42.105:8000",
+  "proxy": "https://koltsovaecoprint.ru:8000",
   "browserslist": {
     "production": [
       ">0.2%",

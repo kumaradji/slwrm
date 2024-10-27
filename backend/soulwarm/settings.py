@@ -48,7 +48,7 @@ GENERAL_TELEGRAM_CHAT_ID = env('GENERAL_TELEGRAM_CHAT_ID')
 # Основные настройки
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = False
-ALLOWED_HOSTS = ['31.129.42.105', '127.0.0.1', 'localhost', '0.0.0.0']
+ALLOWED_HOSTS = ['31.129.42.105', '127.0.0.1', 'localhost', '0.0.0.0', 'koltsovaecoprint.ru']
 
 LOGGING = {
     'version': 1,
@@ -87,7 +87,7 @@ LOGGING = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = ['http://31.129.42.105:3000']
+CORS_ALLOWED_ORIGINS = ['http://koltsovaecoprint.ru:3000']
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'Lax'

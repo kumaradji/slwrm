@@ -402,7 +402,7 @@ class ResetPasswordView(APIView):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
         # Изменяем URL на тот, который ведет на фронтенд
-        reset_url = f"http://31.129.42.105/reset-password/{uid}/{token}/"
+        reset_url = f"http://koltsovaecoprint.ru/reset-password/{uid}/{token}/"
 
         subject = 'Сброс пароля на сайте ДушуГрею'
         message = f'''
