@@ -1,0 +1,46 @@
+// PaymentInstructionsPage.module.scss
+@import '../../../styles/media';
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+
+.paymentInstructionsPage {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 100px 20px;
+	background-color: var(--color-white);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.instructionsContainer {
+	padding: 20px;
+	margin-bottom: 20px;
+
+	h2 {
+		margin-top: 20px;
+		margin-bottom: 10px;
+		font-size: 32px;
+	}
+
+	.ol {
+		padding-left: 20px;
+		font-family: 'Iosevka', sans-serif;
+	}
+
+	.li {
+		padding-left: 20px;
+		font-family: 'Iosevka', sans-serif;
+	}
+}
+
+.backButton {
+	@include button-style;
+	margin: 15px 0;
+	font-size: 1.5rem;
+	width: 100%;
+
+	&:hover {
+		background-color: var(--color-blue);
+	}
+}
+

@@ -1,0 +1,16 @@
+.idea/
+.vscode/
+.DS_Store
+*.log
+*.pot
+*.pyc
+__pycache__
+*.mo
+venv/
+backend/.env
+frontend/build
+frontend/node_modules
+frontend/public/videos
+.eslintcache
+*.manifest
+*.spec

@@ -1,0 +1,11 @@
+@import '../../styles/media';
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.slider {
+	position: relative;
+	overflow: hidden;
+	height: 100%;
+	max-width: 600px;
+}
+
