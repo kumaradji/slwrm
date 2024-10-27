@@ -1,0 +1,74 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '/README.md'
+      - '.github/'
+
+env:
+  REGISTRY: cr.selcloud.ru/soulwarm
+  REGISTRY_HOST: cr.selcloud.ru
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Docker login
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.REGISTRY_HOST }}
+          username: ${{ secrets.CONTAINER_REGISTRY_USER }}
+          password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+
+      - name: Inject branch slug
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Set image tag
+        run: echo "::set-env name=IMAGE_TAG::${{ env.GITHUB_REF_SLUG }}-${GITHUB_RUN_NUMBER}"
+
+      - name: Build
+        run: make docker-build
+
+      - name: Push
+        run: make push
+        if: ${{ github.ref == 'refs/heads/master' }}
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          known_hosts: ${{ secrets.PRODUCTION_HOST }}
+        if: ${{ github.ref == 'refs/heads/master' }}
+
+      - name: Deploy
+        run: make deploy
+        env:
+          HOST: ${{ secrets.PRODUCTION_HOST }}
+          PORT: ${{ secrets.PRODUCTION_PORT }}
+          BUILD_NUMBER: ${GITHUB_RUN_NUMBER}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DJANGO_ADMIN_USER: ${{ secrets.DJANGO_ADMIN_USER }}
+          DJANGO_ADMIN_PASSWORD: ${{ secrets.DJANGO_ADMIN_PASSWORD }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
+          EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          DEFAULT_FROM_EMAIL: ${{ secrets.DEFAUL_FROM_EMAIL }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          GENERAL_TELEGRAM_BOT_TOKEN: ${{ secrets.GENERAL_TELEGRAM_BOT_TOKEN }}
+          GENERAL_TELEGRAM_CHAT_ID: ${{ secrets.GENERAL_TELEGRAM_CHAT_ID }}
+          DATABASE: ${{ secrets.DATABASE }}
+          DB_ENGINE: ${{ secrets.DN_ENGINE }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+        if: ${{ github.ref == 'refs/heads/master' }}
