@@ -47,15 +47,6 @@ header {
 	}
 }
 
-.logoWrapper {
-	display: inline-block;
-	cursor: pointer;
-
-	&:focus {
-		outline: none;
-	}
-}
-
 .headerLogo {
 	width: 141px;
 	align-items: center;

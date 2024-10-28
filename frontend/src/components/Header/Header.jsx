@@ -1,9 +1,9 @@
 // Header.jsx
-import React, { useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate, useLocation, Link} from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import UserBlock from './UserBlock/UserBlock';
-import { useAuth } from '../../context/AuthContext';
+import {useAuth} from '../../context/AuthContext';
 import styles from './Header.module.scss';
 import useWindowSize from '../../hooks/useWindowSize';
 import logo_black from '../../assets/logo_DushuGreu_black.png';
@@ -16,9 +16,9 @@ import Email from '../../assets/icons/email_icon.png';
 import VK from '../../assets/icons/vk_icon.png';
 
 const Header = () => {
-  const { isLoggedIn, user } = useAuth();
+  const {isLoggedIn, user} = useAuth();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const { width } = useWindowSize();
+  const {width} = useWindowSize();
   const isMobile = width <= 767;
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,9 +33,7 @@ const Header = () => {
   return (
     <header className={isMenuVisible && isMobile ? styles.menuVisible : ''}>
       <div className={styles.headerContent}>
-        <div className={styles.logoWrapper}>
-          <a href="/"><img className={styles.headerLogo} src={logo_black} alt="Logo ДушуГрею"/></a>
-        </div>
+        <a href="/"><img className={styles.headerLogo} src={logo_black} alt="Logo ДушуГрею"/></a>
         {!isMobile && <Navbar/>}
         <div className={`${styles.rightSection} ${isMobile ? styles.hideOnMobile : ''}`}>
           {isLoggedIn && user ? (
@@ -62,25 +60,25 @@ const Header = () => {
         <div className={styles.dropdownMenuPage}>
           <div className={styles.userBlockWrapper}>
             {isLoggedIn && user ? (
-              <UserBlock userName={user.username} userPicture={user.picture} />
+              <UserBlock userName={user.username} userPicture={user.picture}/>
             ) : null}
           </div>
-          <Navbar />
+          <Navbar/>
           <div className={styles.footer__social}>
             <a href="https://t.me/nina_koltsova">
-              <img src={Telegram} alt="Telegram" />
+              <img src={Telegram} alt="Telegram"/>
             </a>
             <a href="https://vk.com/ecoprint_koltsova">
-              <img src={VK} alt="VK" />
+              <img src={VK} alt="VK"/>
             </a>
             <a href="https://wa.me/79500423593">
-              <img src={Whatsapp} alt="Whatsapp" />
+              <img src={Whatsapp} alt="Whatsapp"/>
             </a>
             <a href="tel:+79500423593">
-              <img src={Telephone} alt="Telephone" />
+              <img src={Telephone} alt="Telephone"/>
             </a>
             <a href="mailto:koltsovaecoprint@yandex.ru">
-              <img src={Email} alt="Email" />
+              <img src={Email} alt="Email"/>
             </a>
           </div>
         </div>
