@@ -6,11 +6,35 @@ networks:
     external: true
 
 services:
+  nginx:
+    image: ${REGISTRY}/nginx:${IMAGE_TAG}
+    networks:
+      - soulwarm
+      - traefik-public
+    volumes:
+      - django_static:/app/backend/static
+      - django_media:/app/backend/media
+      - react_build:/app/frontend/build
+    deploy:
+      placement:
+        constraints: [ node.role == manager ]
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.http.routers.nginx.rule=Host(`koltsovaecoprint.ru`) || Host(`www.koltsovaecoprint.ru`)
+        - traefik.http.services.nginx.loadBalancer.server.port=80
+        - traefik.http.middlewares.nginx-redirect.redirectRegex.regex=^(https?://)www.koltsovaecoprint.ru/(.*)$$
+        - traefik.http.middlewares.nginx-redirect.redirectRegex.replacement=$${1}koltsovaecoprint.ru/$${2}
+        - traefik.http.middlewares.nginx-redirect.redirectRegex.permanent=true
+        - traefik.http.routers.nginx.middlewares=nginx-redirect,secure-headers
+        - traefik.http.routers.nginx.entryPoints=https
+        - traefik.http.routers.nginx.tls=true
+        - traefik.http.routers.nginx.tls.certResolver=letsEncrypt
+
   backend:
     image: ${REGISTRY}/backend:${IMAGE_TAG}
     networks:
       - soulwarm
-      - traefik-public
     volumes:
       - django_static:/app/backend/static
       - django_media:/app/backend/media
@@ -43,7 +67,6 @@ services:
     image: ${REGISTRY}/db:${IMAGE_TAG}
     networks:
       - soulwarm
-      - traefik-public
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
@@ -59,38 +82,12 @@ services:
     image: ${REGISTRY}/react:${IMAGE_TAG}
     networks:
       - soulwarm
-      - traefik-public
     volumes:
       - react_build:/app/frontend/build
     command: serve -s build -l 3000
     deploy:
       placement:
         constraints: [ node.role == manager ]
-
-  nginx:
-    image: ${REGISTRY}/nginx:${IMAGE_TAG}
-    networks:
-      - soulwarm
-      - traefik-public
-    volumes:
-      - django_static:/app/backend/static
-      - django_media:/app/backend/media
-      - react_build:/app/frontend/build
-    deploy:
-      placement:
-        constraints: [ node.role == manager ]
-      labels:
-        - traefik.enable=true
-        - traefik.docker.network=traefik-public
-        - traefik.http.routers.nginx.rule=Host(`koltsovaecoprint.ru`) || Host(`www.koltsovaecoprint.ru`)
-        - traefik.http.services.nginx.loadBalancer.server.port=80
-        - traefik.http.middlewares.nginx-redirect.redirectRegex.regex=^(https?://)www.koltsovaecoprint.ru/(.*)$$
-        - traefik.http.middlewares.nginx-redirect.redirectRegex.replacement=$${1}koltsovaecoprint.ru/$${2}
-        - traefik.http.middlewares.nginx-redirect.redirectRegex.permanent=true
-        - traefik.http.routers.nginx.middlewares=nginx-redirect,secure-headers
-        - traefik.http.routers.nginx.entryPoints=https
-        - traefik.http.routers.nginx.tls=true
-        - traefik.http.routers.nginx.tls.certResolver=letsEncrypt
 
 volumes:
   postgres_data:
