@@ -87,10 +87,14 @@ LOGGING = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = ['http://koltsovaecoprint.ru:3000']
+CORS_ALLOWED_ORIGINS = ['http://koltsovaecoprint.ru:3000', 'https://koltsovaecoprint.ru']
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_TRUSTED_ORIGINS = [
+    'https://31.129.42.105',
+    'https://koltsovaecoprint.ru'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
