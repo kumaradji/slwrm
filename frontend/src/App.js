@@ -1,6 +1,6 @@
 // App.jsx
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import './styles/styles.scss';
 
@@ -53,13 +53,14 @@ function App() {
   }, [fetchUserData]);
 
   return (
-    <Router>
+    <Router basename="/">
       <ScrollToTop />
       <CartProvider>
         <div className="app-container">
           <div className="content">
-            <Header isLoggedIn={isLoggedIn} userName={user?.username} />
+            <Header />
             <Routes>
+              <Route path="*" element={<Navigate to="/" />} />
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<Authorization />} />
               <Route path="/change-password" element={<ChangePassword />} />

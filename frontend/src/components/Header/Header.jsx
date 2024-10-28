@@ -30,20 +30,15 @@ const Header = () => {
     navigate('/auth');
   };
 
-  const handleLogoClick = () => {
-    navigate('/');
-  };
-
   return (
     <header className={isMenuVisible && isMobile ? styles.menuVisible : ''}>
       <div className={styles.headerContent}>
-        <img
-          className={styles.headerLogo}
-          src={logo_black}
-          alt="Logo ДушуГрею"
-          onClick={handleLogoClick}
-          style={{cursor: 'pointer'}}
-        />
+        <Link to="/" className={styles.headerLogo}>
+          <img
+            src={logo_black}
+            alt="Logo ДушуГрею"
+          />
+        </Link>
         {!isMobile && <Navbar/>}
         <div className={`${styles.rightSection} ${isMobile ? styles.hideOnMobile : ''}`}>
           {isLoggedIn && user ? (
