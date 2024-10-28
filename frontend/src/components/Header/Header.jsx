@@ -1,6 +1,6 @@
 // Header.jsx
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import UserBlock from './UserBlock/UserBlock';
 import { useAuth } from '../../context/AuthContext';
@@ -33,13 +33,13 @@ const Header = () => {
   return (
     <header className={isMenuVisible && isMobile ? styles.menuVisible : ''}>
       <div className={styles.headerContent}>
-        <img
-          className={styles.headerLogo}
-          src={logo_black}
-          alt="Logo ДушуГрею"
-          onClick={() => navigate('/')}
-          style={{cursor: 'pointer'}}
-        />
+        <Link to="/" className={styles.logoWrapper}>
+          <img
+            className={styles.headerLogo}
+            src={logo_black}
+            alt="Logo ДушуГрею"
+          />
+        </Link>
         {!isMobile && <Navbar/>}
         <div className={`${styles.rightSection} ${isMobile ? styles.hideOnMobile : ''}`}>
           {isLoggedIn && user ? (
