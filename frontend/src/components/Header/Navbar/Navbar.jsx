@@ -1,16 +1,17 @@
 // Navbar.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import style from './Navbar.module.scss';
 
 const Navbar = () => {
   return (
     <nav className={style.navbar}>
-      <a href="/">Главная</a>
-      <a href="/lessons">Уроки</a>
-      <a href="/shop">Магазин</a>
-      <a href="/about">Обо мне</a>
-      <a href="/gallery">Галерея</a>
-      <a href="/profile">Личный кабинет</a>
+      <Link to="/">Главная</Link>
+      <Link to="/lessons">Уроки</Link>
+      <Link to="/shop">Магазин</Link>
+      <Link to="/about">Обо мне</Link>
+      <Link to="/gallery">Галерея</Link>
+      <Link to="/profile">Личный кабинет</Link>
     </nav>
   );
 };
