@@ -33,11 +33,9 @@ const Header = () => {
   return (
     <header className={isMenuVisible && isMobile ? styles.menuVisible : ''}>
       <div className={styles.headerContent}>
-
-        <div className={styles.logoWrapper} onClick={() => navigate('/')}>
-          <img className={styles.headerLogo} src={logo_black} alt="Logo ДушуГрею" />
+        <div className={styles.logoWrapper}>
+          <a href="/"><img className={styles.headerLogo} src={logo_black} alt="Logo ДушуГрею"/></a>
         </div>
-
         {!isMobile && <Navbar/>}
         <div className={`${styles.rightSection} ${isMobile ? styles.hideOnMobile : ''}`}>
           {isLoggedIn && user ? (
@@ -63,7 +61,7 @@ const Header = () => {
       {isMenuVisible && isMobile && (
         <div className={styles.dropdownMenuPage}>
           <div className={styles.userBlockWrapper}>
-          {isLoggedIn && user ? (
+            {isLoggedIn && user ? (
               <UserBlock userName={user.username} userPicture={user.picture} />
             ) : null}
           </div>
