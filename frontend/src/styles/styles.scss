@@ -37,6 +37,21 @@ body, html {
 	font-size: 14px;
 	background-color: var(--color-main);
 
+	@include tablet {
+		font-size: 16px;
+	}
+
+	@include desktop {
+		font-size: 18px;
+	}
+
+	@include mobile {
+		font-size: 16px;
+	}
+
+	@include mobile-small {
+		font-size: 14px;
+	}
 }
 
 a {

@@ -43,17 +43,6 @@
   },
   {
     "model": "main.ecostaff",
-    "pk": 1,
-    "fields": {
-      "title": "Шёлковое платье \"Жемчужина\"",
-      "description": "Шёлковое платье \"Жемчужина\". Экопринт.",
-      "content": "Погрузитесь в мир натуральной красоты с шёлковым платьем \"Жемчужина\". Это уникальное изделие из домотканого шёлка шои, окрашенное с помощью растений и индиго, создаёт неповторимый стиль и атмосферу.\n\nПлатье выполнено в бохо стиле, идеально подходящем для свободных духом и мыслями. Лесной рисунок на натуральном шёлке изящно переливается, напоминая о жемчужине, с оттенками от серого до зеленоватого и голубого. Каждое движение будет напоминать о красоте природы.\n\nПлатье подходит как для размера 48, так и для 54, обеспечивая комфорт и стиль в любом образе. Позвольте себе окунуться в мир элегантности и свободы с платьем \"Жемчужина\"!",
-      "price": "20000.00",
-      "category": 4
-    }
-  },
-  {
-    "model": "main.ecostaff",
     "pk": 2,
     "fields": {
       "title": "Палантин из кашемира с шерстью \"Нежность\"",
@@ -448,7 +437,6 @@
       "category": 5
     }
   },
-
   {
     "model": "main.ecostaffimage",
     "pk": 20,
@@ -494,54 +482,6 @@
     "pk": 25,
     "fields": {
       "image": "shop/45_Shelkovoe_plate_Zhemchuzhina_None_L40Zuqa.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 26,
-    "fields": {
-      "image": "shop/46_Plate_iz_krepdeshina_Naslazhdenie_None.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 27,
-    "fields": {
-      "image": "shop/46_Plate_iz_krepdeshina_Naslazhdenie_None_05zf2Ac.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 28,
-    "fields": {
-      "image": "shop/46_Plate_iz_krepdeshina_Naslazhdenie_None_ANyneNb.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 29,
-    "fields": {
-      "image": "shop/46_Plate_iz_krepdeshina_Naslazhdenie_None_F2P5qRI.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 30,
-    "fields": {
-      "image": "shop/46_Plate_iz_krepdeshina_Naslazhdenie_None_fEDdulA.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 31,
-    "fields": {
-      "image": "shop/46_Plate_iz_krepdeshina_Naslazhdenie_None_iEpyxn1.jpeg",
       "ecostaff": 1
     }
   },
@@ -2359,63 +2299,6 @@
     "fields": {
       "image": "shop/43_Marenovyj_sad_None.jpg",
       "ecostaff": 43
-    }
-  },
-
-  {
-    "model": "main.ecostaffimage",
-    "pk": 301,
-    "fields": {
-      "image": "shop/47_Jubka-sarafan_Mjata_None.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 302,
-    "fields": {
-      "image": "shop/47_Jubka-sarafan_Mjata_None_cBXKT6f.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 303,
-    "fields": {
-      "image": "shop/47_Jubka-sarafan_Mjata_None_iAzQBl5.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 304,
-    "fields": {
-      "image": "shop/47_Jubka-sarafan_Mjata_None_MmwS4yB.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 305,
-    "fields": {
-      "image": "shop/47_Jubka-sarafan_Mjata_None_nk812fh.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 306,
-    "fields": {
-      "image": "shop/47_Jubka-sarafan_Mjata_None_v36r9Hg.jpeg",
-      "ecostaff": 1
-    }
-  },
-  {
-    "model": "main.ecostaffimage",
-    "pk": 306,
-    "fields": {
-      "image": "shop/47_Jubka-sarafan_Mjata_None_v36r9Hg.jpeg",
-      "ecostaff": 1
     }
   }
 ]
