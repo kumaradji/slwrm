@@ -16,17 +16,29 @@ docker-build: docker-build-backend docker-build-nginx docker-build-react docker-
 
 docker-build-backend:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
+<<<<<<< HEAD
     	--platform linux/amd64 \
+=======
+		--platform linux/amd64 \
+>>>>>>> 7eb18c199171b08c6fb13490babed127002e7ba8
     	--tag ${REGISTRY}/backend:${IMAGE_TAG} \
     	--file ./docker/Django/Dockerfile .
 docker-build-nginx:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
+<<<<<<< HEAD
     	--platform linux/amd64 \
+=======
+		--platform linux/amd64 \
+>>>>>>> 7eb18c199171b08c6fb13490babed127002e7ba8
     	--tag ${REGISTRY}/nginx:${IMAGE_TAG} \
     	--file ./docker/Nginx/Dockerfile .
 docker-build-react:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
+<<<<<<< HEAD
     	--platform linux/amd64 \
+=======
+		--platform linux/amd64 \
+>>>>>>> 7eb18c199171b08c6fb13490babed127002e7ba8
     	--tag ${REGISTRY}/react:${IMAGE_TAG} \
     	--file ./docker/React/Dockerfile .
 docker-build-db:
