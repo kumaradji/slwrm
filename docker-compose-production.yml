@@ -11,8 +11,6 @@ services:
     networks:
       - soulwarm
       - traefik-public
-    port:
-      - 80:80
     volumes:
       - django_static:/app/backend/static
       - django_media:/app/backend/media
