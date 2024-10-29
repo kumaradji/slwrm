@@ -113,11 +113,11 @@ p, ul, ol, span {
 	}
 
 	@include mobile {
-		font-size: 26px;
+		font-size: 30px;
 	}
 
 	@include mobile-small {
-		font-size: 28px;
+		font-size: 30px;
 	}
 }
 

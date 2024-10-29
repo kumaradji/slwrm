@@ -33,12 +33,13 @@ const Header = () => {
   return (
     <header className={isMenuVisible && isMobile ? styles.menuVisible : ''}>
       <div className={styles.headerContent}>
-        <Link to="/" className={styles.headerLogo}>
-          <img
-            src={logo_black}
-            alt="Logo ДушуГрею"
-          />
-        </Link>
+        <div className={styles.headerLogo}>
+          <a href="https://koltsovaecoprint.ru">
+            <img src={logo_black}
+                 alt="Logo ДушуГрею"/>
+          </a>
+        </div>
+
         {!isMobile && <Navbar/>}
         <div className={`${styles.rightSection} ${isMobile ? styles.hideOnMobile : ''}`}>
           {isLoggedIn && user ? (
