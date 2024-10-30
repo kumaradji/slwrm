@@ -7,10 +7,14 @@
 __pycache__
 *.mo
 venv/
-backend/.env.example
+backend/.env.dev.example
+backend/static
+backend/media/user*
 frontend/build
 frontend/node_modules
 frontend/public/videos
+docker/volumes
+docker/dev/Nginx/logs
 .eslintcache
 *.manifest
 *.spec
