@@ -7,6 +7,7 @@
 __pycache__
 *.mo
 venv/
+backend/.env
 backend/.env.dev.example
 backend/static
 backend/media/user*
