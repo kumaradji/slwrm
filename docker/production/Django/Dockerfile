@@ -4,8 +4,8 @@ FROM python:3.10-slim as builder
 # Установка рабочей директории
 WORKDIR /app/backend
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE = 1
+ENV PYTHONUNBUFFERED = 1
 
 # Копируем requirements для установки зависимостей
 COPY ./backend/requirements.txt .
