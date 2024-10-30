@@ -7,8 +7,7 @@
 __pycache__
 *.mo
 venv/
-backend/.env
-backend/.env.prod.example
+backend/.env.example
 frontend/build
 frontend/node_modules
 frontend/public/videos
