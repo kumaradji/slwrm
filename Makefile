@@ -1,16 +1,12 @@
 #DOCKER
 docker-up:
-	docker compose -f docker-compose-production.yml up -d --build
+	docker compose up -d
 docker-down:
-	docker compose -f docker-compose-production.yml down --remove-orphans
+	docker compose down --remove-orphans
 docker-down-clear:
-	docker compose -f docker-compose-production.yml down -v --remove-orphans
-prod-docker-build:
+	docker compose down -v --remove-orphans
+docker-prod:
 	REGISTRY=cr.selcloud.ru/soulwarm IMAGE_TAG=master-1 make docker-build push
-dev-docker-build:
-	REGISTRY=local IMAGE_TAG=master-1 make docker-build
-dev-run-build:
-	REGISTRY=local IMAGE_TAG=master-1 docker compose -f docker-compose-production.yml up -d
 
 docker-build: docker-build-backend docker-build-nginx docker-build-react docker-build-db
 
@@ -18,22 +14,22 @@ docker-build-backend:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
 		  --platform linux/amd64 \
     	--tag ${REGISTRY}/backend:${IMAGE_TAG} \
-    	--file ./docker/Django/Dockerfile .
+    	--file ./docker/production/Django/Dockerfile .
 docker-build-nginx:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
 		  --platform linux/amd64 \
     	--tag ${REGISTRY}/nginx:${IMAGE_TAG} \
-    	--file ./docker/Nginx/Dockerfile .
+    	--file ./docker/production/Nginx/Dockerfile .
 docker-build-react:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
 		  --platform linux/amd64 \
     	--tag ${REGISTRY}/react:${IMAGE_TAG} \
-    	--file ./docker/React/Dockerfile .
+    	--file ./docker/production/React/Dockerfile .
 docker-build-db:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
 	    --platform linux/amd64 \
     	--tag ${REGISTRY}/db:${IMAGE_TAG} \
-    	--file ./docker/DB/Dockerfile .
+    	--file ./docker/production/DB/Dockerfile .
 
 push:
 	docker push ${REGISTRY}/backend:${IMAGE_TAG}

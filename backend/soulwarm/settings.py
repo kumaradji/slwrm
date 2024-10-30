@@ -63,13 +63,13 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/app/backend/django_logs.log',
+            'filename': os.path.join(BASE_DIR, 'django_logs.log'),
             'formatter': 'verbose',
         },
         'client_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/app/backend/client_logs.log',
+            'filename': os.path.join(BASE_DIR, 'client_logs.log'),
             'formatter': 'verbose',
         },
     },
@@ -79,7 +79,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'client': {  # Изменено с 'client_logs' на 'client'
+        'client': {
             'handlers': ['client_file'],
             'level': 'DEBUG',
             'propagate': False,
