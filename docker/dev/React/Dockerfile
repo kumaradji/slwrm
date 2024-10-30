@@ -1,3 +1,5 @@
+FROM node:18-alpine
+
 # Установка рабочей директории
 WORKDIR /app/frontend
 

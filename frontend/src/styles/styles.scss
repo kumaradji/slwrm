@@ -109,15 +109,15 @@ p, ul, ol, span {
 	}
 
 	@include tablet {
-		font-size: 24px;
+		font-size: 16px;
 	}
 
 	@include mobile {
-		font-size: 30px;
+		font-size: 18px;
 	}
 
 	@include mobile-small {
-		font-size: 30px;
+		font-size: 18px;
 	}
 }
 

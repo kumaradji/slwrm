@@ -55,7 +55,7 @@ services:
       - 80:80
     volumes:
       - ./:/app
-      - ./docker/dev/Nginx/conf.d:/etc/nginx/
+      - ./docker/dev/Nginx/core:/etc/nginx/
       - ./docker/dev/Nginx/logs:/var/log/nginx/
     depends_on:
       - backend
