@@ -6,7 +6,7 @@ docker-down:
 docker-down-clear:
 	docker compose down -v --remove-orphans
 docker-prod:
-	REGISTRY=cr.selcloud.ru/soulwarm IMAGE_TAG=master-1 make docker-build push
+	REGISTRY=cr.selcloud.ru/soulwarm IMAGE_TAG=master-1 make docker-build docker-push
 
 docker-build: docker-build-backend docker-build-nginx docker-build-react docker-build-db
 
@@ -31,7 +31,7 @@ docker-build-db:
     	--tag ${REGISTRY}/db:${IMAGE_TAG} \
     	--file ./docker/production/DB/Dockerfile .
 
-push:
+docker-push:
 	docker push ${REGISTRY}/backend:${IMAGE_TAG}
 	docker push ${REGISTRY}/nginx:${IMAGE_TAG}
 	docker push ${REGISTRY}/react:${IMAGE_TAG}

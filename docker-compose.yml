@@ -9,6 +9,7 @@ services:
       context: .
       dockerfile: ./docker/dev/Django/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
+    platform: linux/amd64
     networks:
       - soulwarm
     ports:
@@ -22,6 +23,7 @@ services:
 
   db:
     image: postgres:15.1
+    platform: linux/amd64
     networks:
       - soulwarm
     ports:
@@ -37,6 +39,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/dev/React/Dockerfile
+    platform: linux/amd64
     networks:
       - soulwarm
     ports:
@@ -49,6 +52,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/dev/Nginx/Dockerfile
+    platform: linux/amd64
     networks:
       - soulwarm
     ports:

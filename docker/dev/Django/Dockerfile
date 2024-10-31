@@ -4,8 +4,8 @@ FROM python:3.10-slim
 WORKDIR /app/backend
 
 # Устанавливаем переменные среды
-ENV PYTHONDONTWRITEBYTECODE = 1
-ENV PYTHONUNBUFFERED = 1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Установка необходимых пакетов в систему Linux
 RUN apt-get update && \
