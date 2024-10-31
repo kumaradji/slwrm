@@ -1,3 +1,4 @@
+// galleryPage.scss
 @import '../../styles/media';
 @import '../../styles/variables';
 @import '../../styles/mixins';
@@ -97,16 +98,25 @@
 		width: 200px;
 		height: 30px;
 		flex: 1;
+		/* Центрирование кнопки */
+		margin: 15px 0;
 		background-color: var(--color-red);
 		color: var(--color-main);
 		border: none;
 		border-radius: 5px;
-		font-size: 16px;
+		transition: background-color 0.3s ease;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		font-family: LetteraTrentadue, sans-serif;
+		font-size: 1.1rem;
+		text-align: center;
 		cursor: pointer;
-		margin: 0 5px 10px 5px;
 
 		&:hover {
 			background-color: var(--color-blue);
+		}
+
+		@include tablet {
+			margin: 0 5px 10px 5px;
 		}
 	}
 }

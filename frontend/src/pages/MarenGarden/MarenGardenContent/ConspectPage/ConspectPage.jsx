@@ -1,6 +1,6 @@
 // ConspectPage.jsx
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styles from './ConspectPage.module.scss';
 
 const ConspectPage = () => {
@@ -19,8 +19,9 @@ const ConspectPage = () => {
           <div className={styles.iframeContainer}>
             <iframe
               src="https://drive.google.com/file/d/1HwMy7gnpbNqDNwwYKAFkgegMJnwyjp0K/preview"
-              allow="autoplay"
-            ></iframe>
+              allow="autoplay">
+
+            </iframe>
           </div>
           <h4>Скачайте файл, нажав на кнопку ниже.</h4>
           <a
@@ -36,8 +37,9 @@ const ConspectPage = () => {
           <div className={styles.iframeContainer}>
             <iframe
               src="https://drive.google.com/file/d/16n-r79FSDTSoo2bt2c2_kcwrQmLcHnaC/preview"
-              allow="autoplay"
-            ></iframe>
+              allow="autoplay">
+
+            </iframe>
           </div>
           <h4>Скачайте файл, нажав на кнопку ниже.</h4>
           <a

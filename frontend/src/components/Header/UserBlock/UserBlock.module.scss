@@ -13,11 +13,11 @@
 	}
 
 	@include tablet {
-		min-width: 110px;
+		min-width: 0;
 	}
 
 	@include mobile {
-		min-width: 100px;
+		min-width: 0;
 	}
 }
 

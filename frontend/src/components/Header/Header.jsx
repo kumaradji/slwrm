@@ -1,6 +1,6 @@
 // Header.jsx
 import React, {useState} from 'react';
-import {useNavigate, useLocation, Link} from 'react-router-dom';
+import {useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import UserBlock from './UserBlock/UserBlock';
 import {useAuth} from '../../context/AuthContext';
@@ -30,13 +30,21 @@ const Header = () => {
     navigate('/auth');
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   return (
     <header className={isMenuVisible && isMobile ? styles.menuVisible : ''}>
       <div className={styles.headerContent}>
         <div className={styles.headerLogo}>
-          <a href="https://koltsovaecoprint.ru">
-            <img src={logo_black}
-                 alt="Logo ДушуГрею"/>
+          <a>
+            <img
+              src={logo_black}
+              alt="Logo ДушуГрею"
+              onClick={handleLogoClick}
+              className={styles.headerLogo}
+            />
           </a>
         </div>
 
@@ -55,9 +63,17 @@ const Header = () => {
         {isMobile && (
           <>
             {isMenuVisible ? (
-              <img src={close_icon} alt="Close" onClick={closeMenu} className={styles.headerMenuIcon}/>
+              <img src={close_icon}
+                   alt="Close"
+                   onClick={closeMenu}
+                   className={styles.headerCloseMenuIcon}
+              />
             ) : (
-              <img src={burger_menu_icon} alt="Menu" onClick={openMenu} className={styles.headerMenuIcon}/>
+              <img src={burger_menu_icon}
+                   alt="Menu"
+                   onClick={openMenu}
+                   className={styles.headerMenuIcon}
+              />
             )}
           </>
         )}

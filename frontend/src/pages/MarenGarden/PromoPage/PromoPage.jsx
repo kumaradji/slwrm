@@ -69,7 +69,7 @@ const PromoPage = () => {
         Важно отметить, что для процесса окрашивания вам не потребуется специальное оборудование - все можно сделать на
         обычном столе. Я научу вас техникам окрашивания, которые просты в исполнении, но при этом гарантируют высокое
         качество результата.</p>
-      <p>Мастер-класс состоит из:</p>
+      <p><strong>Мастер-класс состоит из:</strong></p>
       <ol>
         <li>Введение</li>
         <li>Необходимые материалы</li>
@@ -92,10 +92,10 @@ const PromoPage = () => {
       </ol>
       <p>А в качестве бонуса, вы получите видео мастер-класс и конспект по теме "Графика", что позволит вам расширить
         свои навыки и вдохновиться новыми идеями в области окрашивания ткани.</p>
-      <button className={styles.buyButton} onClick={handleAddToCart}>Купить</button>
       <div className={styles.gallery}>
         <Slider {...settings} autoPlay={true} autoPlayTime={6000} width="80%" height="700px" images={images}/>
       </div>
+      <button className={styles.buyButton} onClick={handleAddToCart}>Купить</button>
     </div>
   );
 };
