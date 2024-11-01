@@ -3,15 +3,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import style from './Navbar.module.scss';
 
-const Navbar = () => {
+const Navbar = ({ closeMenu }) => {
   return (
     <nav className={style.navbar}>
-      <Link to="/">Главная</Link>
-      <Link to="/lessons">Уроки</Link>
-      <Link to="/shop">Магазин</Link>
-      <Link to="/about">Обо мне</Link>
-      <Link to="/gallery">Галерея</Link>
-      <Link to="/profile">Личный кабинет</Link>
+      <Link to="/" onClick={closeMenu}>Главная</Link>
+      <Link to="/lessons" onClick={closeMenu}>Уроки</Link>
+      <Link to="/shop" onClick={closeMenu}>Магазин</Link>
+      <Link to="/about" onClick={closeMenu}>Обо мне</Link>
+      <Link to="/gallery" onClick={closeMenu}>Галерея</Link>
+      <Link to="/profile" onClick={closeMenu}>Личный кабинет</Link>
     </nav>
   );
 };
