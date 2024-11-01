@@ -27,9 +27,6 @@ const GalleryPage = () => {
 
   return (
     <div className={styles.gallery}>
-      <button onClick={handleGoBack} className={styles.backButton}>
-        Назад к галерее
-      </button>
       <h1>{title}</h1>
       <p className={styles.gallery__description}>{description}</p>
       <div className={styles.gallery__container}>
@@ -43,6 +40,9 @@ const GalleryPage = () => {
       </div>
       <LightboxModal images={items.map(item => item.src)} selectedImageIndex={selectedImageIndex}
                      closeLightbox={closeLightbox}/>
+      <button onClick={handleGoBack} className={styles.backButton}>
+        Назад к галерее
+      </button>
     </div>
   );
 };
