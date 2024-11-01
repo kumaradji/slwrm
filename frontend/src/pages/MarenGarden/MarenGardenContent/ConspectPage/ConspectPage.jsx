@@ -23,7 +23,7 @@ const ConspectPage = () => {
 
             </iframe>
           </div>
-          <h4>Скачайте файл, нажав на кнопку ниже.</h4>
+          <h2>Скачайте файл, нажав на кнопку ниже.</h2>
           <a
             href="https://drive.google.com/uc?export=download&id=1HwMy7gnpbNqDNwwYKAFkgegMJnwyjp0K"
             className={styles.downloadButton}
@@ -41,7 +41,7 @@ const ConspectPage = () => {
 
             </iframe>
           </div>
-          <h4>Скачайте файл, нажав на кнопку ниже.</h4>
+          <h2>Скачайте файл, нажав на кнопку ниже.</h2>
           <a
             href="https://drive.google.com/uc?export=download&id=16n-r79FSDTSoo2bt2c2_kcwrQmLcHnaC"
             className={styles.downloadButton}

@@ -55,7 +55,7 @@ const LandingPage = () => {
       </div>
 
       <div className={styles.landingPage__video}>
-        <video muted autoPlay loop>
+        <video muted autoPlay loop playsInline>
           <source
             src="/videos/landingPage/Process_zadnik.mp4"
             type="video/mp4"
@@ -85,7 +85,7 @@ const LandingPage = () => {
       <img className={styles.mainLeaf02} src={Leaf02} alt="Leaf image"/>
 
       <div className={styles.landingPage__video}>
-        <video muted autoPlay loop>
+        <video muted autoPlay loop playsInline>
           <source
             src="/videos/landingPage/Rasteniya_zadnik.mp4"
             type="video/mp4"

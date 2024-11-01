@@ -59,7 +59,7 @@ a:hover {
 	cursor: pointer;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3 {
 	font-family: 'LetteraTrentadue', sans-serif;
 }
 
@@ -111,8 +111,8 @@ h3 {
 	}
 }
 
-p, ul, ol, span {
-	margin-bottom: 40px;
+p, ul, ol, li, span {
+	margin-bottom: 20px;
 	font-size: 24px;
 
 	@include desktop {
@@ -131,7 +131,6 @@ p, ul, ol, span {
 		font-size: 18px;
 	}
 }
-
 
 /* Добавленные стили для body, html и корневого элемента */
 html, body, #root, .app-container {

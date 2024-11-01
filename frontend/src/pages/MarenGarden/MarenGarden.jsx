@@ -8,7 +8,8 @@ const MarenGarden = ({ marenGardenChapters = [] }) => {
   return (
     <div className={styles.masterclass}>
       <h2>Мастер-класс "Цветной фон".</h2>
-      <p>Благодарю вас за то, что вы обратили внимание на моё творчество и приобрели этот мастер-класс. Надеюсь, это вдохновило вас на создание прекрасных и неповторимых шедевров, создаваемых вместе с природой.</p>
+      <p>Благодарю вас за то, что вы обратили внимание на моё творчество и приобрели этот мастер-класс. Надеюсь, это
+        вдохновило вас на создание прекрасных и неповторимых шедевров, создаваемых вместе с природой.</p>
       <p>Если у вас остались какие-то вопросы, пожалуйста, напишите мне. Я обязательно на них отвечу.</p>
       <p>Этот мастер-класс лишь "вершина айсберга" бездонного океана экопринта.</p>
       <p>Экспериментируйте, творите, а я всегда помогу вам в этом.</p>
@@ -19,11 +20,11 @@ const MarenGarden = ({ marenGardenChapters = [] }) => {
           <motion.div
             key={chapter.id}
             className={styles.chapter}
-            initial={{ opacity: index < 2 ? 1 : 0, x: index % 2 === 0 ? '-100vw' : '100vw' }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ type: 'spring', stiffness: 360 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.8 }}
+            initial={{opacity: index < 2 ? 1 : 0, x: index % 2 === 0 ? '-100vw' : '100vw'}}
+            animate={{opacity: 1, x: 0}}
+            transition={{type: 'spring', stiffness: 360}}
+            whileInView={{opacity: 1, x: 0}}
+            viewport={{once: true, amount: 0.8}}
           >
             <div className={styles.chapterContent}>
               <div className={styles.chapterNumber}>{chapter.id}</div>
@@ -33,6 +34,17 @@ const MarenGarden = ({ marenGardenChapters = [] }) => {
             </div>
           </motion.div>
         ))}
+      </div>
+
+      <div>
+        <h3>Присоединяйтесь к нашей Telegram-группе!</h3>
+        <p>Следите за новостями, получайте советы и делитесь своими успехами! Общайтесь между собой и задавайте
+          вопросы.</p>
+        <div>
+          <Link to="https://t.me/+5bbgmwAoKHs2Mzcy" className={styles.telegramButton}>
+            Перейти в группу Telegram
+          </Link>
+        </div>
       </div>
     </div>
   );

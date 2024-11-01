@@ -38,10 +38,8 @@ const MarenGardenContent = ({ marenGardenChapters = [] }) => {
         </ol>
       </div>
 
-      {/* Контент раздела отображается в полном виде на мобильных устройствах */}
       <div className={styles.chapterContent}>
         {currentChapter.content}
-        {/* Кнопка назад для мобильных устройств */}
         <button onClick={handleGoBack} className={styles.backButton}>
           Назад
         </button>
