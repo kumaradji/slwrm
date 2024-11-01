@@ -55,7 +55,7 @@ services:
     networks:
       - soulwarm
     volumes:
-      - react_build:/app/frontend/build
+      - react_videos:/app/frontend/build/videos
     command: serve -s build -l 3000
 
   nginx:
@@ -67,7 +67,7 @@ services:
     volumes:
       - django_static:/app/backend/static
       - django_media:/app/backend/media
-      - react_build:/app/frontend/build
+      - react_videos:/app/frontend/build/videos
     ports:
       - 80:80
 
@@ -75,4 +75,4 @@ volumes:
   postgres_data:
   django_static:
   django_media:
-  react_build:
+  react_videos:
