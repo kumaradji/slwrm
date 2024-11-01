@@ -1,0 +1,78 @@
+version: "3.9"
+
+networks:
+  soulwarm:
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/production/Django/Dockerfile
+    networks:
+      - soulwarm
+    volumes:
+      - django_static:/app/backend/static
+      - django_media:/app/backend/media
+    environment:
+      - APP_ENV=production
+      - SECRET_KEY=django-insecure-xc7xublqj_u6jh&$$+++e-yrsm$$8ma*x_^4gxe%upd=-f7)1h_x
+      - DJANGO_ADMIN_USER=admin_ecoprint
+      - DJANGO_ADMIN_PASSWORD=Ku5609792
+      - EMAIL_HOST=smtp.yandex.ru
+      - EMAIL_PORT=587
+      - EMAIL_HOST_USER=koltsovaecoprint@yandex.ru
+      - EMAIL_HOST_PASSWORD=uxftjmkthdxbgfsj
+      - DEFAULT_FROM_EMAIL=koltsovaecoprint@yandex.ru
+      - ADMIN_EMAIL=kumaradji@me.com
+      - GENERAL_TELEGRAM_BOT_TOKEN=7289275372:AAGDhyO9xRWsO2s55qfcEjr-b0RKJXA2QMM
+      - GENERAL_TELEGRAM_CHAT_ID=707268574
+      - DATABASE=postgres
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_DATABASE=soulwarm
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+    command: gunicorn soulwarm.wsgi:application --bind 0.0.0.0:8000
+
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/production/DB/Dockerfile
+    networks:
+      - soulwarm
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=soulwarm
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  react:
+    build:
+      context: .
+      dockerfile: ./docker/production/React/Dockerfile
+    networks:
+      - soulwarm
+    volumes:
+      - react_build:/app/frontend/build
+    command: serve -s build -l 3000
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/production/Nginx/Dockerfile
+    networks:
+      - soulwarm
+    volumes:
+      - django_static:/app/backend/static
+      - django_media:/app/backend/media
+      - react_build:/app/frontend/build
+    ports:
+      - 80:80
+
+volumes:
+  postgres_data:
+  django_static:
+  django_media:
+  react_build:

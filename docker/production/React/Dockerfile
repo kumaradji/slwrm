@@ -1,5 +1,5 @@
 ### Node.js ###
-FROM node:18-alpine as builder
+FROM node:18-alpine AS builder
 
 # Установка рабочей директории
 WORKDIR /app/frontend
