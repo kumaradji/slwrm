@@ -201,7 +201,7 @@ const marenGardenChapters = [
             <p>Танины помогают связаться красителю кошенили с растительным волокном, увеличивается светопрочность. На
               фото палантин из шерсти с шёлком, где было второе протравливание железным купоросом.</p>
           </div>
-          <div className={styles.imageContent}>
+          <div className={styles.masterclass__images}>
             <img src={'/images/masterclass/M10.jpeg'} alt="Кошениль"/>
           </div>
         </div>
@@ -229,8 +229,10 @@ const marenGardenChapters = [
             <p>Весной хорошо красят такие листья: земляника, гравилат, герань, клён, черёмуха, рябинник, дёрен, каштан,
               шиповник, роза.</p>
           </div>
-          <div>
+          <div className={styles.masterclass__images}>
             <img src={'/images/masterclass/M11_1.jpeg'} alt="Окрашивание ткани весенними листьями"/>
+          </div>
+          <div className={styles.masterclass__images}>
             <img src={'/images/masterclass/M11_2.jpeg'} alt="Окрашивание ткани весенними листьями"/>
           </div>
         </div>
@@ -260,24 +262,9 @@ const marenGardenChapters = [
     title: 'Конспекты',
     content: <ConspectRedirect/>,
   },
+
   {
     id: 14,
-    title: 'Переходите в Telegram!',
-    content: (
-      <div key="chapter-14">
-        <h3>Присоединяйтесь к нашей Telegram-группе!</h3>
-        <h4>Следите за новостями, получайте советы и делитесь своими успехами! Общайтесь между собой и задавайте
-          вопросы.</h4>
-        <div>
-          <Link to="https://t.me/+5bbgmwAoKHs2Mzcy" className={styles.telegramButton}>
-            Перейти в группу Telegram
-          </Link>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 15,
     title: 'Часто задаваемые вопросы',
     content: (
       <div key="chapter-15" className={styles.faqSection}>

@@ -1,5 +1,6 @@
 @import '../../styles/media';
 @import '../../styles/variables';
+@import '../../styles/mixins';
 
 .masterclass {
 	max-width: 1440px;
@@ -210,11 +211,16 @@
 		}
 	}
 
+	&__images {
+		margin-bottom: 10px;
+
+	}
+
 	&__videoContainer {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding: 20px 60px 30px 60px;
+		padding: 10px 0 30px 0;
 		max-width: 1000px;
 		margin: 0 auto;
 
@@ -229,37 +235,33 @@
 	text-align: center;
 	margin-top: 30px;
 	padding: 20px;
-	background-color: #f1f1f1;
+	background-color: var(--color-main);
 }
 
 .telegramButton {
-	display: inline-block;
-	margin: 10px 5px 20px 0;
+	@include button-style;
 	padding: 10px 20px;
 	background-color: var(--color-blue);
-	color: var(--color-white);
-	text-align: center;
-	text-decoration: none;
-	border-radius: 5px;
-	transition: background-color 0.3s;
+	color: var(--color-main);
+	margin: 0 auto;
+	display: block;
+	font-size: 1.4rem;
+	width: 450px;
+
 
 	@include tablet {
+		font-size: 1.3rem;
 		width: 100%;
-		margin: 10px 0 0 0;
 	}
 
 	@include mobile {
+		font-size: 1.1rem;
 		width: 100%;
-		margin: 10px 0 0 0;
 	}
 
 	@include mobile-small {
+		font-size: 1.1rem;
 		width: 100%;
-		margin: 10px 0 0 0;
-	}
-
-	&:hover {
-		background-color: var(--color-red);
 	}
 }
 

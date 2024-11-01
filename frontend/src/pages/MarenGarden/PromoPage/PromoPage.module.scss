@@ -27,11 +27,11 @@
 
 	h1 {
 		margin-bottom: 2rem;
-		text-align: center; /* Центрирование заголовка */
+		text-align: center;
 	}
 
 	p {
-		margin-bottom: 1rem; /* Отступ между абзацами */
+		margin-bottom: 1rem;
 		line-height: 1.3; /* Высота строки */
 	}
 
@@ -43,9 +43,9 @@
 
 	ol {
 		margin-bottom: 1.5rem; // Отступ внизу списка
-		padding-left: 10px; // Уменьшен отступ слева для выравнивания с текстом
+		padding-left: 10px;
 		font-size: 1rem;
-		line-height: 1.4; // Высота строки как над списком
+		line-height: 1.2; // Высота строки как над списком
 
 		li {
 			margin-bottom: 0.3rem; // Отступ между элементами списка

@@ -1,5 +1,7 @@
+// MarenGardenContent.module.scss
 @import '../../../styles/media';
 @import '../../../styles/variables';
+@import '../../../styles/mixins';
 
 .content {
 	display: flex;
@@ -10,19 +12,20 @@
 
 	@include tablet {
 		flex-direction: column;
-		padding: 110px 0 0 0;
+		padding: 60px 0 0 0;
 	}
 
 	@include mobile {
 		flex-direction: column;
-		padding: 110px 0 0 0;
+		padding: 0;
 	}
 
 	@include mobile-small {
 		flex-direction: column;
-		padding: 110px 0 0 0;
+		padding: 0;
 	}
 }
+
 
 .sidebar {
 	width: 40%;
@@ -42,8 +45,10 @@
 
 	ol {
 		font-family: LetteraTrentadue, sans-serif;
+		font-size: 1.3rem;
 		list-style: decimal outside;
 		padding: 0;
+		margin-bottom: 0;
 
 		li {
 			cursor: pointer;
@@ -60,7 +65,6 @@
 
 .chapterContent {
 	width: 65%; // Две трети ширины
-	padding: 20px;
 
 	@include tablet {
 		width: 100%;
@@ -101,34 +105,27 @@
 }
 
 .backButton {
-	width: 200px;
-	flex: 1;
-	padding: 10px;
-	background-color: var(--color-red);
-	color: var(--color-main);
-	border: none;
-	border-radius: 5px;
-	font-size: 16px;
-	cursor: pointer;
-	margin: 10px 5px 20px 0;
+	@include button-style;
+	margin: 0 auto 20px;
+	display: block;
+	font-size: 1.4rem;
+	width: 100%;
+
 
 	@include tablet {
+		font-size: 1.3rem;
 		width: 100%;
-		margin: 10px 0 0 0;
 	}
 
 	@include mobile {
+		font-size: 1.1rem;
 		width: 100%;
-		margin: 10px 0 0 0;
 	}
 
 	@include mobile-small {
+		font-size: 1.1rem;
 		width: 100%;
-		margin: 10px 0 0 0;
-	}
-
-	&:hover {
-		background-color: var(--color-blue);
 	}
 }
+
 

@@ -13,21 +13,6 @@
 	img {
 		width: 30px;
 		height: 30px;
-
-		@include tablet {
-			width: 25px;
-			height: 25px;
-		}
-
-		@include mobile {
-			width: 25px;
-			height: 25px;
-		}
-
-		@include mobile-small {
-			width: 20px;
-			height: 20px;
-		}
 	}
 
 	.cartCount {
