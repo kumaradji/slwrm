@@ -48,7 +48,7 @@ const Header = () => {
           </a>
         </div>
 
-        {!isMobile && <Navbar/>}
+        {!isMobile && <Navbar closeMenu={closeMenu} />}
         <div className={`${styles.rightSection} ${isMobile ? styles.hideOnMobile : ''}`}>
           {isLoggedIn && user ? (
             <UserBlock userName={user.username} userPicture={user.picture}/>
@@ -85,7 +85,7 @@ const Header = () => {
               <UserBlock userName={user.username} userPicture={user.picture}/>
             ) : null}
           </div>
-          <Navbar/>
+          <Navbar closeMenu={closeMenu} />
           <div className={styles.footer__social}>
             <a href="https://t.me/nina_koltsova">
               <img src={Telegram} alt="Telegram"/>

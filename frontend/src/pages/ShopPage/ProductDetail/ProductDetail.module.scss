@@ -79,6 +79,20 @@
 			order: 1;
 		}
 
+		@include mobile {
+			h1 {
+				text-align: center;
+				font-size: 26px;
+			}
+		}
+
+		@include mobile-small {
+			h1 {
+				text-align: center;
+				font-size: 26px;
+			}
+		}
+
 		h1 {
 			margin-bottom: 20px;
 		}
@@ -115,14 +129,17 @@
 
 			@include tablet {
 				width: 100%;
+				font-size: 1.3rem;
 			}
 
 			@include mobile {
 				width: 100%;
+				font-size: 1.3rem;
 			}
 
 			@include mobile-small {
 				width: 100%;
+				font-size: 1.3rem;
 			}
 		}
 	}
