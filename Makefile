@@ -1,10 +1,16 @@
-#DOCKER
+#DOCKER LOCAL DEV
 docker-up:
 	docker compose up -d
 docker-down:
 	docker compose down --remove-orphans
+
+#DOCKER PROD-CONTAINER TESTING ON DEV
+docker-dev:
+	docker compose -f docker-compose-dev.yml up -d
 docker-down-clear:
-	docker compose down -v --remove-orphans
+	docker compose -f docker-compose-dev.yml down -v --remove-orphans
+
+#DOCKER BUILD AND PUSH ON PRODUCTION
 docker-prod:
 	REGISTRY=cr.selcloud.ru/soulwarm IMAGE_TAG=master-1 make docker-build docker-push
 
@@ -12,17 +18,17 @@ docker-build: docker-build-backend docker-build-nginx docker-build-react docker-
 
 docker-build-backend:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
-		  --platform linux/amd64 \
+		--platform linux/amd64 \
     	--tag ${REGISTRY}/backend:${IMAGE_TAG} \
     	--file ./docker/production/Django/Dockerfile .
 docker-build-nginx:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
-		  --platform linux/amd64 \
+		--platform linux/amd64 \
     	--tag ${REGISTRY}/nginx:${IMAGE_TAG} \
     	--file ./docker/production/Nginx/Dockerfile .
 docker-build-react:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
-		  --platform linux/amd64 \
+		--platform linux/amd64 \
     	--tag ${REGISTRY}/react:${IMAGE_TAG} \
     	--file ./docker/production/React/Dockerfile .
 docker-build-db:
