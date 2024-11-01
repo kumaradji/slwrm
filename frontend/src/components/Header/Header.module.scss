@@ -1,3 +1,4 @@
+// Header.module.scss
 @import '../../styles/variables';
 @import '../../styles/mixins';
 @import '../../styles/media';
@@ -66,8 +67,21 @@ header {
 .headerMenuIcon {
 	display: none;
 	cursor: pointer;
+	width: 40px;
+	height: 50px;
+	pointer-events: auto;
+	z-index: 2001;
+
+	@include mobile {
+		display: block;
+	}
+}
+
+.headerCloseMenuIcon {
+	display: none;
+	cursor: pointer;
 	width: 30px;
-	height: 25px;
+	height: 30px;
 	pointer-events: auto;
 	z-index: 2001;
 
@@ -104,26 +118,41 @@ header {
 		margin-top: 100px;
 		margin-bottom: 30px;
 
+		@include tablet {
+			gap: 20px;
+		}
+
 		@include mobile {
 			gap: 15px;
+		}
+
+		@include mobile-small {
+			gap: 20px;
 		}
 
 		a img {
 			width: 50px;
 			height: 50px;
-		}
 
-		@include mobile-small {
-			a img {
-				width: 40px;
-				height: 40px;
+			@include tablet {
+				a img {
+					width: 60px;
+					height: 60px;
+				}
 			}
-		}
 
-		@include mobile-above {
-			a img {
-				width: 40px;
-				height: 40px;
+			@include mobile {
+				a img {
+					width: 55px;
+					height: 55px;
+				}
+			}
+
+			@include mobile-small {
+				a img {
+					width: 40px;
+					height: 40px;
+				}
 			}
 		}
 	}
@@ -136,25 +165,31 @@ header {
 	width: 100%;
 
 	@include tablet {
-		margin-bottom: 50px;}
-}
+		margin-bottom: 50px;
+	}
 
+}
 
 .loginButton {
 	@include button-header;
 
 	@include tablet {
 		width: 70px;
-		height: 25px;
-		font-size: 13px;
+		height: 20px;
+		font-size: 0.7rem;
 	}
 
 	@include mobile {
-		width: 65px;
-		height: 25px;
-		font-size: 12px;
+		width: 160px;
+		height: 30px;
+		font-size: 0.7rem;
 	}
 
+	@include mobile-small {
+		width: 140px;
+		height: 25px;
+		font-size: 0.7rem;
+	}
 }
 
 .rightSection {

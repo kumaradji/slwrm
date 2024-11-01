@@ -1,3 +1,4 @@
+// GalleriesList.module.scss
 @import '../../../styles/media';
 @import '../../../styles/variables';
 @import '../../../styles/mixins';
@@ -24,6 +25,7 @@
 
 		@include mobile {
 			grid-template-columns: 1fr;
+			padding: 3rem 1rem;
 		}
 
 		@include mobile-small {

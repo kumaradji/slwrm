@@ -34,6 +34,15 @@
 
 		@include tablet {
 			text-align: center;
+			font-size: 2.1rem;
+		}
+
+		@include mobile {
+			font-size: 2rem;
+		}
+
+		@include mobile-small {
+			font-size: 1.7rem;
 		}
 	}
 
@@ -82,15 +91,15 @@
 			margin-bottom: 1rem;
 
 			@include tablet {
-				font-size: 1.8rem;
+				font-size: 1.5rem;
 			}
 
 			@include mobile {
-				font-size: 1.8rem;
+				font-size: 1.2rem;
 			}
 
 			@include mobile-small {
-				font-size: 0.8rem;
+				font-size: 1rem;
 			}
 		}
 

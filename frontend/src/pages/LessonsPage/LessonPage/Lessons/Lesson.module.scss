@@ -1,8 +1,27 @@
 // Lesson.module.scss
+@import '../../../../styles/media';
 
 p {
 	margin-bottom: 20px;
 	line-height: 1.2;
+
+	@include tablet {
+		p {
+			font-size: 18px;
+		}
+	}
+
+	@include mobile {
+		p {
+			font-size: 16px;
+		}
+	}
+
+	@include mobile-small {
+		p {
+			font-size: 14px;
+		}
+	}
 }
 
 .lesson {
