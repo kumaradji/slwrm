@@ -1,14 +1,15 @@
 // ShopPage.jsx
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import styles from './ShopPage.module.scss';
-import { logToServer } from "../../services/logger";
+import {logToServer} from "../../services/logger";
 
 const ShopPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
+  const [selectedCategoryName, setSelectedCategoryName] = useState("все категории");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,24 +32,29 @@ const ShopPage = () => {
     fetchData();
   }, []);
 
+  const handleCategoryClick = (categoryId, categoryName) => {
+    setSelectedCategory(categoryId);
+    setSelectedCategoryName(categoryName || "все категории");
+    setIsBurgerMenuOpen(false);
+  };
+
   const filteredProducts = selectedCategory
     ? products.filter(product => product.category === selectedCategory)
     : products;
 
   return (
     <div className={styles.shopContainer}>
+      {/* Десктопное меню категорий */}
       <div className={styles.categoriesWrapper}>
         <div className={styles.categoriesContainer}>
           <ul>
             {categories
-              .filter(category => {
-                return category.id !== 6;
-              })
+              .filter(category => category.id !== 6)
               .map(category => (
                 <li key={category.id}>
                   <button
                     className={selectedCategory === category.id ? styles.activeCategory : ''}
-                    onClick={() => setSelectedCategory(category.id)}
+                    onClick={() => handleCategoryClick(category.id, category.name)}
                   >
                     {category.name}
                   </button>
@@ -58,7 +64,7 @@ const ShopPage = () => {
             <li>
               <button
                 className={selectedCategory === null ? styles.activeCategory : ''}
-                onClick={() => setSelectedCategory(null)}
+                onClick={() => handleCategoryClick(null, "все категории")}
               >
                 все категории
               </button>
@@ -66,10 +72,65 @@ const ShopPage = () => {
           </ul>
         </div>
       </div>
+
+      {/* Мобильное меню категорий */}
+      <div className={styles.mobileMenu}>
+        <button
+          className={styles.categoryButton}
+          onClick={() => setIsBurgerMenuOpen(!isBurgerMenuOpen)}
+        >
+          {selectedCategoryName}
+          <span className={`${styles.arrow} ${isBurgerMenuOpen ? styles.arrowUp : ''}`}>▼</span>
+        </button>
+
+        {isBurgerMenuOpen && (
+          <div className={styles.categoryDropdown}>
+            <div className={styles.dropdownHeader}>
+              <span>Категория</span>
+              <button
+                className={styles.closeButton}
+                onClick={() => setIsBurgerMenuOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <ul className={styles.categoryList}>
+              <li>
+                <button
+                  className={selectedCategory === null ? styles.activeCategory : ''}
+                  onClick={() => handleCategoryClick(null)}
+                >
+                  все категории
+                </button>
+              </li>
+              {categories
+                .filter(category => category.id !== 6)
+                .map(category => (
+                  <li key={category.id}>
+                    <button
+                      className={selectedCategory === category.id ? styles.activeCategory : ''}
+                      onClick={() => handleCategoryClick(category.id, category.name)}
+                    >
+                      {category.name}
+                    </button>
+                  </li>
+                ))}
+            </ul>
+            <button
+              className={styles.doneButton}
+              onClick={() => setIsBurgerMenuOpen(false)}
+            >
+              Готово
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Контейнер с товарами */}
       <div className={styles.productsContainer}>
         <div className={styles.productsGrid}>
           {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
-            filteredProducts.map((product, index) => (
+            filteredProducts.map((product) => (
               <div
                 key={product.id}
                 className={styles.productCard}
@@ -96,38 +157,6 @@ const ShopPage = () => {
             <h2 className={styles.productNot}>Нет доступных товаров</h2>
           )}
         </div>
-      </div>
-      <div className={styles.burgerMenu}>
-        <button className={styles.burgerButton} onClick={() => setIsBurgerMenuOpen(!isBurgerMenuOpen)}>
-          {isBurgerMenuOpen ? 'Закрыть категории' : 'Открыть категории'}
-        </button>
-        {isBurgerMenuOpen && (
-          <div className={styles.burgerMenuOpen}>
-            <ul>
-              {categories
-                .filter(category => category.id !== 6)
-                .map(category => (
-                  <li key={category.id}>
-                    <button
-                      className={selectedCategory === category.id ? styles.activeCategory : ''}
-                      onClick={() => setSelectedCategory(category.id)}
-                    >
-                      {category.name}
-                    </button>
-                  </li>
-                ))}
-              <br />
-              <li>
-                <button
-                  className={selectedCategory === null ? styles.activeCategory : ''}
-                  onClick={() => setSelectedCategory(null)}
-                >
-                  все категории
-                </button>
-              </li>
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );

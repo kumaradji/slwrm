@@ -7,40 +7,102 @@
 .paymentInstructionsPage {
 	max-width: 1000px;
 	margin: 0 auto;
-	padding: 100px 20px;
+	padding: 110px 10px 20px 10px;
 	background-color: var(--color-white);
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+	@include tablet {
+		padding: 90px 20px 20px 20px;
+	}
+
+	@include mobile {
+		padding: 70px 10px 20px 10px;
+	}
+
+	@include mobile-small {
+		padding: 70px 5px 20px 5px;
+	}
 }
 
 .instructionsContainer {
 	padding: 20px;
 	margin-bottom: 20px;
+	margin-top: 10px;
+
+	@include tablet {
+		padding: 10px;
+	}
+
+	@include mobile {
+		padding: 0;
+		margin: 0;
+	}
+
+	@include mobile-small {
+		padding: 0;
+	}
+
+	h1 {
+		margin-bottom: 20px;
+		font-size: 34px;
+
+		@include tablet {
+			font-size: 28px;
+		}
+
+		@include mobile {
+			font-size: 24px;
+		}
+	}
 
 	h2 {
 		margin-top: 20px;
 		margin-bottom: 10px;
 		font-size: 32px;
+
+		@include tablet {
+			font-size: 28px;
+		}
+
+		@include mobile {
+			font-size: 26px;
+		}
+
+		@include mobile-small {
+			font-size: 24px;
+		}
 	}
 
-	.ol {
+	ol {
 		padding-left: 20px;
-		font-family: 'Iosevka', sans-serif;
 	}
 
-	.li {
-		padding-left: 20px;
-		font-family: 'Iosevka', sans-serif;
+	li {
+		padding-left: 3px;
 	}
 }
 
 .backButton {
 	@include button-style;
-	margin: 15px 0;
-	font-size: 1.5rem;
+	margin: 0 auto 20px;
+	display: block;
+	font-size: 1.2rem;
 	width: 100%;
 
-	&:hover {
-		background-color: var(--color-blue);
+
+	@include tablet {
+		font-size: 1.2rem;
+		width: 100%;
+	}
+
+	@include mobile {
+		font-size: 1rem;
+		width: 100%;
+	}
+
+	@include mobile-small {
+		font-size: 1rem;
+		width: 100%;
 	}
 }
 
