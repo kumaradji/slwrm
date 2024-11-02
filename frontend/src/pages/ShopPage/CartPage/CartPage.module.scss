@@ -63,8 +63,8 @@
 		border-radius: 5px;
 		background-color: var(--color-light-main);
 		margin-bottom: 20px;
-		width: 300px;
-		max-width: 400px;
+		width: 450px;
+		max-width: 500px;
 
 		@include tablet {
 			width: 100%;
@@ -81,23 +81,27 @@
 			font-family: Iosevka, sans-serif;
 			margin-bottom: 10px;
 
-			@include mobile {
+			@include tablet {
 				font-size: 1.5rem;
+			}
+
+			@include mobile {
+				font-size: 1.3rem;
+			}
+
+			@include mobile-small {
+				font-size: 1.2rem;
 			}
 		}
 
 		.summaryRight {
 
 			.checkoutButton {
+				@include button-style;
+				margin: 0 auto 20px;
+				display: block;
+				font-size: 1.4rem;
 				width: 100%;
-				padding: 10px;
-				background-color: var(--color-red);
-				color: #fff;
-				border: none;
-				border-radius: 5px;
-				font-size: 16px;
-				cursor: pointer;
-				margin-bottom: 10px;
 				transition: background-color 0.3s;
 
 				&:hover {
@@ -107,6 +111,21 @@
 				&:disabled {
 					background-color: var(--color-light-grey);
 					cursor: not-allowed;
+				}
+
+				@include tablet {
+					font-size: 1.3rem;
+					width: 100%;
+				}
+
+				@include mobile {
+					font-size: 1.1rem;
+					width: 100%;
+				}
+
+				@include mobile-small {
+					font-size: 1.1rem;
+					width: 100%;
 				}
 			}
 		}
@@ -131,20 +150,32 @@
 			span {
 				font-size: 1.1rem;
 				line-height: 1.2;
+
+				@include tablet {
+					font-size: 1rem;
+				}
+
+				@include mobile {
+					font-size: 1rem;
+				}
+
+				@include mobile-small {
+					font-size: 0.9rem;
+				}
 			}
 		}
 
 
 		.offerLink {
-				color: var(--color-blue);
-				text-decoration: underline;
-				font-weight: bold;
+			color: var(--color-blue);
+			text-decoration: underline;
+			font-weight: bold;
 
-				&:hover {
-					text-decoration: none;
-				}
+			&:hover {
+				text-decoration: none;
 			}
 		}
+	}
 
 	.cartItems {
 		flex: 1;
@@ -186,7 +217,7 @@
 			}
 
 			@include mobile {
-				width: 100px;
+				width: 120px;
 			}
 
 			@include mobile-small {
@@ -196,7 +227,7 @@
 			img {
 				width: 100%;
 				height: auto;
-				border-radius: 10px;
+				border-radius: 5px;
 			}
 		}
 
@@ -208,6 +239,18 @@
 			h2 {
 				font-size: 1.5rem;
 				margin-bottom: 10px;
+
+				@include tablet {
+					font-size: 1.3rem;
+				}
+
+				@include mobile {
+					font-size: 0.9rem;
+				}
+
+				@include mobile-small {
+					font-size: 0.9rem;
+				}
 			}
 
 			.cartItemPrice {
@@ -221,16 +264,26 @@
 				}
 
 				.removeButton {
-					background-color: var(--color-red);
-					color: var(--color-white);
-					border: none;
-					border-radius: 5px;
-					padding: 10px 20px;
-					cursor: pointer;
-					transition: background-color 0.3s;
+					@include button-style;
+					margin: 0 auto 10px;
+					display: block;
+					font-size: 1.4rem;
+					width: 300px;
 
-					&:hover {
-						background-color: var(--color-blue);
+
+					@include tablet {
+						font-size: 1.3rem;
+						width: 300px;
+					}
+
+					@include mobile {
+						font-size: 0.9rem;
+						width: 150px;
+					}
+
+					@include mobile-small {
+						font-size: 0.9rem;
+						width: 120px;
 					}
 				}
 			}
@@ -246,51 +299,76 @@
 		width: 100%;
 		max-width: 600px;
 
-		.emptyCartIcon {
-			width: 100px;
-			height: 100px;
-			margin-bottom: 1rem;
+		h1, h3, p {
+			font-size: 2rem;
+			margin-bottom: 10px;
+
+			@include tablet {
+				font-size: 1.7rem;
+			}
+
+			@include mobile {
+				font-size: 1.4rem;
+			}
+
+			@include mobile-small {
+				font-size: 1.4rem;
+			}
 		}
 
-
 		.continueShopping {
-			display: inline-block;
-			padding: 0.8rem 1.5rem;
-			background-color: var(--color-red);
-			color: var(--color-white);
-			text-decoration: none;
-			border-radius: 5px;
+			@include button-style;
+			margin: 0 auto 20px;
+			display: block;
 			font-size: 1.4rem;
-			transition: background-color 0.3s;
+			width: 100%;
 
-			&:hover {
-				background-color: var(--color-blue);
+			@include tablet {
+				font-size: 1.3rem;
+				width: 100%;
+			}
+
+			@include mobile {
+				font-size: 1.1rem;
+				width: 100%;
+			}
+
+			@include mobile-small {
+				font-size: 1.1rem;
+				width: 100%;
 			}
 		}
 	}
 
 	.backButton {
-		width: 200px;
-		flex: 1;
-		padding: 10px;
-		background-color: var(--color-red);
-		color: var(--color-main);
-		border: none;
-		border-radius: 5px;
-		font-size: 16px;
-		cursor: pointer;
-		margin: 20px 5px 20px 5px;
+		@include button-style;
+		margin: 10px auto 10px;
+		display: block;
+		font-size: 1.4rem;
+		width: 500px;
 
-		&:hover {
-			background-color: var(--color-blue);
+
+		@include tablet {
+			font-size: 1.3rem;
+			width: 500px;
 		}
-	}
 
-	.privacyPolicyLink {
-		margin-top: 10px;
-		font-size: 1.2rem;
-		color: var(--color-red);
-		text-decoration: underline;
-		cursor: pointer;
+		@include mobile {
+			font-size: 1.1rem;
+			width: 100%;
+		}
+
+		@include mobile-small {
+			font-size: 1.1rem;
+			width: 100%;
+		}
+
+		.privacyPolicyLink {
+			margin-top: 10px;
+			font-size: 1.2rem;
+			color: var(--color-red);
+			text-decoration: underline;
+			cursor: pointer;
+		}
 	}
 }
