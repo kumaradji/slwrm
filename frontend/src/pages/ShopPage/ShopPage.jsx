@@ -1,8 +1,9 @@
 // ShopPage.jsx
-import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './ShopPage.module.scss';
-import {logToServer} from "../../services/logger";
+import { logToServer } from "../../services/logger";
+import Loader from '../../components/Loader/Loader';
 
 const ShopPage = () => {
   const [products, setProducts] = useState([]);
@@ -10,10 +11,12 @@ const ShopPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
   const [selectedCategoryName, setSelectedCategoryName] = useState("все категории");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true); // Показать индикатор загрузки
         const [productsResponse, categoriesResponse] = await Promise.all([
           fetch('/api/products/'),
           fetch('/api/categories/')
@@ -26,6 +29,8 @@ const ShopPage = () => {
         setCategories(categoriesData);
       } catch (error) {
         logToServer(`Ошибка при получении данных: ${error.message}`, 'error');
+      } finally {
+        setIsLoading(false); // Скрыть индикатор загрузки
       }
     };
 
@@ -60,7 +65,7 @@ const ShopPage = () => {
                   </button>
                 </li>
               ))}
-            <br/>
+            <br />
             <li>
               <button
                 className={selectedCategory === null ? styles.activeCategory : ''}
@@ -129,7 +134,9 @@ const ShopPage = () => {
       {/* Контейнер с товарами */}
       <div className={styles.productsContainer}>
         <div className={styles.productsGrid}>
-          {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
+          {isLoading ? (
+            <Loader />
+          ) : Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <div
                 key={product.id}
