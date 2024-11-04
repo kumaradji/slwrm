@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './CartPage.module.scss';
 import { CartContext } from '../../../context/CartContext';
 import { logToServer } from "../../../services/logger";
+import Loader from '../../../components/Loader/Loader';
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
@@ -15,6 +16,7 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   const fetchCart = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/cart/', {
         headers: {
@@ -79,13 +81,10 @@ const CartPage = () => {
 
       updateCartCount(cart.items.length - 1);
 
-      // Синхронизация с сервером
-      await fetchCart();
+      await fetchCart();  // Обновляем корзину после удаления
     } catch (error) {
       logToServer(`Ошибка при удалении товара из корзины: ${error.message}`, 'error');
       setError('Не удалось удалить товар. Попробуйте еще раз.');
-      // Восстанавливаем состояние корзины при ошибке
-      await fetchCart();
     } finally {
       setDeletingItems(prev => {
         const newSet = new Set(prev);
@@ -119,14 +118,7 @@ const CartPage = () => {
   };
 
   if (loading) {
-    return (
-      <div className={styles.cartPage}>
-        <div className={styles.loading}>
-          <div className={styles.loadingSpinner}></div>
-          <p>Загрузка корзины...</p>
-        </div>
-      </div>
-    );
+    return <Loader />;  // Используем компонент Loader при первой загрузке корзины
   }
 
   if (error) {
@@ -226,7 +218,7 @@ const CartPage = () => {
                     onClick={() => removeFromCart(item.id)}
                     disabled={deletingItems.has(item.id)}
                   >
-                    {deletingItems.has(item.id) ? 'Удаление...' : 'Удалить'}
+                    {deletingItems.has(item.id) ? <Loader /> : 'Удалить'}  {/* Показать Loader при удалении товара */}
                   </button>
                 </div>
               </div>
