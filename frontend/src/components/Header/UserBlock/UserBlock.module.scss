@@ -44,11 +44,11 @@
 	}
 
 	@include mobile {
-		display: none;
+		justify-content: center;
 	}
 
 	@include mobile-small {
-		display: none;
+		justify-content: center;
 	}
 }
 
