@@ -15,7 +15,6 @@
 	width: 100%;
 }
 
-
 .landingPage__link {
 	display: inline; /* Убираем inline-block, чтобы ссылка не нарушала общий поток текста */
 	line-height: inherit; /* Наследуем единое значение line-height */
@@ -126,7 +125,7 @@
 	position: absolute;
 	opacity: 0.1;
 	rotate: (300deg);
-	width: 700px;
+	width: 500px;
 	height: auto;
 	top: 2100px;
 	left: 500px;
