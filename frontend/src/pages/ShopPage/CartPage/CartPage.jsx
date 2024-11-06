@@ -75,20 +75,11 @@ const CartPage = () => {
         throw new Error('Не удалось удалить товар из корзины');
       }
 
-      // Оптимистическое обновление UI
-      setCart(prevCart => ({
-        ...prevCart,
-        items: prevCart.items.filter(item => item.id !== itemId)
-      }));
-
-      updateCartCount(cart.items.length - 1);
-
-      // Включаем лоадер и через 2 секунды обновляем корзину
+      // Перезагрузка корзины сразу после запроса
       setRefreshing(true);
-      setTimeout(async () => {
-        await fetchCart();
-        setRefreshing(false);
-      }, 2000);
+      await fetchCart(); // Обновление корзины после успешного удаления
+      setRefreshing(false);
+
     } catch (error) {
       logToServer(`Ошибка при удалении товара из корзины: ${error.message}`, 'error');
       setError('Не удалось удалить товар. Попробуйте еще раз.');
@@ -100,6 +91,7 @@ const CartPage = () => {
       });
     }
   };
+
 
   if (loading || refreshing) {
     return <Loader />;
