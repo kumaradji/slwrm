@@ -1,3 +1,4 @@
+// UserBlock.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
@@ -6,8 +7,8 @@ import user_icon from '../../../assets/user_icon.png';
 import CartButton from '../../../pages/ShopPage/CartButton/CartButton';
 import { logToServer } from "../../../services/logger";
 
-const UserBlock = ({ userName, setMode, onNavigate }) => {
-  const { isLoggedIn, user } = useAuth();
+const UserBlock = ({userName, setMode, onNavigate}) => {
+  const {isLoggedIn, user} = useAuth();
   const navigate = useNavigate();
   const [avatarUrl, setAvatarUrl] = useState(user_icon);
 
@@ -38,12 +39,12 @@ const UserBlock = ({ userName, setMode, onNavigate }) => {
   const handleLoginClick = () => {
     setMode('login');
     navigate('/auth');
-    if (onNavigate) onNavigate(); // Закрываем меню при переходе
+    if (onNavigate) onNavigate();
   };
 
   const handleProfileClick = () => {
     navigate('/profile');
-    if (onNavigate) onNavigate(); // Закрываем меню при переходе
+    if (onNavigate) onNavigate();
   };
 
   return (
@@ -74,7 +75,7 @@ const UserBlock = ({ userName, setMode, onNavigate }) => {
               </div>
             </div>
             <div className={styles.cartContainer}>
-              <CartButton onNavigate={onNavigate} /> {/* Передаем callback в CartButton */}
+              <CartButton onNavigate={onNavigate} />
             </div>
           </div>
         </>
@@ -82,7 +83,7 @@ const UserBlock = ({ userName, setMode, onNavigate }) => {
         <div className={styles.userContainer}>
           <button className={styles.loginButton} onClick={handleLoginClick}>Войти</button>
           <div className={styles.cartContainer}>
-            <CartButton onNavigate={onNavigate} /> {/* Передаем callback в CartButton */}
+            <CartButton onNavigate={onNavigate} />
           </div>
         </div>
       )}
