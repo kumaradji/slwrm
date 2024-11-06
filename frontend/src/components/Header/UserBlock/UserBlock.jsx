@@ -1,4 +1,3 @@
-// UserBlock.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
@@ -7,8 +6,8 @@ import user_icon from '../../../assets/user_icon.png';
 import CartButton from '../../../pages/ShopPage/CartButton/CartButton';
 import { logToServer } from "../../../services/logger";
 
-const UserBlock = ({userName, setMode}) => {
-  const {isLoggedIn, user} = useAuth();
+const UserBlock = ({ userName, setMode, onNavigate }) => {
+  const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
   const [avatarUrl, setAvatarUrl] = useState(user_icon);
 
@@ -39,10 +38,12 @@ const UserBlock = ({userName, setMode}) => {
   const handleLoginClick = () => {
     setMode('login');
     navigate('/auth');
+    if (onNavigate) onNavigate(); // Закрываем меню при переходе
   };
 
   const handleProfileClick = () => {
     navigate('/profile');
+    if (onNavigate) onNavigate(); // Закрываем меню при переходе
   };
 
   return (
@@ -63,6 +64,8 @@ const UserBlock = ({userName, setMode}) => {
                   src={avatarUrl}
                   alt="User"
                   className={styles.userInfo__userIcon}
+                  onClick={handleProfileClick}
+                  style={{cursor: 'pointer'}}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = user_icon;
@@ -71,7 +74,7 @@ const UserBlock = ({userName, setMode}) => {
               </div>
             </div>
             <div className={styles.cartContainer}>
-              <CartButton/>
+              <CartButton onNavigate={onNavigate} /> {/* Передаем callback в CartButton */}
             </div>
           </div>
         </>
@@ -79,7 +82,7 @@ const UserBlock = ({userName, setMode}) => {
         <div className={styles.userContainer}>
           <button className={styles.loginButton} onClick={handleLoginClick}>Войти</button>
           <div className={styles.cartContainer}>
-            <CartButton/>
+            <CartButton onNavigate={onNavigate} /> {/* Передаем callback в CartButton */}
           </div>
         </div>
       )}

@@ -32,7 +32,11 @@
 	position: -webkit-sticky; /* Для поддержки Safari */
 	position: sticky;
 	top: 100px;
-	align-self: flex-start; /* Для обеспечения правильного позиционирования */
+	align-self: flex-start;
+
+	&.hidden {
+		display: none;
+	}
 
 	@include mobile {
 		display: none;
@@ -172,7 +176,7 @@
 }
 
 .arrow {
-	font-size: 12px;
+	font-size: 14px;
 	transition: transform 0.3s ease;
 
 	&.arrowUp {
