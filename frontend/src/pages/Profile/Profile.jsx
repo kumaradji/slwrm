@@ -1,11 +1,12 @@
 // Profile.jsx
-import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import React, {useState, useEffect, useCallback} from 'react';
+import {useAuth} from '../../context/AuthContext';
+import {useNavigate, Link} from 'react-router-dom';
 import styles from './Profile.module.scss';
 import Modal from '../../components/Modal/Modal.jsx';
 import defaultAvatar from '../../assets/default_user_icon.png';
-import { logToServer } from "../../services/logger";
+import {logToServer} from "../../services/logger";
+import {Helmet} from 'react-helmet';
 
 const Profile = () => {
   const {user, fetchUserData, logout} = useAuth();
@@ -116,11 +117,12 @@ const Profile = () => {
 
   return (
     <div className={styles.profile}>
-      <title>ДушуГрею | Личный кабинет</title>
-      <meta name="description" content="Личный кабинет пользователя сайта ДушуГрею"/>
-      <meta name="keywords" content="экопринт, личный кабинет, прифиль, ДушуГрею"/>
+      <Helmet>
+        <title>ДушуГрею | Личный кабинет</title>
+        <meta name="description" content="Личный кабинет пользователя сайта ДушуГрею"/>
+        <meta name="keywords" content="экопринт, личный кабинет, прифиль, ДушуГрею"/>
+      </Helmet>
 
-      <h1>Личный кабинет пользователя</h1>
       <div className={styles.cardProfile}>
         <h3>Профиль</h3>
         <div className={styles.profileInfo}>

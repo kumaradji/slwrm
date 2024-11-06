@@ -1,18 +1,19 @@
 // LessonsPage.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import {Link} from 'react-router-dom';
+import {motion} from 'framer-motion';
 import styles from './LessonsPage.module.scss';
 import lessons from './LessonPage/Lessons';
+import {Helmet} from 'react-helmet';
 
 export const LessonsPage = () => {
   return (
     <div className={styles.lessons}>
-      <title>ДушуГрею | Бесплатные уроки про технику экопринт</title>
-      <meta name="description" content="Бесплатные уроки про технику экопринт. ДушуГрею"/>
-      <meta name="keywords" content="экопринт, уроки, мастер-класс, красота, природа, ткани, изделия, ДушуГрею"/>
-
-      <h1>Добро пожаловать на страницу бесплатных уроков о важнейших этапах создания экопринта</h1>
+      <Helmet>
+        <title>ДушуГрею | Бесплатные уроки про технику экопринт</title>
+        <meta name="description" content="Бесплатные уроки про технику экопринт. ДушуГрею"/>
+        <meta name="keywords" content="экопринт, уроки, мастер-класс, красота, природа, ткани, изделия, ДушуГрею"/>
+      </Helmet>
 
       <h1>Бесплатные уроки</h1>
       <p>В этих уроках я рассказываю о важнейших этапах создания экопринта.</p>

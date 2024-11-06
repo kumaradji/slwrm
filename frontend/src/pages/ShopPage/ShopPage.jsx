@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import styles from './ShopPage.module.scss';
 import {logToServer} from "../../services/logger";
 import Loader from '../../components/Loader/Loader';
+import {Helmet} from 'react-helmet';
 
 const ShopPage = () => {
   const [products, setProducts] = useState([]);
@@ -48,12 +49,13 @@ const ShopPage = () => {
     : products;
 
   return (
-    <div className={styles.shopContainer}>
-      <title>ДушуГрею | Страница магазина</title>
-      <meta name="description" content="Галерея фотографий с изделиями экопринта от ДушуГрею"/>
-      <meta name="keywords" content="экопринт, фото, галерея, изделия, ДушуГрею"/>
 
-      <h1>Добро пожаловать в магазин сайта ДушуГрею. Здесь вы сможете приобрести неповторимые изделия экопринта</h1>
+    <div className={styles.shopContainer}>
+      <Helmet>
+        <title>ДушуГрею | Страница магазина</title>
+        <meta name="description" content="Галерея фотографий с изделиями экопринта от ДушуГрею"/>
+        <meta name="keywords" content="экопринт, фото, галерея, изделия, ДушуГрею"/>
+      </Helmet>
 
       {/* Десктопное меню категорий */}
       <div className={styles.categoriesWrapper}>

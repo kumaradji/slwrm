@@ -1,15 +1,16 @@
 // AboutMePage.jsx
 import styles from './AboutMePage.module.scss';
 import Photo from '../../assets/about_me_photo.jpeg';
+import {Helmet} from 'react-helmet';
 
 const AboutMePage = () => {
   return (
     <div className={styles.aboutPage}>
-      <title>ДушуГрею | Обо мне</title>
-      <meta name="description" content="Обо мне. Нина Кольцова. Художник экопринта. ДушуГрею"/>
-      <meta name="keywords" content="экопринт, красота, природа, ткани, товары, изделия, ДушуГрею"/>
-
-      <h1>Обо мне. Нина Кольцова. Художник экопринта</h1>
+      <Helmet>
+        <title>ДушуГрею | Обо мне</title>
+        <meta name="description" content="Обо мне. Нина Кольцова. Художник экопринта. ДушуГрею"/>
+        <meta name="keywords" content="экопринт, красота, природа, ткани, товары, изделия, ДушуГрею"/>
+      </Helmet>
 
       <div className={styles.aboutPage__content}>
         <div className={styles.aboutPage__left}>
