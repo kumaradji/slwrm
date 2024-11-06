@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import Leaf01 from "../../assets/leaf_1.png";
 import Leaf02 from "../../assets/leaf_2.png";
 import images from "./ImageList";
+import {Helmet} from 'react-helmet';
 import {AuthContext} from '../../context/AuthContext';
 import LandingPageSlider from "../../components/LandingPageSlider/LandingPageSlider";
 
@@ -15,13 +16,14 @@ const LandingPage = () => {
 
   return (
     <div className={styles.landingPage}>
-      <title>ДушуГрею | Сайт про Экопринт - метод натурального окрашивания, который позволяет перенести природные
-        цвета растений на ткань или бумагу с использованием солей металлов. Главная страница</title>
-      <meta name="description" content="Сайт про Экопринт - метод натурального окрашивания, который позволяет перенести природные
+      <Helmet>
+        <title>ДушуГрею | Сайт про Экопринт - метод натурального окрашивания, который позволяет перенести природные
+          цвета растений на ткань или бумагу с использованием солей металлов. Главная страница</title>
+        <meta name="description" content="Сайт про Экопринт - метод натурального окрашивания, который позволяет перенести природные
         цвета растений на ткань или бумагу с использованием солей металлов"/>
-      <meta name="keywords" content="экопринт, красота, природа, ткани, товары, мастер-классы, уроки, изделия, ДушуГрею"/>
-
-      <h1>Добро пожаловать на главную страницу сайта ДушуГрею</h1>
+        <meta name="keywords"
+              content="экопринт, красота, природа, ткани, товары, мастер-классы, уроки, изделия, ДушуГрею"/>
+      </Helmet>
 
       <div className={styles.titleBlock}>
         <h1 className={styles.titleBlock__textTitle}>ДушуГрею</h1>

@@ -5,6 +5,7 @@ import styles from './CartPage.module.scss';
 import { CartContext } from '../../../context/CartContext';
 import { logToServer } from "../../../services/logger";
 import Loader from '../../../components/Loader/Loader';
+import { Helmet } from 'react-helmet';
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
@@ -162,10 +163,11 @@ const CartPage = () => {
 
   return (
     <div className={styles.cartPage}>
+    <Helmet>
       <title>ДушуГрею | Корзина пользователя</title>
-      <h1>Корзина пользователя сайта ДушуГрею</h1>
       <meta name="description" content="Магазин с изделиями экопринта от ДушуГрею"/>
       <meta name="keywords" content="экопринт, красота, природа, ткани, товары, купить, изделия, ДушуГрею"/>
+    </Helmet>
 
       <h1>Корзина</h1>
       <div className={styles.cartContainer}>

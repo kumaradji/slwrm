@@ -26,6 +26,7 @@
     "slick-carousel": "^1.8.1",
     "swiper": "^11.1.4",
     "web-vitals": "^2.1.4",
+    "react-helmet": "^6.1.0",
     "zepto": "^1.2.0"
   },
   "devDependencies": {
