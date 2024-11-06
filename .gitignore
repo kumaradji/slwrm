@@ -19,3 +19,4 @@ docker/dev/Nginx/logs
 .eslintcache
 *.manifest
 *.specbackend/media/shop/*
+/backend/media/shop/
