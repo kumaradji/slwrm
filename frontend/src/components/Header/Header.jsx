@@ -1,6 +1,6 @@
 // Header.jsx
 import React, {useState} from 'react';
-import {useNavigate, useLocation } from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import UserBlock from './UserBlock/UserBlock';
 import {useAuth} from '../../context/AuthContext';
@@ -22,16 +22,29 @@ const Header = () => {
   const isMobile = width <= 767;
   const navigate = useNavigate();
   const location = useLocation();
+  const [setMode] = useState('login');
 
   const openMenu = () => setIsMenuVisible(true);
   const closeMenu = () => setIsMenuVisible(false);
 
   const handleLoginClick = () => {
     navigate('/auth');
+    if (isMobile) {
+      closeMenu();
+    }
   };
 
   const handleLogoClick = () => {
     navigate('/');
+    if (isMobile) {
+      closeMenu();
+    }
+  };
+
+  const handleNavigate = () => {
+    if (isMobile) {
+      closeMenu();
+    }
   };
 
   return (
@@ -48,10 +61,15 @@ const Header = () => {
           </a>
         </div>
 
-        {!isMobile && <Navbar closeMenu={closeMenu} />}
+        {!isMobile && <Navbar closeMenu={closeMenu}/>}
         <div className={`${styles.rightSection} ${isMobile ? styles.hideOnMobile : ''}`}>
           {isLoggedIn && user ? (
-            <UserBlock userName={user.username} userPicture={user.picture}/>
+            <UserBlock
+              userName={user.username}
+              userPicture={user.picture}
+              setMode={setMode}
+              onNavigate={handleNavigate}
+            />
           ) : (
             location.pathname !== '/auth' && (
               <button className={styles.loginButton} onClick={handleLoginClick}>
@@ -82,24 +100,29 @@ const Header = () => {
         <div className={styles.dropdownMenuPage}>
           <div className={styles.userBlockWrapper}>
             {isLoggedIn && user ? (
-              <UserBlock userName={user.username} userPicture={user.picture}/>
+              <UserBlock
+                userName={user.username}
+                userPicture={user.picture}
+                setMode={setMode}
+                onNavigate={handleNavigate}
+              />
             ) : null}
           </div>
-          <Navbar closeMenu={closeMenu} />
+          <Navbar closeMenu={closeMenu}/>
           <div className={styles.footer__social}>
-            <a href="https://t.me/nina_koltsova">
+            <a href="https://t.me/nina_koltsova" onClick={handleNavigate}>
               <img src={Telegram} alt="Telegram"/>
             </a>
-            <a href="https://vk.com/ecoprint_koltsova">
+            <a href="https://vk.com/ecoprint_koltsova" onClick={handleNavigate}>
               <img src={VK} alt="VK"/>
             </a>
-            <a href="https://wa.me/79500423593">
+            <a href="https://wa.me/79500423593" onClick={handleNavigate}>
               <img src={Whatsapp} alt="Whatsapp"/>
             </a>
-            <a href="tel:+79500423593">
+            <a href="tel:+79500423593" onClick={handleNavigate}>
               <img src={Telephone} alt="Telephone"/>
             </a>
-            <a href="mailto:koltsovaecoprint@yandex.ru">
+            <a href="mailto:koltsovaecoprint@yandex.ru" onClick={handleNavigate}>
               <img src={Email} alt="Email"/>
             </a>
           </div>

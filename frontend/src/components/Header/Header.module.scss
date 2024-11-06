@@ -107,7 +107,7 @@ header {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-top: 100px;
+	padding-top: 170px;
 	z-index: 2000;
 	overflow-y: auto;
 	pointer-events: auto;
@@ -162,6 +162,8 @@ header {
 		}
 	}
 }
+
+.menuVisible {}
 
 .userBlockWrapper {
 	margin-bottom: 20px;

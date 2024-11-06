@@ -1,15 +1,15 @@
 // ShopPage.jsx
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import styles from './ShopPage.module.scss';
-import { logToServer } from "../../services/logger";
+import {logToServer} from "../../services/logger";
 import Loader from '../../components/Loader/Loader';
 
 const ShopPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
+  const [isBurgerCategoryMenuOpen, setIsBurgerCategoryMenuOpen] = useState(false);
   const [selectedCategoryName, setSelectedCategoryName] = useState("все категории");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,7 +30,7 @@ const ShopPage = () => {
       } catch (error) {
         logToServer(`Ошибка при получении данных: ${error.message}`, 'error');
       } finally {
-        setIsLoading(false); // Скрыть индикатор загрузки
+        setIsLoading(false);
       }
     };
 
@@ -40,7 +40,7 @@ const ShopPage = () => {
   const handleCategoryClick = (categoryId, categoryName) => {
     setSelectedCategory(categoryId);
     setSelectedCategoryName(categoryName || "все категории");
-    setIsBurgerMenuOpen(false);
+    setIsBurgerCategoryMenuOpen(false);
   };
 
   const filteredProducts = selectedCategory
@@ -65,7 +65,7 @@ const ShopPage = () => {
                   </button>
                 </li>
               ))}
-            <br />
+            <br/>
             <li>
               <button
                 className={selectedCategory === null ? styles.activeCategory : ''}
@@ -82,19 +82,19 @@ const ShopPage = () => {
       <div className={styles.mobileMenu}>
         <button
           className={styles.categoryButton}
-          onClick={() => setIsBurgerMenuOpen(!isBurgerMenuOpen)}
+          onClick={() => setIsBurgerCategoryMenuOpen(!isBurgerCategoryMenuOpen)}
         >
           {selectedCategoryName}
-          <span className={`${styles.arrow} ${isBurgerMenuOpen ? styles.arrowUp : ''}`}>▼</span>
+          <span className={`${styles.arrow} ${isBurgerCategoryMenuOpen ? styles.arrowUp : ''}`}>▼</span>
         </button>
 
-        {isBurgerMenuOpen && (
+        {isBurgerCategoryMenuOpen && (
           <div className={styles.categoryDropdown}>
             <div className={styles.dropdownHeader}>
               <span>Категория</span>
               <button
                 className={styles.closeButton}
-                onClick={() => setIsBurgerMenuOpen(false)}
+                onClick={() => setIsBurgerCategoryMenuOpen(false)}
               >
                 ✕
               </button>
@@ -123,7 +123,7 @@ const ShopPage = () => {
             </ul>
             <button
               className={styles.doneButton}
-              onClick={() => setIsBurgerMenuOpen(false)}
+              onClick={() => setIsBurgerCategoryMenuOpen(false)}
             >
               Готово
             </button>
@@ -135,7 +135,7 @@ const ShopPage = () => {
       <div className={styles.productsContainer}>
         <div className={styles.productsGrid}>
           {isLoading ? (
-            <Loader />
+            <Loader/>
           ) : Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <div
