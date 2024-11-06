@@ -22,7 +22,7 @@ const Header = () => {
   const isMobile = width <= 767;
   const navigate = useNavigate();
   const location = useLocation();
-  const [setMode] = useState('login');
+  const [mode, setMode] = useState('login');
 
   const openMenu = () => setIsMenuVisible(true);
   const closeMenu = () => setIsMenuVisible(false);
@@ -41,6 +41,7 @@ const Header = () => {
     }
   };
 
+  // Функция для обработки навигации
   const handleNavigate = () => {
     if (isMobile) {
       closeMenu();
