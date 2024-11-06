@@ -27,6 +27,12 @@ const GalleryPage = () => {
 
   return (
     <div className={styles.gallery}>
+      <title>ДушуГрею | Галерея фотографий</title>
+      <meta name="description" content="Галерея фотографий с изделиями экопринта от ДушуГрею"/>
+      <meta name="keywords" content="экопринт, фото, галерея, изделия, ДушуГрею"/>
+
+      <h1>Страница галереи фотографий с изделиями экопринта сайта ДушуГрею</h1>
+
       <h1>{title}</h1>
       <p className={styles.gallery__description}>{description}</p>
       <div className={styles.gallery__container}>
