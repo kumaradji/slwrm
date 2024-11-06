@@ -18,4 +18,4 @@ docker/volumes
 docker/dev/Nginx/logs
 .eslintcache
 *.manifest
-*.spec
+*.specbackend/media/shop/*
