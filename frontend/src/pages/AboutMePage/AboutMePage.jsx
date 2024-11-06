@@ -5,6 +5,12 @@ import Photo from '../../assets/about_me_photo.jpeg';
 const AboutMePage = () => {
   return (
     <div className={styles.aboutPage}>
+      <title>ДушуГрею | Обо мне</title>
+      <meta name="description" content="Обо мне. Нина Кольцова. Художник экопринта. ДушуГрею"/>
+      <meta name="keywords" content="экопринт, красота, природа, ткани, товары, изделия, ДушуГрею"/>
+
+      <h1>Обо мне. Нина Кольцова. Художник экопринта</h1>
+
       <div className={styles.aboutPage__content}>
         <div className={styles.aboutPage__left}>
           <h1>Здравствуйте!</h1>

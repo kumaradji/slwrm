@@ -49,6 +49,12 @@ const ShopPage = () => {
 
   return (
     <div className={styles.shopContainer}>
+      <title>ДушуГрею | Страница магазина</title>
+      <meta name="description" content="Галерея фотографий с изделиями экопринта от ДушуГрею"/>
+      <meta name="keywords" content="экопринт, фото, галерея, изделия, ДушуГрею"/>
+
+      <h1>Добро пожаловать в магазин сайта ДушуГрею. Здесь вы сможете приобрести неповторимые изделия экопринта</h1>
+
       {/* Десктопное меню категорий */}
       <div className={styles.categoriesWrapper}>
         <div className={styles.categoriesContainer}>

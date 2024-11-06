@@ -116,6 +116,11 @@ const Profile = () => {
 
   return (
     <div className={styles.profile}>
+      <title>ДушуГрею | Личный кабинет</title>
+      <meta name="description" content="Личный кабинет пользователя сайта ДушуГрею"/>
+      <meta name="keywords" content="экопринт, личный кабинет, прифиль, ДушуГрею"/>
+
+      <h1>Личный кабинет пользователя</h1>
       <div className={styles.cardProfile}>
         <h3>Профиль</h3>
         <div className={styles.profileInfo}>

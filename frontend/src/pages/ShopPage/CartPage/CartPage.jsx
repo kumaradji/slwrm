@@ -14,6 +14,7 @@ const CartPage = () => {
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
   const { updateCartCount, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchCart = async () => {
     setLoading(true);
@@ -81,7 +82,12 @@ const CartPage = () => {
 
       updateCartCount(cart.items.length - 1);
 
-      await fetchCart();  // Обновляем корзину после удаления
+      // Включаем лоадер и через 2 секунды обновляем корзину
+      setRefreshing(true);
+      setTimeout(async () => {
+        await fetchCart();
+        setRefreshing(false);
+      }, 2000);
     } catch (error) {
       logToServer(`Ошибка при удалении товара из корзины: ${error.message}`, 'error');
       setError('Не удалось удалить товар. Попробуйте еще раз.');
@@ -93,6 +99,10 @@ const CartPage = () => {
       });
     }
   };
+
+  if (loading || refreshing) {
+    return <Loader />;
+  }
 
   const calculateTotal = () => {
     if (!cart || !cart.items) return 0;
@@ -118,7 +128,7 @@ const CartPage = () => {
   };
 
   if (loading) {
-    return <Loader />;  // Используем компонент Loader при первой загрузке корзины
+    return <Loader />;
   }
 
   if (error) {
@@ -152,6 +162,11 @@ const CartPage = () => {
 
   return (
     <div className={styles.cartPage}>
+      <title>ДушуГрею | Корзина пользователя</title>
+      <h1>Корзина пользователя сайта ДушуГрею</h1>
+      <meta name="description" content="Магазин с изделиями экопринта от ДушуГрею"/>
+      <meta name="keywords" content="экопринт, красота, природа, ткани, товары, купить, изделия, ДушуГрею"/>
+
       <h1>Корзина</h1>
       <div className={styles.cartContainer}>
         <div className={styles.cartSummary}>
@@ -218,7 +233,7 @@ const CartPage = () => {
                     onClick={() => removeFromCart(item.id)}
                     disabled={deletingItems.has(item.id)}
                   >
-                    {deletingItems.has(item.id) ? <Loader /> : 'Удалить'}  {/* Показать Loader при удалении товара */}
+                    {deletingItems.has(item.id) ? <Loader/> : 'Удалить'} {/* Показать Loader при удалении товара */}
                   </button>
                 </div>
               </div>
