@@ -6,6 +6,7 @@ import {CartContext} from '../../../context/CartContext';
 import {logToServer} from "../../../services/logger";
 import Loader from '../../../components/Loader/Loader';
 import {Helmet} from 'react-helmet';
+import Modal from "../../../components/Modal/Modal";
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
@@ -16,6 +17,9 @@ const CartPage = () => {
   const {updateCartCount, clearCart} = useContext(CartContext);
   const navigate = useNavigate();
   const [refreshing, setRefreshing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
 
   const fetchCart = async () => {
     setLoading(true);
@@ -38,6 +42,12 @@ const CartPage = () => {
       setLoading(false);
     }
   };
+
+  const closeModalAndReload = () => {
+    setIsModalOpen(false);
+    fetchCart();
+  };
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -75,8 +85,10 @@ const CartPage = () => {
         throw new Error('Не удалось удалить товар из корзины');
       }
 
-      // Добавляем случайный параметр к URL, чтобы избежать кэширования на iOS
-      window.location.href = `${window.location.pathname}?refresh=${new Date().getTime()}`;
+      setTimeout(() => {
+        setModalMessage('Товар успешно удалён из корзины');
+        setIsModalOpen(true);
+      });
 
     } catch (error) {
       logToServer(`Ошибка при удалении товара из корзины: ${error.message}`, 'error');
@@ -119,19 +131,6 @@ const CartPage = () => {
 
   if (loading) {
     return <Loader/>;
-  }
-
-  if (error) {
-    return (
-      <div className={styles.cartPage}>
-        <div className={styles.error}>
-          <p>Ошибка: {error}</p>
-          <button onClick={fetchCart} className={styles.retryButton}>
-            Попробовать снова
-          </button>
-        </div>
-      </div>
-    );
   }
 
   if (!cart || !cart.items || cart.items.length === 0) {
@@ -227,7 +226,7 @@ const CartPage = () => {
                     onClick={() => removeFromCart(item.id)}
                     disabled={deletingItems.has(item.id)}
                   >
-                    {deletingItems.has(item.id) ? <Loader/> : 'Удалить'} {/* Показать Loader при удалении товара */}
+                    {deletingItems.has(item.id) ? <Loader/> : 'Удалить'}
                   </button>
                 </div>
               </div>
@@ -242,6 +241,16 @@ const CartPage = () => {
       >
         Назад в магазин
       </button>
+
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModalAndReload}
+          message={modalMessage}
+          buttonText="Назад в корзину"
+        />
+      )}
+
     </div>
   );
 };
