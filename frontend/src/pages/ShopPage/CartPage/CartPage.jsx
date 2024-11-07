@@ -75,14 +75,15 @@ const CartPage = () => {
         throw new Error('Не удалось удалить товар из корзины');
       }
 
-      // Обновляем состояние корзины после успешного удаления
-      setRefreshing(true);
-      await fetchCart();
-      setRefreshing(false);
+      // Перезагрузка страницы после успешного удаления товара
+      window.location.reload(); // Перезагружает текущую страницу
 
     } catch (error) {
       logToServer(`Ошибка при удалении товара из корзины: ${error.message}`, 'error');
       setError('Не удалось удалить товар. Попробуйте еще раз.');
+
+      // Перезагрузка страницы в случае ошибки
+      window.location.reload(); // Перезагружает текущую страницу
     } finally {
       setDeletingItems(prev => {
         const newSet = new Set(prev);
@@ -91,6 +92,7 @@ const CartPage = () => {
       });
     }
   };
+
 
 
   if (loading || refreshing) {
