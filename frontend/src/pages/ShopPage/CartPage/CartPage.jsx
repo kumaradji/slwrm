@@ -75,8 +75,8 @@ const CartPage = () => {
         throw new Error('Не удалось удалить товар из корзины');
       }
 
-      // Простая перезагрузка страницы вместо обновления состояния
-      window.location.reload();
+      // Добавляем случайный параметр к URL, чтобы избежать кэширования на iOS
+      window.location.href = `${window.location.pathname}?refresh=${new Date().getTime()}`;
 
     } catch (error) {
       logToServer(`Ошибка при удалении товара из корзины: ${error.message}`, 'error');
@@ -89,7 +89,6 @@ const CartPage = () => {
       });
     }
   };
-
 
   if (loading || refreshing) {
     return <Loader/>;
