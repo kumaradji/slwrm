@@ -130,41 +130,131 @@
 			}
 		}
 
-		.agreement {
-			margin-top: 10px;
-			font-size: 0.8rem;
+		//.agreement {
+		//	margin-top: 10px;
+		//	font-size: 0.8rem;
+		//
+		//	label {
+		//		display: flex;
+		//		align-items: center;
+		//		gap: 5px;
+		//		cursor: pointer;
+		//	}
+		//
+		//	input[type="checkbox"] {
+		//		width: 50px;
+		//		margin-right: 5px;
+		//		margin-top: 0;
+		//	}
+		//
+		//	span {
+		//		font-size: 1.1rem;
+		//		line-height: 1.2;
+		//
+		//		@include tablet {
+		//			font-size: 1rem;
+		//		}
+		//
+		//		@include mobile {
+		//			font-size: 1rem;
+		//		}
+		//
+		//		@include mobile-small {
+		//			font-size: 0.9rem;
+		//		}
+		//	}
+		//}
 
-			label {
+		.agreement {
+			margin-top: 15px;
+			width: 100%;
+
+			.agreementLabel {
+				display: flex;
+				align-items: flex-start;
+				gap: 12px;
+				cursor: pointer;
+				width: 100%;
+			}
+
+			.checkboxWrapper {
+				position: relative;
 				display: flex;
 				align-items: center;
-				gap: 5px;
+			}
+
+			// Скрытый оригинальный чекбокс
+			.hiddenCheckbox {
+				position: absolute;
+				opacity: 0;
 				cursor: pointer;
+				width: 0;
+				height: 0;
 			}
 
-			input[type="checkbox"] {
-				width: 50px;
-				margin-right: 5px;
-				margin-top: 0;
+			// Кастомный чекбокс
+			.customCheckbox {
+				width: 20px;
+				height: 20px;
+				background: white;
+				border: 2px solid var(--color-blue);
+				border-radius: 4px;
+				display: inline-block;
+				position: relative;
+				cursor: pointer;
+
+				// Галочка
+				&:after {
+					content: '';
+					position: absolute;
+					display: none;
+					left: 6px;
+					top: 2px;
+					width: 5px;
+					height: 10px;
+					border: solid white;
+					border-width: 0 2px 2px 0;
+					transform: rotate(45deg);
+				}
 			}
 
-			span {
-				font-size: 1.1rem;
-				line-height: 1.2;
+			// Когда чекбокс отмечен
+			.hiddenCheckbox:checked + .customCheckbox {
+				background-color: var(--color-blue);
+
+				&:after {
+					display: block;
+				}
+			}
+
+			.agreementText {
+				font-family: 'Inter', sans-serif;
+				font-size: 1.2rem;
+				line-height: 1.4;
+				color: var(--color-grey);
+				flex: 1;
 
 				@include tablet {
-					font-size: 1rem;
+					font-size: 1.1rem;
 				}
 
 				@include mobile {
 					font-size: 1rem;
 				}
+			}
 
-				@include mobile-small {
-					font-size: 0.9rem;
+			.offerLink {
+				color: var(--color-blue);
+				text-decoration: none;
+				font-weight: 500;
+				border-bottom: 1px solid transparent;
+				transition: border-color 0.3s ease;
+
+				&:hover {
+					border-bottom-color: var(--color-blue);
 				}
 			}
 		}
-
 
 		.offerLink {
 			color: var(--color-blue);
