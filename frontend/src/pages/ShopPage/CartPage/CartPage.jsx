@@ -1,11 +1,11 @@
 // CartPage.jsx
-import React, { useEffect, useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, {useEffect, useState, useContext} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import styles from './CartPage.module.scss';
-import { CartContext } from '../../../context/CartContext';
-import { logToServer } from "../../../services/logger";
+import {CartContext} from '../../../context/CartContext';
+import {logToServer} from "../../../services/logger";
 import Loader from '../../../components/Loader/Loader';
-import { Helmet } from 'react-helmet';
+import {Helmet} from 'react-helmet';
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
@@ -13,7 +13,7 @@ const CartPage = () => {
   const [error, setError] = useState(null);
   const [deletingItems, setDeletingItems] = useState(new Set());
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
-  const { updateCartCount, clearCart } = useContext(CartContext);
+  const {updateCartCount, clearCart} = useContext(CartContext);
   const navigate = useNavigate();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -75,10 +75,8 @@ const CartPage = () => {
         throw new Error('Не удалось удалить товар из корзины');
       }
 
-      // Перезагрузка корзины сразу после запроса
-      setRefreshing(true);
-      await fetchCart(); // Обновление корзины после успешного удаления
-      setRefreshing(false);
+      // Простая перезагрузка страницы вместо обновления состояния
+      window.location.reload();
 
     } catch (error) {
       logToServer(`Ошибка при удалении товара из корзины: ${error.message}`, 'error');
@@ -94,7 +92,7 @@ const CartPage = () => {
 
 
   if (loading || refreshing) {
-    return <Loader />;
+    return <Loader/>;
   }
 
   const calculateTotal = () => {
@@ -116,12 +114,12 @@ const CartPage = () => {
   const handleCheckout = () => {
     if (isAgreementChecked) {
       localStorage.setItem('agreementChecked', 'true');
-      navigate('/payment-instructions', { state: { totalAmount: calculateTotal() } });
+      navigate('/payment-instructions', {state: {totalAmount: calculateTotal()}});
     }
   };
 
   if (loading) {
-    return <Loader />;
+    return <Loader/>;
   }
 
   if (error) {
@@ -155,11 +153,11 @@ const CartPage = () => {
 
   return (
     <div className={styles.cartPage}>
-    <Helmet>
-      <title>ДушуГрею | Корзина пользователя</title>
-      <meta name="description" content="Магазин с изделиями экопринта от ДушуГрею"/>
-      <meta name="keywords" content="экопринт, красота, природа, ткани, товары, купить, изделия, ДушуГрею"/>
-    </Helmet>
+      <Helmet>
+        <title>ДушуГрею | Корзина пользователя</title>
+        <meta name="description" content="Магазин с изделиями экопринта от ДушуГрею"/>
+        <meta name="keywords" content="экопринт, красота, природа, ткани, товары, купить, изделия, ДушуГрею"/>
+      </Helmet>
 
       <h1>Корзина</h1>
       <div className={styles.cartContainer}>
@@ -177,15 +175,18 @@ const CartPage = () => {
               Перейти к оформлению
             </button>
             <div className={styles.agreement}>
-              <label htmlFor="agreement">
-                <input
-                  type="checkbox"
-                  id="agreement"
-                  checked={isAgreementChecked}
-                  onChange={handleAgreementChange}
-                />
-                <span>
-                  Продолжая оформление я соглашаюсь с{' '}
+              <label className={styles.agreementLabel}>
+                <div className={styles.checkboxWrapper}>
+                  <input
+                    type="checkbox"
+                    checked={isAgreementChecked}
+                    onChange={handleAgreementChange}
+                    className={styles.hiddenCheckbox}
+                  />
+                  <div className={styles.customCheckbox}></div>
+                </div>
+                <span className={styles.agreementText}>
+                  Продолжая оформление, я соглашаюсь с{' '}
                   <Link
                     className={styles.offerLink}
                     to="/offer-agreement"
