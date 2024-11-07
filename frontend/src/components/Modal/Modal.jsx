@@ -2,7 +2,7 @@
 import React from 'react';
 import styles from './Modal.module.scss';
 
-const Modal = ({ isOpen, onClose, message }) => {
+const Modal = ({ isOpen, onClose, message, buttonText = 'Закрыть' }) => {
   if (!isOpen) return null;
 
   return (
@@ -10,7 +10,7 @@ const Modal = ({ isOpen, onClose, message }) => {
       <div className={styles.modal}>
         <div className={styles.modalContent}>
           <p>{message}</p>
-          <button className={styles.modal__button} onClick={onClose}>Закрыть</button>
+          <button className={styles.modal__button} onClick={onClose}>{buttonText}</button>
         </div>
       </div>
     </div>
