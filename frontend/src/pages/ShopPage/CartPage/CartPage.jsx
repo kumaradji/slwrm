@@ -93,8 +93,6 @@ const CartPage = () => {
     }
   };
 
-
-
   if (loading || refreshing) {
     return <Loader/>;
   }

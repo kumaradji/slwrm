@@ -158,7 +158,7 @@ const LandingPage = () => {
               <Link to="/promo" className={styles.landingPage__button}>
                 Подробнее
               </Link>
-              <p>Цена 4000 рублей.</p>
+              <p>Цена 7000 рублей.</p>
               <p>Волшебничайте! И Ваша жизнь станет волшебством.</p>
             </>
           )}
