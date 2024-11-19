@@ -14,6 +14,7 @@ import Whatsapp from '../../assets/icons/whatsapp_icon.png';
 import Telephone from '../../assets/icons/telephone_icon.png';
 import Email from '../../assets/icons/email_icon.png';
 import VK from '../../assets/icons/vk_icon.png';
+import CartButton from "../../pages/ShopPage/CartButton/CartButton";
 
 const Header = () => {
   const {isLoggedIn, user} = useAuth();

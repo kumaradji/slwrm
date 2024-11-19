@@ -6,10 +6,11 @@ import cartIcon from '../../../assets/icons/shopping-cart.png';
 import { CartContext } from '../../../context/CartContext';
 import { logToServer } from "../../../services/logger";
 
-const CartButton = () => {
+const CartButton = ({ closeMenu }) => {
   const navigate = useNavigate();
   const { cartCount, updateCartCount } = useContext(CartContext);
   const token = localStorage.getItem('token');
+
 
   useEffect(() => {
     if (token) {
@@ -38,6 +39,7 @@ const CartButton = () => {
 
   const handleCartClick = () => {
     if (cartCount > 0) {
+      if (closeMenu) closeMenu();  // Закрытие бургер-меню
       navigate('/cart');
     }
   };
