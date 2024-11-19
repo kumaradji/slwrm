@@ -7,10 +7,11 @@ import user_icon from '../../../assets/user_icon.png';
 import CartButton from '../../../pages/ShopPage/CartButton/CartButton';
 import { logToServer } from "../../../services/logger";
 
-const UserBlock = ({userName, setMode, onNavigate}) => {
-  const {isLoggedIn, user} = useAuth();
+const UserBlock = ({ userName, setMode, onNavigate, closeMenu }) => {
+  const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
   const [avatarUrl, setAvatarUrl] = useState(user_icon);
+
 
   useEffect(() => {
     if (isLoggedIn && user) {
@@ -57,7 +58,7 @@ const UserBlock = ({userName, setMode, onNavigate}) => {
                 <div
                   className={styles.userInfo__userName}
                   onClick={handleProfileClick}
-                  style={{cursor: 'pointer'}}
+                  style={{ cursor: 'pointer' }}
                 >
                   {userName}
                 </div>
@@ -66,7 +67,7 @@ const UserBlock = ({userName, setMode, onNavigate}) => {
                   alt="User"
                   className={styles.userInfo__userIcon}
                   onClick={handleProfileClick}
-                  style={{cursor: 'pointer'}}
+                  style={{ cursor: 'pointer' }}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = user_icon;
@@ -75,15 +76,17 @@ const UserBlock = ({userName, setMode, onNavigate}) => {
               </div>
             </div>
             <div className={styles.cartContainer}>
-              <CartButton onNavigate={onNavigate} />
+              <CartButton onNavigate={onNavigate} closeMenu={closeMenu} />
             </div>
           </div>
         </>
       ) : (
         <div className={styles.userContainer}>
-          <button className={styles.loginButton} onClick={handleLoginClick}>Войти</button>
+          <button className={styles.loginButton} onClick={handleLoginClick}>
+            Войти
+          </button>
           <div className={styles.cartContainer}>
-            <CartButton onNavigate={onNavigate} />
+            <CartButton onNavigate={onNavigate} closeMenu={closeMenu} />
           </div>
         </div>
       )}
