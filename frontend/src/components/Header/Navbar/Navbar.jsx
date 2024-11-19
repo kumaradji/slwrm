@@ -7,7 +7,7 @@ const Navbar = ({ closeMenu }) => {
   return (
     <nav className={style.navbar}>
       <Link to="/" onClick={closeMenu}>Главная</Link>
-      <Link to="/lessons" onClick={closeMenu}>Уроки</Link>
+      <Link to="/lessons" onClick={closeMenu}>Статьи</Link>
       <Link to="/shop" onClick={closeMenu}>Магазин</Link>
       <Link to="/about" onClick={closeMenu}>Обо мне</Link>
       <Link to="/gallery" onClick={closeMenu}>Галерея</Link>

@@ -122,7 +122,7 @@ const LandingPage = () => {
         </p>
 
         <p>
-          Посмотрите мои{' '}<Link to="/lessons" className={styles.landingPage__link}> бесплатные уроки,</Link> и если
+          Посмотрите мой{' '}<Link to="/lessons" className={styles.landingPage__link}> базовый курс</Link> по экопринту, и если
           решитесь – приобретайте мой мастер-класс, в котором я подробно рассказываю все тонкости процесса.
         </p>
       </div>
