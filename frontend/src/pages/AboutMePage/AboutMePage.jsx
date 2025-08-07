@@ -1,7 +1,7 @@
 // AboutMePage.jsx
 import styles from './AboutMePage.module.scss';
 import Photo from '../../assets/about_me_photo.jpeg';
-import {Helmet} from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import TypingParagraphAnimation from "../../components/TypingParagraphAnimation/TypingParagraphAnimation";
 
 const AboutMePage = () => {
@@ -42,9 +42,44 @@ const AboutMePage = () => {
   return (
     <div className={styles.aboutPage}>
       <Helmet>
-        <title>ДушуГрею | Обо мне</title>
-        <meta name="description" content="Обо мне. Нина Кольцова. Художник экопринта. ДушуГрею"/>
-        <meta name="keywords" content="экопринт, красота, природа, ткани, товары, изделия, ДушуГрею"/>
+        <title>Нина Кольцова — художник экопринт. О создании изделий из шёлка и растений | ДушуГрею</title>
+        <meta name="description" content="История Нины Кольцовой — художника экопринта. Как изучение марены, индиго и лесных растений привело к созданию уникальных шарфов и платков ручной работы. Мастер-классы и изделия из шёлка и шерсти." />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="Нина Кольцова — художник экопринт | ДушуГрею" />
+        <meta property="og:description" content="История создания изделий из шёлка и природных красителей. Уникальные техники окрашивания листьями и травами." />
+        <meta property="og:image" content="https://koltsovaecoprint.ru/images/about-preview.jpg" />
+        <meta property="og:url" content="https://koltsovaecoprint.ru/about" />
+        <meta property="og:type" content="profile" />
+        <meta property="profile:first_name" content="Нина" />
+        <meta property="profile:last_name" content="Кольцова" />
+
+        {/* Schema.org */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Нина Кольцова",
+            "url": "https://koltsovaecoprint.ru/about",
+            "image": "https://koltsovaecoprint.ru/images/nina-profile.jpg",
+            "jobTitle": "Художник по текстилю",
+            "description": "Создаю уникальные изделия из шёлка и шерсти с помощью природных красителей: марена, индиго, кошениль, листья и цветы.",
+            "sameAs": [
+              "https://vk.com/ecoprint_koltsova",
+              "https://t.me/ecoprint_koltsova",
+              "https://www.livemaster.ru/nandesha",
+              "https://www.instagram.com/nandeshvari_ecoprint/",
+              "https://youtube.com/channel/UCuBLmTMRConlw6RXUukWnTw",
+              "https://www.tiktok.com/@leafcolorshop_ecoprint",
+              "https://www.facebook.com/ecoprint.koltsova"
+            ],
+            "worksFor": {
+              "@type": "Organization",
+              "name": "ДушуГрею",
+              "url": "https://koltsovaecoprint.ru"
+            }
+          })}
+        </script>
       </Helmet>
 
       <div className={styles.aboutPage__content}>
@@ -54,7 +89,7 @@ const AboutMePage = () => {
         </div>
 
         <div className={styles.aboutPage__photo}>
-          <img src={Photo} alt="Nina photo"/>
+          <img src={Photo} alt="Нина Кольцова — художник по текстилю" />
         </div>
       </div>
 

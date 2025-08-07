@@ -7,6 +7,7 @@ import ModalResetPass from '../../components/ModalResetPass/ModalResetPass.jsx';
 import { handleLogin, handleRegistration, handleResetPassword } from './authFunctions';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { logToServer } from "../../services/logger";
+import {Helmet} from "react-helmet";
 
 const Authorization = ({initialMode = 'login', setAuthMode}) => {
   const [mode, setMode] = useState(initialMode);
@@ -120,6 +121,13 @@ const Authorization = ({initialMode = 'login', setAuthMode}) => {
 
   return (
     <div className={styles.registrationForm}>
+      <Helmet>
+        <title>Вход и регистрация — ДушуГрею</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <meta name="description" content="Страница входа и регистрации на сайте ДушуГрею. Доступ к личному кабинету и мастер-классам." />
+        <link rel="canonical" href="https://koltsovaecoprint.ru/auth" />
+      </Helmet>
+
       <div className={styles.registrationContainer}>
         <div className={styles.registrationFormWrapper}>
           <h2>{mode === 'login' ? 'Войти' : 'Зарегистрироваться'}</h2>
