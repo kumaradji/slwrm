@@ -1,4 +1,7 @@
 User-agent: *
-Disallow:
+Disallow: /cart
+Disallow: /auth
+Disallow: /payment-instructions
+Allow: /
 
-Sitemap: http://koltsovaecoprint.ru/sitemap.xml
+Sitemap: https://koltsovaecoprint.ru/sitemap.xml

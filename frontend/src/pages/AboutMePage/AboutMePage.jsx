@@ -85,7 +85,7 @@ const AboutMePage = () => {
       <div className={styles.aboutPage__content}>
         <div className={styles.aboutPage__left}>
           <h1>Здравствуйте!</h1>
-          <TypingParagraphAnimation text={mainText} speed={5} />
+          <p>{mainText}</p>
         </div>
 
         <div className={styles.aboutPage__photo}>
