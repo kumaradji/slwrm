@@ -50,14 +50,14 @@ const LandingPage = () => {
     // Первое видео — процесс
     loadVideoOrImage(
       '.landingPage__video.process-video',
-      '/videos/landingPage/Process_zadnik.webm',
+      '/images/Process_zadnik.webm',
       '/images/fallback_process.jpg'
     );
 
     // Второе видео — растения
     loadVideoOrImage(
       '.landingPage__video.plants-video',
-      '/videos/landingPage/Rasteniya_zadnik.webm',
+      '/images/Rasteniya_zadnik.webm',
       '/images/fallback_plants.jpg'
     );
 
