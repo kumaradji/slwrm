@@ -52,10 +52,45 @@ const ShopPage = () => {
 
     <div className={styles.shopContainer}>
       <Helmet>
-        <title>ДушуГрею | Страница магазина</title>
-        <meta name="description" content="Галерея фотографий с изделиями экопринта от ДушуГрею"/>
-        <meta name="keywords" content="экопринт, фото, галерея, изделия, ДушуГрею"/>
+        <title>ДушуГрею | Магазин изделий экопринта</title>
+        <meta
+          name="description"
+          content="Магазин изделий с экопринтом от ДушуГрею: одежда, аксессуары, предметы интерьера. Закажите уникальные товары с доставкой по России."
+        />
+        <meta
+          name="keywords"
+          content="экопринт, магазин, купить, одежда, аксессуары, интерьер, ДушуГрею"
+        />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="ДушуГрею | Магазин изделий экопринта" />
+        <meta property="og:description" content="Выберите и закажите изделия с экопринтом: одежда, аксессуары, интерьер." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://koltsovaecoprint.ru/shop" />
+        <meta property="og:image" content="https://koltsovaecoprint.ru/images/og-image-shop.jpg" />
+
+        {/* JSON-LD структурированные данные */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Store",
+            name: "ДушуГрею",
+            url: "https://koltsovaecoprint.ru/shop",
+            description: "Магазин изделий с экопринтом от ДушуГрею",
+            image: "https://koltsovaecoprint.ru/images/og-image-shop.jpg",
+            sameAs: [
+              "https://vk.com/ecoprint_koltsova",
+              "https://t.me/ecoprint_koltsova",
+              "https://www.livemaster.ru/nandesha",
+              "https://www.instagram.com/nandeshvari_ecoprint/",
+              "https://youtube.com/channel/UCuBLmTMRConlw6RXUukWnTw",
+              "https://www.tiktok.com/@leafcolorshop_ecoprint",
+              "https://www.facebook.com/ecoprint.koltsova"
+            ]
+          })}
+        </script>
       </Helmet>
+
 
       {/* Десктопное меню категорий */}
       <div className={styles.categoriesWrapper}>
