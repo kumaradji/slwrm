@@ -5,6 +5,7 @@ import styles from './CartPage.module.scss';
 import {CartContext} from '../../../context/CartContext';
 import {logToServer} from "../../../services/logger";
 import Loader from '../../../components/Loader/Loader';
+import LazyImage from '../../../components/LazyImage';
 import {Helmet} from 'react-helmet';
 
 const CartPage = () => {
@@ -159,6 +160,7 @@ const CartPage = () => {
         <title>ДушуГрею | Корзина пользователя</title>
         <meta name="description" content="Магазин с изделиями экопринта от ДушуГрею"/>
         <meta name="keywords" content="экопринт, красота, природа, ткани, товары, купить, изделия, ДушуГрею"/>
+        <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       <h1>Корзина</h1>
@@ -208,16 +210,13 @@ const CartPage = () => {
               <div className={styles.cartItemImage}>
                 <Link to={`/product/${item.id}`}>
                   {item.images && item.images.length > 0 ? (
-                    <img
+                    <LazyImage
                       src={item.images[0].image}
                       alt={item.title}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://via.placeholder.com/100';
-                      }}
+                      onError={() => {}}
                     />
                   ) : (
-                    <img src='https://via.placeholder.com/100' alt={item.title}/>
+                    <LazyImage src='/images/fallback_plants.jpg' alt={item.title}/>
                   )}
                 </Link>
               </div>

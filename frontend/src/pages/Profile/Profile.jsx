@@ -4,6 +4,7 @@ import {useAuth} from '../../context/AuthContext';
 import {useNavigate, Link} from 'react-router-dom';
 import styles from './Profile.module.scss';
 import Modal from '../../components/Modal/Modal.jsx';
+import LazyImage from '../../components/LazyImage';
 import defaultAvatar from '../../assets/default_user_icon.png';
 import {logToServer} from "../../services/logger";
 import {Helmet} from 'react-helmet';
@@ -120,20 +121,18 @@ const Profile = () => {
       <Helmet>
         <title>ДушуГрею | Личный кабинет</title>
         <meta name="description" content="Личный кабинет пользователя сайта ДушуГрею"/>
-        <meta name="keywords" content="экопринт, личный кабинет, прифиль, ДушуГрею"/>
+        <meta name="keywords" content="экопринт, личный кабинет, профиль, ДушуГрею"/>
+        <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       <div className={styles.cardProfile}>
         <h3>Профиль</h3>
         <div className={styles.profileInfo}>
-          <img
+          <LazyImage
             src={avatarUrl || defaultAvatar}
             alt="User"
             className={styles.userIcon}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = defaultAvatar;
-            }}
+            onError={() => {}}
           />
           <div className={styles.userInfo}>
             <p className={styles.userName}><strong>Имя пользователя:</strong> {user.username}</p>
