@@ -13,11 +13,11 @@
 	}
 
 	@include mobile {
-		padding: 160px 20px 20px 20px;
+		padding: 110px 20px 20px 20px;
 	}
 
 	@include mobile-small {
-		padding: 160px 10px 20px 10px;
+		padding: 110px 10px 20px 10px;
 	}
 
 	//a {
@@ -202,11 +202,13 @@
 
 			@include mobile {
 				font-size: 1.1rem;
-				margin-bottom: 0.7rem;
+				margin: 30px;
+				//margin-bottom: 0.7rem;
 			}
 
 			@include mobile-small {
 				font-size: 1rem;
+				margin: 30px;
 			}
 		}
 	}
