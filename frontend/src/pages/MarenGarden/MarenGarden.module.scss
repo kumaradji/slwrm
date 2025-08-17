@@ -1,5 +1,3 @@
-// MarenGarden.module.scss:
-
 @import '../../styles/media';
 @import '../../styles/variables';
 @import '../../styles/mixins';
@@ -15,79 +13,28 @@
 	}
 
 	@include mobile {
-		padding: 180px 20px 20px 20px; // Увеличил отступ сверху
+		padding: 160px 20px 20px 20px;
 	}
 
 	@include mobile-small {
-		padding: 180px 10px 20px 10px; // Увеличил отступ сверху
+		padding: 160px 10px 20px 10px;
 	}
 
-	// Стили для видео ошибки
-	.videoErrorFallback {
-		text-align: center;
-		padding: 40px 20px;
-		background: #f8f9fa;
-		border-radius: 8px;
-		border: 2px dashed #dee2e6;
-		margin: 20px 0;
-	}
-
-	.videoErrorContent h4 {
-		color: #856404;
-		margin-bottom: 15px;
-	}
-
-	.videoDirectLink {
-		display: inline-block;
-		padding: 10px 20px;
-		background: #007bff;
-		color: white;
-		text-decoration: none;
-		border-radius: 5px;
-		margin: 10px;
-
-		&:hover {
-			background: #0056b3;
-			color: white;
-		}
-	}
-
-	.videoHint {
-		font-size: 12px;
-		color: #6c757d;
-		margin-top: 10px;
-	}
-
-	// Мобильная кнопка для видео
-	.mobileVideoButton {
-		text-align: center;
-		margin-top: 15px;
-		padding-top: 10px;
-		border-top: 1px solid #e9ecef;
-	}
-
-	.mobileVideoLink {
-		display: inline-block;
-		padding: 12px 20px;
-		background: linear-gradient(135deg, #007bff, #0056b3);
-		color: white;
-		text-decoration: none;
-		border-radius: 8px;
-		font-size: 14px;
-		font-weight: 500;
-		box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
-		transition: all 0.2s ease;
-
-		&:hover {
-			transform: translateY(-1px);
-			box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-			color: white;
-		}
-
-		&:active {
-			transform: translateY(0);
-		}
-	}
+	//a {
+	//	margin-left: 30px;
+	//
+	//	@include tablet {
+	//		margin-left: 20px;
+	//	}
+	//
+	//	@include mobile {
+	//		margin-left: 10px;
+	//	}
+	//
+	//	@include mobile-small {
+	//		margin-left: 5px;
+	//	}
+	//}
 
 	h2 {
 		margin-bottom: 2rem;
@@ -104,13 +51,7 @@
 		@include mobile-small {
 			margin-bottom: 1rem;
 		}
-	}
 
-	// Специфичные стили для h3 в видео компонентах
-	h3 {
-		@include mobile {
-			margin-top: 0; // Убираем лишний отступ сверху
-		}
 	}
 
 	p {
@@ -128,6 +69,7 @@
 		@include mobile-small {
 			margin-bottom: 0.5rem;
 		}
+
 	}
 
 	.chapters {
@@ -228,6 +170,7 @@
 		}
 	}
 
+
 	.chapterContent {
 		margin-left: 60px;
 		padding: 0 8px 0 8px;
@@ -270,6 +213,7 @@
 
 	&__images {
 		margin-bottom: 10px;
+
 	}
 
 	&__videoContainer {
@@ -304,6 +248,7 @@
 	font-size: 1.4rem;
 	width: 450px;
 
+
 	@include tablet {
 		font-size: 1.3rem;
 		width: 100%;
@@ -324,6 +269,7 @@
 	margin-top: 40px;
 	padding: 20px;
 	background-color: var(--color-main);
+
 }
 
 .faqItem {
@@ -336,3 +282,4 @@
 		margin: 0;
 	}
 }
+

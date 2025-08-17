@@ -2,7 +2,6 @@
 import React from 'react';
 import styles from './MarenGarden.module.scss';
 import ConspectRedirect from "./MarenGardenContent/ConspectPage/ConspectRedirect";
-import VideoPlayerWithFallback from "./VideoPlayerWithFallback/VideoPlayerWithFallback";
 
 const marenGardenChapters = [
   {
@@ -77,16 +76,22 @@ const marenGardenChapters = [
       </div>
     ),
   },
-  // Улучшенная версия для iOS
   {
     id: 5,
     title: 'Подготовка железного одеяла',
     content: (
-      <VideoPlayerWithFallback
-        videoSrc="/videos/marengarden/Podgotovka_zeleznogo_odeyala.mp4"
-        title="Подготовка железного одеяла"
-        videoKey="video-5"
-      />
+      <div key="chapter-5">
+        <h3>Подготовка железного одеяла</h3>
+        <div className={styles.masterclass__videoContainer}>
+          <video controls key="video-5">
+            <source
+              src="/videos/marengarden/Podgotovka_zeleznogo_odeyala.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
     ),
   },
   {
