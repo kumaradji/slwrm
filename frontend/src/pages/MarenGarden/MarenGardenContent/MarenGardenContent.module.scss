@@ -73,10 +73,12 @@
 
 	@include mobile {
 		width: 100%;
+		padding: 40px 10px 0 10px;
 	}
 
 	@include mobile-small {
 		width: 100%;
+		padding: 40px 10px 0 10px;
 	}
 
 	h3 {

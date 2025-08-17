@@ -1,3 +1,4 @@
+// MarenGarden.module.scss
 @import '../../styles/media';
 @import '../../styles/variables';
 @import '../../styles/mixins';
@@ -202,13 +203,11 @@
 
 			@include mobile {
 				font-size: 1.1rem;
-				margin: 30px;
-				//margin-bottom: 0.7rem;
+				margin-bottom: 0.7rem;
 			}
 
 			@include mobile-small {
 				font-size: 1rem;
-				margin: 30px;
 			}
 		}
 	}
