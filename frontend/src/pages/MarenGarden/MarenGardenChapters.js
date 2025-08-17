@@ -77,6 +77,7 @@ const marenGardenChapters = [
       </div>
     ),
   },
+  // Улучшенная версия для iOS
   {
     id: 5,
     title: 'Подготовка железного одеяла',
@@ -84,13 +85,63 @@ const marenGardenChapters = [
       <div key="chapter-5">
         <h3>Подготовка железного одеяла</h3>
         <div className={styles.masterclass__videoContainer}>
-          <video controls key="video-5">
+          <video
+            controls
+            preload="metadata"
+            playsInline           // Критично для iOS
+            webkit-playsinline="true"    // Исправлено: добавлены кавычки
+            crossOrigin="anonymous"
+            key="video-5"
+            style={{
+              width: '100%',
+              height: 'auto',
+              maxWidth: '100%'
+            }}
+            onLoadStart={(e) => {
+              console.log('Видео 5: начало загрузки');
+              // Принудительная загрузка на iOS
+              if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                setTimeout(() => {
+                  e.target.load();
+                }, 100);
+              }
+            }}
+            onError={(e) => {
+              console.error('Ошибка видео 5:', e.target.error);
+              if (e.target.error) {
+                console.log('Error code:', e.target.error.code);
+                console.log('Error message:', e.target.error.message);
+              }
+            }}
+            onCanPlay={() => console.log('Видео 5: готово к воспроизведению')}
+          >
             <source
               src="/videos/marengarden/Podgotovka_zeleznogo_odeyala.mp4"
               type="video/mp4"
             />
             Your browser does not support the video tag.
           </video>
+
+          {/* Запасная кнопка для мобильных */}
+          <div style={{ textAlign: 'center', marginTop: '10px' }}>
+            <a
+              href="/videos/marengarden/Podgotovka_zeleznogo_odeyala.mp4"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                padding: '8px 16px',
+                background: 'linear-gradient(135deg, #007bff, #0056b3)',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}
+            >
+              📱 Открыть видео в полном экране
+            </a>
+          </div>
         </div>
       </div>
     ),
