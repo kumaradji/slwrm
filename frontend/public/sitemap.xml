@@ -3,113 +3,91 @@
     Карта сайта (sitemap.xml) для сайта koltsovaecoprint.ru
     Предназначена для поисковых систем (Google, Яндекс).
     Содержит только основные статические страницы сайта.
-    Динамические страницы (товары, уроки и др.) не включены —
-    их добавление требует автоматической генерации.
+    Служебные страницы исключены в соответствии с robots.txt
 -->
 
 <urlset
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+		xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
     http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-    <!-- Главная страница сайта -->
-    <!-- Наивысший приоритет, часто меняется -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
-    </url>
+	<!-- Главная страница сайта -->
+	<!-- Наивысший приоритет, часто меняется -->
+	<url>
+		<loc>https://koltsovaecoprint.ru/</loc>
+		<lastmod>2025-08-18</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>1.0</priority>
+	</url>
 
-    <!-- Страница "О себе" -->
-    <!-- Информация об авторе, обновляется редко -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/about</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
+	<!-- Страница "О себе" -->
+	<!-- Информация об авторе, обновляется редко -->
+	<url>
+		<loc>https://koltsovaecoprint.ru/about</loc>
+		<lastmod>2025-08-18</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
 
-    <!-- Страница магазина -->
-    <!-- Важная страница, обновляется часто -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/shop</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
-    </url>
+	<!-- Страница магазина -->
+	<!-- Важная страница, обновляется часто -->
+	<url>
+		<loc>https://koltsovaecoprint.ru/shop</loc>
+		<lastmod>2025-08-18</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>0.9</priority>
+	</url>
 
-    <!-- Страница корзины -->
-    <!-- Служебная страница, низкий приоритет -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/cart</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
+	<!-- Страница галерей -->
+	<!-- Показывает работы, обновляется редко -->
+	<url>
+		<loc>https://koltsovaecoprint.ru/gallery</loc>
+		<lastmod>2025-08-18</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.7</priority>
+	</url>
 
-    <!-- Страница галерей -->
-    <!-- Показывает работы, обновляется редко -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/gallery</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+	<!-- Страница уроков -->
+	<!-- Важный раздел, часто используется -->
+	<url>
+		<loc>https://koltsovaecoprint.ru/lessons</loc>
+		<lastmod>2025-08-18</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>0.8</priority>
+	</url>
 
-    <!-- Страница уроков -->
-    <!-- Важный раздел, часто используется -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/lessons</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
+	<!-- Промо-страница мастер-класса -->
+	<!-- Целевая страница, обновляется редко -->
+	<url>
+		<loc>https://koltsovaecoprint.ru/promo</loc>
+		<lastmod>2025-08-18</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.7</priority>
+	</url>
 
-    <!-- Промо-страница мастер-класса -->
-    <!-- Целевая страница, обновляется редко -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/promo</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+	<!-- Условия оферты -->
+	<!-- Юридическая страница, почти не меняется -->
+	<url>
+		<loc>https://koltsovaecoprint.ru/offer-agreement</loc>
+		<lastmod>2025-08-18</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.5</priority>
+	</url>
 
-    <!-- Условия оферты -->
-    <!-- Юридическая страница, почти не меняется -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/offer-agreement</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>yearly</changefreq>
-        <priority>0.5</priority>
-    </url>
+	<!-- Политика конфиденциальности -->
+	<!-- Юридическая страница, редко обновляется -->
+	<url>
+		<loc>https://koltsovaecoprint.ru/privacy-policy</loc>
+		<lastmod>2025-08-18</lastmod>
+		<changefreq>yearly</changefreq>
+		<priority>0.5</priority>
+	</url>
 
-    <!-- Политика конфиденциальности -->
-    <!-- Юридическая страница, редко обновляется -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/privacy-policy</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>yearly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <!-- Инструкции по оплате -->
-    <!-- Служебная страница, обновляется редко -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/payment-instructions</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-
-    <!-- Страница авторизации -->
-    <!-- Служебная страница, не требует высокого приоритета -->
-    <url>
-        <loc>https://koltsovaecoprint.ru/auth</loc>
-        <lastmod>2025-08-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.4</priority>
-    </url>
+	<!-- УБРАНЫ ЗАБЛОКИРОВАННЫЕ СТРАНИЦЫ:
+       /cart - заблокирована в robots.txt
+       /auth - заблокирована в robots.txt
+       /payment-instructions - заблокирована в robots.txt
+  -->
 
 </urlset>
