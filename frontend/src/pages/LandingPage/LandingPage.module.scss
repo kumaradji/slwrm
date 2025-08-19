@@ -171,16 +171,21 @@
 
 .landingPage__button {
 	@include button-style;
+	width: 200px;
+	font-size: 1.5rem;
 
 	@include tablet {
 		font-size: 1.3rem;
+		width: 100%;
 	}
 
 	@include mobile {
 		font-size: 1.3rem;
+		width: 100%;
 	}
 
 	@include mobile-small {
 		font-size: 1.3rem;
+		width: 100%;
 	}
 }
