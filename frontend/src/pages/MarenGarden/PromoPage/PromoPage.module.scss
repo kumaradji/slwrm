@@ -55,6 +55,7 @@
 
 	.buyButton {
 		@include button-style;
+		width: 220px;
 
 		@include tablet {
 			font-size: 1.3rem;
