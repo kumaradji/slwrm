@@ -153,10 +153,10 @@ const LandingPage = () => {
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
       </Helmet>
 
-      {/* Основной заголовок страницы */}
-      <header className={styles.titleBlock}>
+      {/* Основной заголовочный блок */}
+      <div className={styles.titleBlock}>
         <h1 className={styles.titleBlock__textTitle}>ДушуГрею</h1>
-        <p className={styles.titleBlock__textCopyright}>© Нина Кольцова</p>
+        <h1 className={styles.titleBlock__textCopyright}>© Нина Кольцова</h1>
         <img
           className={styles.mainLeaf01}
           src={Leaf01}
@@ -165,7 +165,7 @@ const LandingPage = () => {
           width="150"
           height="200"
         />
-      </header>
+      </div>
 
       {/* Основной контент */}
       <main>
