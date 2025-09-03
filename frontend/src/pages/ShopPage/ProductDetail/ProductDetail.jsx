@@ -1,6 +1,7 @@
 // ProductDetail.jsx
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import styles from './ProductDetail.module.scss';
 import VerticalGallery from '../../../components/VerticalGallery/VerticalGallery';
 import { CartContext } from '../../../context/CartContext';
@@ -32,7 +33,6 @@ const ProductDetail = () => {
         logToServer(`Ошибка при загрузке продукта: ${error.message}`, 'error');
         setNotification('Не удалось загрузить детали продукта');
       }
-
     };
 
     fetchProduct();
@@ -72,6 +72,16 @@ const ProductDetail = () => {
 
   return (
     <div className={styles.productDetail}>
+      <Helmet>
+        {/* Запрещаем индексирование страниц товаров */}
+        <meta name="robots" content="noindex, follow" />
+        <title>{product.title} - ДушуГрею</title>
+        <meta name="description" content={`${product.title} - уникальное изделие с экопринтом от ДушуГрею. Цена: ${product.price} руб.`} />
+
+        {/* Канонический URL указывает на главную страницу магазина */}
+        <link rel="canonical" href="https://koltsovaecoprint.ru/shop" />
+      </Helmet>
+
       {notification && <div className={styles.notification}>{notification}</div>}
       <div className={styles.productContent}>
         <div className={styles.productImages}>

@@ -2,6 +2,7 @@ User-agent: *
 Disallow: /cart
 Disallow: /auth
 Disallow: /payment-instructions
+Disallow: /product/
 Allow: /
 
 Sitemap: https://koltsovaecoprint.ru/sitemap.xml
