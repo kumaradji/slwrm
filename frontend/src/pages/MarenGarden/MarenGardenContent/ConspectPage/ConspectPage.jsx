@@ -33,7 +33,7 @@ const ConspectPage = () => {
           </a>
         </div>
         <div className={styles.conspectItem}>
-          <h2>Конспект "Цветной фон"</h2>
+          <h2>Конспект "Графика"</h2>
           <div className={styles.iframeContainer}>
             <iframe
               src="https://drive.google.com/file/d/16n-r79FSDTSoo2bt2c2_kcwrQmLcHnaC/preview"
@@ -47,7 +47,7 @@ const ConspectPage = () => {
             className={styles.downloadButton}
             download
           >
-            Скачать конспект "Цветной фон"
+            Скачать конспект "Графика"
           </a>
         </div>
       </div>
