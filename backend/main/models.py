@@ -2,7 +2,7 @@
 import os
 from django.db import models
 from PIL import Image
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.crypto import get_random_string
 from transliterate import translit
 
@@ -11,9 +11,60 @@ def user_directory_path(instance, filename):
     # Файл будет загружен в MEDIA_ROOT/user_<id>/<filename>
     return f'user_{instance.user.id}/{filename}'
 
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, username, password=None, **extra_fields):
+        """
+        Создает и возвращает пользователя с email, username и паролем
+        """
+        if not email:
+            raise ValueError('Email обязателен для создания пользователя')
+        if not username:
+            raise ValueError('Username обязателен для создания пользователя')
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        """
+        Создает и возвращает суперпользователя с email, username и паролем
+        """
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Суперпользователь должен иметь is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Суперпользователь должен иметь is_superuser=True.')
+
+        return self.create_user(email, username, password, **extra_fields)
+
+class CustomUser(AbstractUser):
+    username = models.CharField(
+        max_length=150,
+        unique=False,
+        blank=False,
+        null=False,
+        verbose_name='Username'
+    )
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        app_label = 'main'
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -46,7 +97,7 @@ class Profile(models.Model):
         super(Profile, self).delete(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.user.email} Profile'
 
     def get_avatar_url(self):
         if self.avatar and hasattr(self.avatar, 'url'):
@@ -55,7 +106,7 @@ class Profile(models.Model):
 
 
 class Message(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     user_name = models.CharField(max_length=255, null=True, blank=True)
     content = models.TextField()
     message_id = models.IntegerField(unique=True, null=True)
@@ -115,7 +166,7 @@ class EcoStaffImage(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     items = models.ManyToManyField(EcoStaff)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 

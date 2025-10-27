@@ -46,6 +46,7 @@ GENERAL_TELEGRAM_BOT_TOKEN = env('GENERAL_TELEGRAM_BOT_TOKEN')
 GENERAL_TELEGRAM_CHAT_ID = env('GENERAL_TELEGRAM_CHAT_ID')
 
 # Основные настройки
+AUTH_USER_MODEL = 'main.CustomUser'
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = False
 ALLOWED_HOSTS = ['31.129.42.105', '127.0.0.1', 'localhost', '0.0.0.0', 'koltsovaecoprint.ru']
