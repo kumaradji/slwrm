@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Category, EcoStaff, Profile, Activation, Cart, Message, EcoStaffImage
+from .models import Category, EcoStaff, Profile, Cart, Message, EcoStaffImage
 from django.contrib.auth.models import User
 
 
@@ -57,12 +57,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
-
-
-class ActivationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Activation
-        fields = ['user', 'token', 'created_at']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

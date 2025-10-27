@@ -1,7 +1,7 @@
 # admin.py
 from django.contrib import admin
 from django.db import models
-from .models import Profile, Activation, Category, EcoStaff, Cart, EcoStaffImage, Message
+from .models import Profile, Category, EcoStaff, Cart, EcoStaffImage, Message
 
 
 class EcoStaffImageInline(admin.TabularInline):
@@ -34,6 +34,5 @@ class MessageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Profile)
-admin.site.register(Activation)
 admin.site.register(Category)
 admin.site.register(Cart)

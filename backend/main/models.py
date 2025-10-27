@@ -54,17 +54,6 @@ class Profile(models.Model):
         return None
 
 
-class Activation(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    token = models.CharField(max_length=64, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def save(self, *args, **kwargs):
-        if not self.token:
-            self.token = get_random_string(64)
-        super().save(*args, **kwargs)
-
-
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     user_name = models.CharField(max_length=255, null=True, blank=True)
