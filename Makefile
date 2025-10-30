@@ -4,13 +4,13 @@ docker-up:
 docker-down:
 	docker compose down --remove-orphans
 migrate:
-	docker compose exec -it backend python manage.py migrate
+	docker exec -i backend python manage.py migrate
 superuser:
-	docker compose exec -it backend python manage.py createsuperuser
+	docker exec -i backend python manage.py createsuperuser
 static:
-	docker compose exec -it backend python manage.py collectstatic --noinput
+	docker exec -i backend python manage.py collectstatic --noinput
 seed:
-	docker compose exec -it backend python manage.py loaddata main/fixtures/initial_data.json
+	docker exec -i backend python manage.py loaddata main/fixtures/initial_data.json
 
 #DOCKER PROD-CONTAINER TESTING ON DEV
 docker-dev:
