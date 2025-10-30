@@ -11,7 +11,7 @@ import {Helmet} from "react-helmet";
 
 const Authorization = ({initialMode = 'login', setAuthMode}) => {
   const [mode, setMode] = useState(initialMode);
-  const [username, setUsername] = useState('');
+  const [username] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -37,28 +37,19 @@ const Authorization = ({initialMode = 'login', setAuthMode}) => {
     }
   }, [mode, setAuthMode]);
 
-  const validateUsername = (username) => {
-    if (username.includes(' ')) {
-      setModalMessage('Имя пользователя не должно содержать пробелов');
-      setIsModalOpen(true);
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setModalMessage('');
 
-    if (mode === 'register' && !validateUsername(username)) {
+    if (mode === 'register') {
       return;
     }
 
     try {
       switch (mode) {
         case 'login':
-          await handleLogin(username, password, login, navigate, setError, setLoginAttempts);
+          await handleLogin(email, password, login, navigate, setError, setLoginAttempts);
           if (loginAttempts + 1 >= 3) {
             setModalMessage('Неверные учетные данные. Хотите сбросить пароль?');
             setIsModalOpen(true);
@@ -136,10 +127,10 @@ const Authorization = ({initialMode = 'login', setAuthMode}) => {
             <div className={styles.formGroup}>
               <input
                 type="text"
-                id="username"
-                placeholder="Имя пользователя"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                placeholder="Ваш e-mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>

@@ -20,7 +20,7 @@ export function getCookie(name) {
 // Получаем CSRF-токен
 const csrfToken = getCookie('csrftoken');
 
-export const handleLogin = async (username, password, login, navigate, setError, setLoginAttempts) => {
+export const handleLogin = async (email, password, login, navigate, setError, setLoginAttempts) => {
   try {
     const response = await fetch('/api/login/', {
       method: 'POST',
@@ -28,14 +28,13 @@ export const handleLogin = async (username, password, login, navigate, setError,
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
       },
-      body: JSON.stringify({username, password}),
+      body: JSON.stringify({email, password}),
     });
 
     if (response.ok) {
       const data = await response.json();
       const userData = {
         id: data.user.id,
-        username: data.user.username,
         email: data.user.email,
       };
       login(userData, data.user.token); // Передаем данные пользователя в функцию login
