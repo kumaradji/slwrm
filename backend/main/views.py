@@ -292,11 +292,11 @@ class UserLoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
 
-        # Аутентификация пользователя
-        user = authenticate(username=username, password=password)
+        # Аутентификация пользователя по email
+        user = authenticate(email=email, password=password)
 
         # Проверка успешной аутентификации и активации пользователя
         if user is not None:
@@ -304,7 +304,6 @@ class UserLoginView(APIView):
             token, created = Token.objects.get_or_create(user=user)
             user_data = {
                 'id': user.id,
-                'username': user.username,
                 'email': user.email,
                 'token': token.key
             }
