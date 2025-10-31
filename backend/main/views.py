@@ -252,8 +252,15 @@ class UserProfileView(APIView):
 class AvatarUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get_profile(self, user):
+        """Используем get_or_create для безопасного получения профиля"""
+        profile, created = Profile.objects.get_or_create(user=user)
+        if created:
+            logger.info(f"Created new profile for user {user.email}")
+        return profile
+
     def get(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user=request.user)
+        profile = self.get_profile(request.user)
         serializer = ProfileSerializer(profile)
         return Response(serializer.data)
 
