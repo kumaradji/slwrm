@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Category, EcoStaff, Profile, Activation, Cart, Message, EcoStaffImage
+from .models import Category, EcoStaff, CustomUser, Profile, Cart, Message, EcoStaffImage
 from django.contrib.auth.models import User
 
 
@@ -55,25 +55,34 @@ class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['id', 'username', 'email']
-
-
-class ActivationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Activation
-        fields = ['user', 'token', 'created_at']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['username', 'email', 'password']
+        extra_kwargs = {
+            'username': {'required': True}
+        }
+
+    def validate_username(self, value):
+        """
+        Дополнительная валидация для username
+        """
+        if not value or value.strip() == '':
+            raise serializers.ValidationError("Username не может быть пустым")
+
+        if len(value.strip()) < 3:
+            raise serializers.ValidationError("Username должен содержать минимум 3 символа")
+
+        return value.strip()
 
     def create(self, validated_data):
-        user = User.objects.create(
+        user = CustomUser.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
             is_active=False  # Устанавливаем пользователя как неактивного

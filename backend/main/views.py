@@ -13,9 +13,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import authenticate, update_session_auth_hash
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail, BadHeaderError
-from .models import Category, Activation, EcoStaff, Profile, Message, Cart
+from .models import Category, EcoStaff, Profile, Message, Cart, CustomUser
 from .serializers import UserRegistrationSerializer, EcoStaffSerializer, UserSerializer, ChangePasswordSerializer, \
     CategorySerializer, ProfileSerializer, MessageSerializer, CartSerializer, \
     EcoStaffImageSerializer, ResetChangePasswordSerializer
@@ -252,8 +252,15 @@ class UserProfileView(APIView):
 class AvatarUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get_profile(self, user):
+        """Используем get_or_create для безопасного получения профиля"""
+        profile, created = Profile.objects.get_or_create(user=user)
+        if created:
+            logger.info(f"Created new profile for user {user.email}")
+        return profile
+
     def get(self, request, *args, **kwargs):
-        profile = Profile.objects.get(user=request.user)
+        profile = self.get_profile(request.user)
         serializer = ProfileSerializer(profile)
         return Response(serializer.data)
 
@@ -292,11 +299,11 @@ class UserLoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
 
-        # Аутентификация пользователя
-        user = authenticate(username=username, password=password)
+        # Аутентификация пользователя по email
+        user = authenticate(email=email, password=password)
 
         # Проверка успешной аутентификации и активации пользователя
         if user is not None:
@@ -304,7 +311,6 @@ class UserLoginView(APIView):
             token, created = Token.objects.get_or_create(user=user)
             user_data = {
                 'id': user.id,
-                'username': user.username,
                 'email': user.email,
                 'token': token.key
             }
@@ -367,7 +373,7 @@ class ResetChangePasswordView(APIView):
 
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
-            user = User.objects.get(pk=uid)
+            user = CustomUser.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
 
@@ -393,7 +399,7 @@ class ResetPasswordView(APIView):
     # Отправка письма для сброса пароля
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
-        user = User.objects.filter(email=email).first()
+        user = CustomUser.objects.filter(email=email).first()
 
         if not user:
             return Response({"message": "Пользователь с таким email не найден"}, status=status.HTTP_400_BAD_REQUEST)
@@ -402,7 +408,7 @@ class ResetPasswordView(APIView):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
         # Изменяем URL на тот, который ведет на фронтенд
-        reset_url = f"http://koltsovaecoprint.ru/reset-password/{uid}/{token}/"
+        reset_url = f"https://koltsovaecoprint.ru/reset-password/{uid}/{token}/"
 
         subject = 'Сброс пароля на сайте ДушуГрею'
         message = f'''
@@ -448,7 +454,7 @@ class ResetPasswordView(APIView):
 
         try:
             user_id = urlsafe_base64_decode(uid).decode()
-            user = User.objects.get(pk=user_id)
+            user = CustomUser.objects.get(pk=user_id)
 
             if not default_token_generator.check_token(user, token):
                 return Response({"message": "Неверный или устаревший токен."}, status=status.HTTP_400_BAD_REQUEST)
@@ -471,7 +477,7 @@ class ConfirmPasswordResetView(APIView):
         logger.info(f"Received GET request for password reset. uidb64: {uidb64}, token: {token}")
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
+            user = CustomUser.objects.get(pk=uid)
             if default_token_generator.check_token(user, token):
                 return Response({"message": "Токен действителен"}, status=status.HTTP_200_OK)
             else:
@@ -485,7 +491,7 @@ class ConfirmPasswordResetView(APIView):
         logger.info(f"Received POST request for password reset. uidb64: {uidb64}, token: {token}")
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
+            user = CustomUser.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return Response({"error": "Недействительный идентификатор пользователя"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -508,22 +514,6 @@ class ConfirmPasswordResetView(APIView):
         else:
             return Response({"error": "Неверная ссылка для сброса пароля или срок действия истек"},
                             status=status.HTTP_400_BAD_REQUEST)
-
-
-class ActivateUser(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, token):
-        print('Полученный токен:', token)
-        activation = get_object_or_404(Activation, token=token)
-        user = activation.user
-        if not user.is_active:
-            user.is_active = True
-            user.save()
-            activation.delete()
-            print('Пользователь активирован:', user.username)
-        else:
-            print('Аккаунт уже активирован')
 
 
 class UserDetailView(APIView):

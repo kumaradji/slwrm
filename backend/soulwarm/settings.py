@@ -46,6 +46,7 @@ GENERAL_TELEGRAM_BOT_TOKEN = env('GENERAL_TELEGRAM_BOT_TOKEN')
 GENERAL_TELEGRAM_CHAT_ID = env('GENERAL_TELEGRAM_CHAT_ID')
 
 # Основные настройки
+AUTH_USER_MODEL = 'main.CustomUser'
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = False
 ALLOWED_HOSTS = ['31.129.42.105', '127.0.0.1', 'localhost', '0.0.0.0', 'koltsovaecoprint.ru']
@@ -87,13 +88,18 @@ LOGGING = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = ['http://koltsovaecoprint.ru:3000', 'https://koltsovaecoprint.ru']
+CORS_ALLOWED_ORIGINS = [
+    'http://koltsovaecoprint.ru:3000',
+    'https://koltsovaecoprint.ru',
+    #'http://127.0.0.1' - для dev
+]
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
     'https://31.129.42.105',
-    'https://koltsovaecoprint.ru'
+    'https://koltsovaecoprint.ru',
+    #'http://127.0.0.1' - для dev
 ]
 
 INSTALLED_APPS = [

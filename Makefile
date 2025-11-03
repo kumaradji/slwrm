@@ -1,8 +1,16 @@
 #DOCKER LOCAL DEV
 docker-up:
-	docker compose up -d
+	docker compose up
 docker-down:
 	docker compose down --remove-orphans
+migrate:
+	docker exec -i backend python manage.py migrate
+superuser:
+	docker exec -i backend python manage.py createsuperuser
+static:
+	docker exec -i backend python manage.py collectstatic --noinput
+seed:
+	docker exec -i backend python manage.py loaddata main/fixtures/initial_data.json
 
 #DOCKER PROD-CONTAINER TESTING ON DEV
 docker-dev:

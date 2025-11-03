@@ -5,6 +5,7 @@ networks:
 
 services:
   backend:
+    container_name: backend
     build:
       context: .
       dockerfile: ./docker/dev/Django/Dockerfile
@@ -22,6 +23,7 @@ services:
       - db
 
   db:
+    container_name: db
     image: postgres:15.1
     platform: linux/amd64
     networks:
@@ -36,6 +38,7 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   react:
+    container_name: react
     build:
       context: .
       dockerfile: ./docker/dev/React/Dockerfile
@@ -49,6 +52,7 @@ services:
     command: serve -s build -l 3000
 
   nginx:
+    container_name: nginx
     build:
       context: .
       dockerfile: ./docker/dev/Nginx/Dockerfile

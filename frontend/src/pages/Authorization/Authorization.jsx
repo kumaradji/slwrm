@@ -37,60 +37,47 @@ const Authorization = ({initialMode = 'login', setAuthMode}) => {
     }
   }, [mode, setAuthMode]);
 
-  const validateUsername = (username) => {
-    if (username.includes(' ')) {
-      setModalMessage('Имя пользователя не должно содержать пробелов');
-      setIsModalOpen(true);
-      return false;
-    }
-    return true;
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(null);
+        setModalMessage('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setModalMessage('');
-
-    if (mode === 'register' && !validateUsername(username)) {
-      return;
-    }
-
-    try {
-      switch (mode) {
-        case 'login':
-          await handleLogin(username, password, login, navigate, setError, setLoginAttempts);
-          if (loginAttempts + 1 >= 3) {
-            setModalMessage('Неверные учетные данные. Хотите сбросить пароль?');
+        try {
+            switch (mode) {
+                case 'login':
+                    await handleLogin(email, password, login, navigate, setError, setLoginAttempts);
+                    if (loginAttempts + 1 >= 3) {
+                        setModalMessage('Неверные учетные данные. Хотите сбросить пароль?');
+                        setIsModalOpen(true);
+                    }
+                    break;
+                case 'register':
+                    if (isCheckboxChecked) {
+                        await handleRegistration(
+                            password,
+                            confirmPassword,
+                            username,
+                            email,
+                            setError,
+                            setModalMessage,
+                            setIsModalOpen,
+                            login,
+                            navigate
+                        );
+                    } else {
+                        setModalMessage('Пожалуйста, дайте согласие на обработку персональных данных');
+                        setIsModalOpen(true);
+                    }
+                    break;
+                default:
+                    logToServer(`Неизвестный режим: ${mode}`, 'error');
+            }
+        } catch (error) {
+            logToServer(`Ошибка при обработке формы: ${error.message}`, 'error');
+            setModalMessage('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
             setIsModalOpen(true);
-          }
-          break;
-        case 'register':
-          if (isCheckboxChecked) {
-            await handleRegistration(
-              password,
-              confirmPassword,
-              username,
-              email,
-              setError,
-              setModalMessage,
-              setIsModalOpen,
-              login,
-              navigate
-            );
-          } else {
-            setModalMessage('Пожалуйста, дайте согласие на обработку персональных данных');
-            setIsModalOpen(true);
-          }
-          break;
-        default:
-          logToServer(`Неизвестный режим: ${mode}`, 'error');
-      }
-    } catch (error) {
-      logToServer(`Ошибка при обработке формы: ${error.message}`, 'error');
-      setModalMessage('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
-      setIsModalOpen(true);
-    }
-  };
+        }
+    };
 
     const handleResetPasswordClick = async () => {
     try {
@@ -133,28 +120,28 @@ const Authorization = ({initialMode = 'login', setAuthMode}) => {
           <h2>{mode === 'login' ? 'Войти' : 'Зарегистрироваться'}</h2>
           {error && <div className={styles.error}>{error}</div>}
           <form onSubmit={handleSubmit}>
+              {mode === 'register' && (
+                  <div className={styles.formGroup}>
+                      <input
+                          type="text"
+                          id="username"
+                          placeholder="Username"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          required
+                      />
+                  </div>
+              )}
             <div className={styles.formGroup}>
               <input
-                type="text"
-                id="username"
-                placeholder="Имя пользователя"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                id="email"
+                placeholder="E-mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
-            {mode === 'register' && (
-              <div className={styles.formGroup}>
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-            )}
             <div className={styles.formGroup}>
               <div className={styles.passwordWrapper}>
                 <input
