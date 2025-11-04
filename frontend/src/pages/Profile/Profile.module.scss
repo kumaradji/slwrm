@@ -1,3 +1,4 @@
+// Profile.module.scss
 @import '../../styles/media';
 @import '../../styles/variables';
 
@@ -45,6 +46,31 @@
 		}
 	}
 
+	h4 {
+		font-size: 1.3rem;
+		margin: 20px 0 15px 0;
+		color: var(--color-dark-green);
+		font-family: LetteraTrentadue, sans-serif;
+
+		@include tablet {
+			font-size: 1.2rem;
+		}
+
+		@include mobile {
+			font-size: 1.1rem;
+		}
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		li {
+			margin-bottom: 15px;
+		}
+	}
+
 	@include tablet {
 		max-width: 500px;
 		margin: 20px;
@@ -57,11 +83,23 @@
 	}
 }
 
+// ✅ Стиль для всех мастер-классов (основной)
 .masterclass {
 	font-size: 2rem;
 	font-family: LetteraTrentadue, sans-serif;
 	margin-bottom: 20px;
 	color: var(--color-blue);
+	background: none;
+	border: none;
+	cursor: pointer;
+	text-align: left;
+	padding: 0;
+	transition: all 0.3s ease;
+
+	&:hover {
+		transform: translateY(-2px);
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
 
 	@include tablet {
 		font-size: 1.5rem;
@@ -70,6 +108,80 @@
 	@include mobile {
 		font-size: 1.5rem;
 	}
+}
+
+// ✅ Стиль для доступных мастер-классов
+.masterclassAvailable {
+	color: var(--color-blue);
+
+	&:hover {
+		color: var(--color-dark-blue);
+	}
+}
+
+// ✅ Стиль для недоступных мастер-классов
+.masterclassLocked {
+	color: var(--color-gray);
+	opacity: 0.8;
+
+	&:hover {
+		color: var(--color-dark-gray);
+		opacity: 1;
+	}
+}
+
+// ✅ Контейнеры для групп мастер-классов
+.availableMasterclasses {
+	margin-bottom: 30px;
+
+	h4 {
+		color: var(--color-blue);
+		border-bottom: 2px solid var(--color-blue);
+		padding-bottom: 5px;
+	}
+}
+
+.lockedMasterclasses {
+	h4 {
+		color: var(--color-gray);
+		border-bottom: 2px solid var(--color-gray);
+		padding-bottom: 5px;
+	}
+}
+
+// ✅ Стили для состояний загрузки и ошибок
+.loading {
+	font-size: 1.2rem;
+	color: var(--color-blue);
+	text-align: center;
+	padding: 20px;
+	font-family: Iosevka, sans-serif;
+}
+
+.error {
+	font-size: 1.2rem;
+	color: var(--color-red);
+	text-align: center;
+	padding: 20px;
+	font-family: Iosevka, sans-serif;
+
+	a {
+		color: var(--color-blue);
+		text-decoration: underline;
+
+		&:hover {
+			color: var(--color-dark-blue);
+		}
+	}
+}
+
+.noMasterclasses {
+	font-size: 1.1rem;
+	color: var(--color-gray);
+	text-align: center;
+	padding: 20px;
+	font-family: Iosevka, sans-serif;
+	font-style: italic;
 }
 
 .cardProfile {
@@ -111,6 +223,8 @@
 			position: absolute;
 			top: -50px;
 			right: 20px;
+			object-fit: cover;
+			border: 3px solid var(--color-light-green);
 
 			@include tablet {
 				width: 90px;
@@ -127,7 +241,6 @@
 		.userName {
 			font-size: 2rem;
 			font-family: Iosevka, sans-serif;
-
 
 			@include tablet {
 				font-size: 1rem;
@@ -160,7 +273,6 @@
 		}
 	}
 
-
 	.textAvatarAddBlock {
 		margin-bottom: 20px;
 		text-align: center;
@@ -184,6 +296,7 @@
 		margin-bottom: 10px;
 		text-align: center;
 		line-height: 30px;
+		text-decoration: none;
 
 		&:hover {
 			background-color: var(--color-red);
@@ -214,5 +327,25 @@
 			height: 30px;
 			font-size: 18px;
 		}
+	}
+}
+
+
+// ✅ Адаптивность для мобильных устройств
+@include mobile {
+	.profile {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.cardProfile,
+	.cardMasterClasses {
+		max-width: 100%;
+		margin: 10px 0;
+	}
+
+	.availableMasterclasses,
+	.lockedMasterclasses {
+		margin-bottom: 20px;
 	}
 }

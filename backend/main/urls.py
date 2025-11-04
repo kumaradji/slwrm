@@ -5,7 +5,8 @@ from .views import (
     UserProfileView, landing_page, category_list, category_detail, product_list, product_detail,
     UserDetailView, AvatarUpdateView, MessageListView, MessageCreateView, ConfirmPasswordResetView,
     CartListView, CartCreateView, TelegramWebhookView, LongPollingMessageView,
-    CartRemoveView, verify_token, LogoutView, ResetChangePasswordView, ClientLogView
+    CartRemoveView, verify_token, LogoutView, ResetChangePasswordView, ClientLogView, UserMasterclassesView,
+    CheckMasterclassAccessView
 )
 
 urlpatterns = [
@@ -33,6 +34,9 @@ urlpatterns = [
     path('messages/create/', MessageCreateView.as_view(), name='message-create'),
     path('telegram-webhook/', TelegramWebhookView.as_view(), name='telegram-webhook'),
     path('long-polling/messages/', LongPollingMessageView.as_view(), name='long_polling_messages'),
+
+    path('masterclass/list/', UserMasterclassesView.as_view(), name='masterclass-list'),
+    path('masterclass/check-access/<slug:slug>/', CheckMasterclassAccessView.as_view(), name='check-access'),
 
     path('cart/', CartListView.as_view(), name='cart-list'),
     path('cart/create/', CartCreateView.as_view(), name='cart-create'),

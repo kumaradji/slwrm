@@ -25,6 +25,12 @@ import GalleryPage from './pages/GalleryPage/GalleryPage';
 import LandingPage from './pages/LandingPage/LandingPage';
 import LessonPage from './pages/LessonsPage/LessonPage/LessonPage';
 import MarenGarden from './pages/MarenGarden/MarenGarden';
+
+import Graphica from './pages/Graphica/Graphica';
+import GraphicaContent from './pages/Graphica/GraphicaContent'; // Добавлен импорт
+import graphicaChapters from './pages/Graphica/GraphicaChapters'; // Добавлен импорт
+import GraphicaPromoPage from './pages/Graphica/GraphicaPromoPage'; // Добавлен импорт
+
 import MarenGardenContent from './pages/MarenGarden/MarenGardenContent/MarenGardenContent';
 import GalleryList from './pages/GalleryPage/GalleriesList/GalleryList';
 import PromoPage from './pages/MarenGarden/PromoPage/PromoPage';
@@ -72,13 +78,26 @@ function App() {
               <Route path="/about" element={<AboutMePage />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/promo" element={<PromoPage />} />
+              <Route path="/graphica-promo" element={<GraphicaPromoPage />} /> {/* Добавлен роут */}
+
+              {/* MarenGarden роуты */}
               <Route path="/masterclass"
                      element={<PrivateRoute element={<MarenGarden marenGardenChapters={marenGardenChapters} />}
                                             requiredGroup="VIP" />} />
               <Route path="/masterclass/:chapterId"
                      element={<PrivateRoute element={<MarenGardenContent marenGardenChapters={marenGardenChapters} />}
                                             requiredGroup="VIP" />} />
-              <Route path="/conspects" element={<PrivateRoute element={<ConspectPage />} requiredGroup="VIP" />} />
+
+              {/* Graphica роуты */}
+              <Route path="/graphica"
+                     element={<PrivateRoute element={<Graphica graphicaChapters={graphicaChapters} />}
+                                            requiredGroup="VIP2" />} />
+              <Route path="/graphica/:chapterId"
+                     element={<PrivateRoute element={<GraphicaContent graphicaChapters={graphicaChapters} />}
+                                            requiredGroup="VIP2" />} />
+
+              <Route path="/conspects" element={<PrivateRoute element={<ConspectPage />} requiredGroup="VIP,VIP2" />} />
+              {/*<Route path="/conspects" element={<PrivateRoute element={<ConspectPage />} requiredGroup="VIP" />} />*/}
               <Route path="/shop" element={<ShopPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/product/:productId" element={<ProductDetail />} />
