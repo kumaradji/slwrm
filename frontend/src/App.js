@@ -27,9 +27,9 @@ import LessonPage from './pages/LessonsPage/LessonPage/LessonPage';
 import MarenGarden from './pages/MarenGarden/MarenGarden';
 
 import Graphica from './pages/Graphica/Graphica';
-import GraphicaContent from './pages/Graphica/GraphicaContent'; // Добавлен импорт
-import graphicaChapters from './pages/Graphica/GraphicaChapters'; // Добавлен импорт
-import GraphicaPromoPage from './pages/Graphica/GraphicaPromoPage'; // Добавлен импорт
+import GraphicaContent from './pages/Graphica/GraphicaContent/GraphicaContent';
+import graphicaChapters from './pages/Graphica/GraphicaChapters';
+import GraphicaPromoPage from './pages/Graphica/GraphicaPromoPage/GraphicaPromoPage';
 
 import MarenGardenContent from './pages/MarenGarden/MarenGardenContent/MarenGardenContent';
 import GalleryList from './pages/GalleryPage/GalleriesList/GalleryList';
@@ -58,6 +58,16 @@ function App() {
     fetchUserData();
   }, [fetchUserData]);
 
+  // ДОБАВЬТЕ ЭТОТ useEffect ДЛЯ ОТЛАДКИ
+  useEffect(() => {
+    console.log('🔍 App.jsx - состояние:', {
+      isLoggedIn,
+      user: user,
+      userGroups: user?.groups,
+      location: window.location.pathname
+    });
+  }, [isLoggedIn, user]);
+
   return (
     <Router basename="/">
       <ScrollToTop />
@@ -78,7 +88,15 @@ function App() {
               <Route path="/about" element={<AboutMePage />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/promo" element={<PromoPage />} />
-              <Route path="/graphica-promo" element={<GraphicaPromoPage />} /> {/* Добавлен роут */}
+
+              {/* Graphica роуты - ДОЛЖНЫ БЫТЬ ВЫШЕ masterclass */}
+              <Route path="/graphica-promo" element={<GraphicaPromoPage />} />
+              <Route path="/graphica"
+                     element={<PrivateRoute element={<Graphica graphicaChapters={graphicaChapters} />}
+                                            requiredGroup="VIP2" />} />
+              <Route path="/graphica/:chapterId"
+                     element={<PrivateRoute element={<GraphicaContent graphicaChapters={graphicaChapters} />}
+                                            requiredGroup="VIP2" />} />
 
               {/* MarenGarden роуты */}
               <Route path="/masterclass"
@@ -88,16 +106,7 @@ function App() {
                      element={<PrivateRoute element={<MarenGardenContent marenGardenChapters={marenGardenChapters} />}
                                             requiredGroup="VIP" />} />
 
-              {/* Graphica роуты */}
-              <Route path="/graphica"
-                     element={<PrivateRoute element={<Graphica graphicaChapters={graphicaChapters} />}
-                                            requiredGroup="VIP2" />} />
-              <Route path="/graphica/:chapterId"
-                     element={<PrivateRoute element={<GraphicaContent graphicaChapters={graphicaChapters} />}
-                                            requiredGroup="VIP2" />} />
-
               <Route path="/conspects" element={<PrivateRoute element={<ConspectPage />} requiredGroup="VIP,VIP2" />} />
-              {/*<Route path="/conspects" element={<PrivateRoute element={<ConspectPage />} requiredGroup="VIP" />} />*/}
               <Route path="/shop" element={<ShopPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/product/:productId" element={<ProductDetail />} />

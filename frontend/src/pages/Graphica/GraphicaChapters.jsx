@@ -1,6 +1,6 @@
 // GraphicaChapters.jsx
 import React from 'react';
-import styles from './MarenGarden.module.scss';
+import styles from '../MarenGarden/MarenGarden.module.scss';
 import ConspectRedirect from "../MarenGarden/MarenGardenContent/ConspectPage/ConspectRedirect";
 
 const graphicaChapters = [

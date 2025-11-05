@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import styles from './MarenGarden.module.scss'; // Используем стили MarenGarden
+import styles from '../MarenGarden/MarenGarden.module.scss';
 import graphicaChapters from './GraphicaChapters';
 
 const Graphica = () => {

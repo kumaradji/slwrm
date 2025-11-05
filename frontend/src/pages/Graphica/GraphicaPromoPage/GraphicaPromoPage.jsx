@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../../context/CartContext';
 import Slider from "../../../components/Slider/Slider";
-import styles from '../MarenGarden/PromoPage/PromoPage.module.scss'; // Используем стили из MarenGarden
+import styles from '../../MarenGarden/PromoPage/PromoPage.module.scss';
 import { logToServer } from "../../../services/logger";
 
 const GraphicaPromoPage = () => {

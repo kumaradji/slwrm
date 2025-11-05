@@ -706,7 +706,7 @@ class UserMasterclassesView(APIView):
             'title': 'Мареновый сад',
             'group': 'VIP',  # Группа для доступа
             'description': 'Техника окрашивания мареной садовой',
-            'price': 3000,
+            'price': 7000,
             'preview_image': '/images/masterclass-preview-1.jpg',
             'videos_folder': 'marengarden',  # Папка в /videos/
         },
@@ -716,7 +716,7 @@ class UserMasterclassesView(APIView):
             'title': 'Графика',
             'group': 'VIP2',
             'description': 'Мастер-класс по окрашиванию ткани из растительных волокон в технике экопринт',
-            'price': 2500,
+            'price': 3000,
             'preview_image': '/images/masterclass-preview-2.jpg',
             'videos_folder': 'graphica',  # Новая папка в /videos/
         },

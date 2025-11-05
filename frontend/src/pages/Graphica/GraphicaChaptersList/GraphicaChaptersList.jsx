@@ -3,6 +3,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from '../MarenGarden/ChaptersList/ChaptersList.module.scss';
 
+
 const GraphicaChaptersList = ({ chapters }) => {
   return (
     <div className={styles.chaptersList}>
