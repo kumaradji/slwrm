@@ -89,14 +89,21 @@ function App() {
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/promo" element={<PromoPage />} />
 
+              {/*/!* Graphica роуты - ДОЛЖНЫ БЫТЬ ВЫШЕ masterclass *!/*/}
+              {/*<Route path="/graphica-promo" element={<GraphicaPromoPage />} />*/}
+              {/*<Route path="/graphica"*/}
+              {/*       element={<PrivateRoute element={<Graphica graphicaChapters={graphicaChapters} />}*/}
+              {/*                              requiredGroup="VIP2" />} />*/}
+              {/*<Route path="/graphica/:chapterId"*/}
+              {/*       element={<PrivateRoute element={<GraphicaContent graphicaChapters={graphicaChapters} />}*/}
+              {/*                              requiredGroup="VIP2" />} />*/}
+
               {/* Graphica роуты - ДОЛЖНЫ БЫТЬ ВЫШЕ masterclass */}
               <Route path="/graphica-promo" element={<GraphicaPromoPage />} />
               <Route path="/graphica"
-                     element={<PrivateRoute element={<Graphica graphicaChapters={graphicaChapters} />}
-                                            requiredGroup="VIP2" />} />
+                     element={<Graphica graphicaChapters={graphicaChapters} />} />
               <Route path="/graphica/:chapterId"
-                     element={<PrivateRoute element={<GraphicaContent graphicaChapters={graphicaChapters} />}
-                                            requiredGroup="VIP2" />} />
+                     element={<GraphicaContent graphicaChapters={graphicaChapters} />} />
 
               {/* MarenGarden роуты */}
               <Route path="/masterclass"
