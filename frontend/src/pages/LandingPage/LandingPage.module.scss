@@ -184,6 +184,7 @@
 	p {
 		margin-bottom: 1rem;
 		line-height: 1.5;
+		text-align: left; /* Добавлено выравнивание по левому краю */
 	}
 }
 
@@ -229,17 +230,76 @@
 }
 
 .landingPage__bye {
-	text-align: center;
+	text-align: left;
 	margin-top: 3rem;
 	padding-bottom: 3rem;
 
 	h1 {
 		color: var(--color-dark-green);
 		margin-bottom: 1rem;
+		text-align: center;
 	}
 
 	p {
 		margin-bottom: 1rem;
 		line-height: 1.5;
+		text-align: left;
+	}
+}
+
+/* Добавленные стили для выравнивания контента по левому краю */
+.landingPage__ecoprint,
+.landingPage__process,
+.landingPage__plants,
+.landingPage__lets_magic {
+	text-align: left;
+
+	h1, h2, h3 {
+		text-align: left;
+	}
+
+	p {
+		text-align: left;
+		line-height: 1.5;
+	}
+}
+
+/* Специфичный стиль для блока с мастер-классами */
+.masterclassContent {
+	text-align: left;
+
+	h1, h2, h3 {
+		text-align: left;
+	}
+
+	p {
+		text-align: left;
+		margin-bottom: 1rem;
+		line-height: 1.5;
+	}
+
+	ul, ol {
+		text-align: left;
+		margin-left: 1.5rem;
+		margin-bottom: 1rem;
+	}
+
+	li {
+		text-align: left;
+		margin-bottom: 0.5rem;
+		line-height: 1.4;
+	}
+}
+
+/* Дополнительные классы для гибкого управления выравниванием */
+.textLeft {
+	text-align: left !important;
+}
+
+.alignLeft {
+	text-align: left;
+
+	* {
+		text-align: left;
 	}
 }
