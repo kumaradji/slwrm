@@ -13,7 +13,7 @@ const Graphica = () => {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: 'Мастер-класс "Графика"',
-    description: 'Мастер-класс по созданию графических композиций в технике экопринт. Графические орнаменты и patterns.',
+    description: 'Мастер-класс по созданию графических композиций в технике экопринт. Графические орнаменты и паттерны.',
     provider: {
       '@type': 'Organization',
       name: 'ДушуГрею',
@@ -82,24 +82,6 @@ const Graphica = () => {
           геометрических patterns и сложных композиций. Вы научитесь работать с различными
           типами растительных материалов для достижения максимальной выразительности.
         </p>
-      </div>
-
-      {/* Призыв к действию */}
-      <div className={styles.ctaSection}>
-        <h3>Присоединяйтесь к нашей Telegram-группе!</h3>
-        <p>
-          Следите за новостями, получайте советы и делитесь своими успехами!
-        </p>
-        <div className={styles.telegramContainer}>
-          <a
-            href="https://t.me/+5bbgmwAoKHs2Mzcy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.telegramButton}
-          >
-            Перейти в группу Telegram
-          </a>
-        </div>
       </div>
     </div>
   );
