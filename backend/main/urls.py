@@ -38,6 +38,10 @@ urlpatterns = [
     path('masterclass/list/', UserMasterclassesView.as_view(), name='masterclass-list'),
     path('masterclass/check-access/<slug:slug>/', CheckMasterclassAccessView.as_view(), name='check-access'),
 
+    path('api/masterclass/purchased/', PurchasedMasterclassesView.as_view(), name='purchased-masterclasses'),
+    path('api/masterclass/purchase/<int:masterclass_id>/', MasterclassPurchaseView.as_view(), name='purchase-masterclass'),
+    path('api/masterclass/check-purchase/<int:masterclass_id>/', CheckMasterclassPurchaseView.as_view(), name='check-masterclass-purchase'),
+
     path('cart/', CartListView.as_view(), name='cart-list'),
     path('cart/create/', CartCreateView.as_view(), name='cart-create'),
     path('cart/remove/<int:item_id>/', CartRemoveView.as_view(), name='cart-remove'),

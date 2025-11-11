@@ -6,6 +6,39 @@ export const CartContext = createContext();
 
 export const CartProvider = ({children}) => {
   const [cartCount, setCartCount] = useState(0);
+  const [purchasedMasterclasses, setPurchasedMasterclasses] = useState([]);
+
+  // Загружаем купленные мастер-классы при инициализации
+  const loadPurchasedMasterclasses = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await fetch('/api/masterclass/purchased/', {
+        headers: {
+          'Authorization': `Token ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPurchasedMasterclasses(data.purchased_masterclasses || []);
+        // Сохраняем в localStorage для быстрого доступа
+        localStorage.setItem(`purchasedMasterclasses`, JSON.stringify(data.purchased_masterclasses || []));
+      }
+    } catch (error) {
+      logToServer(`Ошибка при загрузке купленных мастер-классов: ${error.message}`, 'error');
+    }
+  }, []);
+
+  // Функция для отметки мастер-класса как купленного
+  const markAsPurchased = useCallback((masterclassId) => {
+    setPurchasedMasterclasses(prev => {
+      const updated = [...prev, masterclassId];
+      localStorage.setItem(`purchasedMasterclasses`, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
 
   const updateCartCount = useCallback((count) => {
     setCartCount(count);
@@ -53,11 +86,25 @@ export const CartProvider = ({children}) => {
   }, [updateCartCount]);
 
   const clearCart = useCallback(() => {
-    setCartCount(0); // Очистка количества товаров в корзине
+    setCartCount(0);
   }, []);
 
+  // Проверяем, куплен ли мастер-класс
+  const isMasterclassPurchased = useCallback((masterclassId) => {
+    return purchasedMasterclasses.includes(masterclassId);
+  }, [purchasedMasterclasses]);
+
   return (
-    <CartContext.Provider value={{cartCount, updateCartCount, addToCart, clearCart}}>
+    <CartContext.Provider value={{
+      cartCount,
+      updateCartCount,
+      addToCart,
+      clearCart,
+      purchasedMasterclasses,
+      loadPurchasedMasterclasses,
+      markAsPurchased,
+      isMasterclassPurchased
+    }}>
       {children}
     </CartContext.Provider>
   );

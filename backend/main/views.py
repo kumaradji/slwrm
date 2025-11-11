@@ -30,6 +30,7 @@ from datetime import timedelta
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from django.db.models import Q
 
 logger = logging.getLogger('django')
 client_logger = logging.getLogger('client')
@@ -188,6 +189,127 @@ class ClientLogView(APIView):
 
         logger.warning("Received log request without message")
         return Response({'error': 'No message provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PurchasedMasterclassesView(APIView):
+    """
+    Получение списка купленных мастер-классов пользователя
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """
+        GET /api/masterclass/purchased/
+        Возвращает список ID купленных мастер-классов
+        """
+        user = request.user
+
+        # Получаем группы пользователя (VIP, VIP2 и т.д.)
+        user_groups = [group.name for group in user.groups.all()]
+
+        # Сопоставляем группы с мастер-классами
+        purchased_masterclasses = []
+        masterclasses_config = UserMasterclassesView.MASTERCLASSES_CONFIG
+
+        for mc in masterclasses_config:
+            if mc['group'] in user_groups:
+                purchased_masterclasses.append(mc['id'])
+
+        return Response({
+            'purchased_masterclasses': purchased_masterclasses,
+            'user_groups': user_groups
+        })
+
+
+class MasterclassPurchaseView(APIView):
+    """
+    Отметка мастер-класса как купленного (добавление в группу)
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, masterclass_id):
+        """
+        POST /api/masterclass/purchase/{masterclass_id}/
+        Добавляет пользователя в группу мастер-класса после оплаты
+        """
+        user = request.user
+
+        # Находим мастер-класс по ID
+        masterclass = None
+        for mc in UserMasterclassesView.MASTERCLASSES_CONFIG:
+            if mc['id'] == masterclass_id:
+                masterclass = mc
+                break
+
+        if not masterclass:
+            return Response(
+                {"error": "Мастер-класс не найден"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Добавляем пользователя в группу
+        try:
+            group, created = Group.objects.get_or_create(name=masterclass['group'])
+            user.groups.add(group)
+            user.save()
+
+            logger.info(f"User {user.email} added to group {masterclass['group']} for masterclass {masterclass['title']}")
+
+            return Response({
+                "success": True,
+                "message": f"Доступ к мастер-классу '{masterclass['title']}' открыт",
+                "masterclass_id": masterclass_id,
+                "group": masterclass['group']
+            })
+
+        except Exception as e:
+            logger.error(f"Error adding user to group: {e}")
+            return Response(
+                {"error": "Ошибка при предоставлении доступа"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class CheckMasterclassPurchaseView(APIView):
+    """
+    Проверка покупки конкретного мастер-класса
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, masterclass_id):
+        """
+        GET /api/masterclass/check-purchase/{masterclass_id}/
+        Проверяет, купил ли пользователь конкретный мастер-класс
+        """
+        user = request.user
+
+        # Находим мастер-класс
+        masterclass = None
+        for mc in UserMasterclassesView.MASTERCLASSES_CONFIG:
+            if mc['id'] == masterclass_id:
+                masterclass = mc
+                break
+
+        if not masterclass:
+            return Response(
+                {"has_purchased": False, "error": "Мастер-класс не найден"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Проверяем принадлежность к группе
+        user_groups = [group.name for group in user.groups.all()]
+        has_purchased = masterclass['group'] in user_groups
+
+        return Response({
+            "has_purchased": has_purchased,
+            "masterclass": {
+                'id': masterclass['id'],
+                'title': masterclass['title'],
+                'slug': masterclass['slug']
+            },
+            "required_group": masterclass['group'],
+            "user_groups": user_groups
+        })
 
 
 class RefreshTokenView(APIView):
@@ -692,45 +814,35 @@ class EcoStaffCreateView(generics.CreateAPIView):
 
         return Response(ecostaff_serializer.data, status=status.HTTP_201_CREATED)
 
+
 class UserMasterclassesView(APIView):
     """
     Список мастер-классов с проверкой доступа пользователя
     """
     permission_classes = [IsAuthenticated]
 
-    # Конфигурация мастер-классов
+    # ОБНОВЛЕННАЯ КОНФИГУРАЦИЯ МАСТЕР-КЛАССОВ
     MASTERCLASSES_CONFIG = [
         {
-            'id': 1,
-            'slug': 'marena-garden',
-            'title': 'Мареновый сад',
+            'id': 43,  # Совпадает с PromoPage.jsx
+            'slug': 'color-background',
+            'title': 'Цветной фон',
             'group': 'VIP',
             'description': 'Мастер-класс "Цветной фон". Полный видео-курс по натуральному окрашиванию тканей растениями.',
             'price': 7000,
             'preview_image': '/images/masterclass-preview-1.jpg',
-            'videos_folder': 'marengarden',
+            'videos_folder': 'color-background',
         },
         {
-            'id': 2,
+            'id': 44,  # Совпадает с GraphicaPromoPage.jsx
             'slug': 'graphica',
             'title': 'Графика',
             'group': 'VIP2',
             'description': 'Мастер-класс по окрашиванию ткани из растительных волокон (лён, хлопок) в технике экопринт.',
             'price': 2000,
             'preview_image': '/images/masterclass-preview-2.jpg',
-            'videos_folder': 'marengarden',
+            'videos_folder': 'graphica',
         },
-        # Добавить третий мастер-класс когда будет готов:
-        # {
-        #     'id': 3,
-        #     'slug': 'indigo',
-        #     'title': 'Индиго',
-        #     'group': 'VIP3',
-        #     'description': 'Работа с натуральным индиго',
-        #     'price': 2800,
-        #     'preview_image': '/images/masterclass-preview-3.jpg',
-        #     'videos_folder': 'indigo',
-        # },
     ]
 
     def get(self, request):
