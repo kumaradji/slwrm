@@ -77,6 +77,30 @@
 		}
 	}
 
+	.accessButton {
+		@include button-style;
+		width: 400px;
+		font-size: 1.5rem;
+		margin: 1rem auto;
+		display: block;
+		text-align: center;
+
+		@include tablet {
+			font-size: 1.3rem;
+			width: 100%;
+		}
+
+		@include mobile {
+			font-size: 1.3rem;
+			width: 100%;
+		}
+
+		@include mobile-small {
+			font-size: 1.3rem;
+			width: 100%;
+		}
+	}
+
 	.gallery {
 		margin-top: 20px;
 		margin-bottom: 10px;

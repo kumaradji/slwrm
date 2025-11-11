@@ -1,9 +1,8 @@
 // PromoPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
-import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 import Slider from "../../../components/Slider/Slider";
 import styles from './PromoPage.module.scss';
 import { logToServer } from "../../../services/logger";
@@ -12,7 +11,37 @@ const PromoPage = () => {
   const { user } = useAuth();
   const { addToCart } = useContext(CartContext);
   const [notification, setNotification] = useState('');
+  const [hasPurchased, setHasPurchased] = useState(false);
   const navigate = useNavigate();
+
+  const MASTERCLASS_ID = 43;
+
+  // Проверяем, приобрел ли пользователь мастер-класс
+  useEffect(() => {
+    const checkPurchaseStatus = () => {
+      if (!user) {
+        setHasPurchased(false);
+        return;
+      }
+
+      try {
+        // Проверяем в localStorage
+        const purchasedMasterclasses = JSON.parse(localStorage.getItem(`purchasedMasterclasses_${user.id}`) || '[]');
+        const hasBought = purchasedMasterclasses.includes(MASTERCLASS_ID);
+
+        // Или проверяем по API/базе данных (если есть такой эндпоинт)
+        // const response = await api.checkMasterclassPurchase(user.id, MASTERCLASS_ID);
+        // setHasPurchased(response.data.hasPurchased);
+
+        setHasPurchased(hasBought);
+      } catch (error) {
+        console.error('Ошибка при проверке статуса покупки:', error);
+        setHasPurchased(false);
+      }
+    };
+
+    checkPurchaseStatus();
+  }, [user]);
 
   const settings = {
     dots: false,
@@ -36,7 +65,18 @@ const PromoPage = () => {
       return;
     }
 
-    const masterClass = { id: 43, name: 'Мастер-класс "Цветной фон"' };
+    // Дополнительная проверка на случай, если статус изменился
+    if (hasPurchased) {
+      setNotification('Вы уже приобрели этот мастер-класс');
+      setTimeout(() => setNotification(''), 3000);
+      return;
+    }
+
+    const masterClass = {
+      id: MASTERCLASS_ID,
+      name: 'Мастер-класс "Цветной фон"',
+      type: 'masterclass'
+    };
 
     try {
       await addToCart(masterClass);
@@ -46,7 +86,11 @@ const PromoPage = () => {
       logToServer(`Ошибка при добавлении мастер-класса в корзину: ${error.message}`, 'error');
       alert(error.message || 'Не удалось добавить мастер-класс в корзину');
     }
+  };
 
+  const handleAccessMasterclass = () => {
+    // Переход к мастер-классу (замените на ваш путь)
+    navigate('/masterclasses/color-background');
   };
 
   return (
@@ -103,7 +147,16 @@ const PromoPage = () => {
           images={images}
         />
       </div>
-      <button className={styles.buyButton} onClick={handleAddToCart}>Купить</button>
+
+      {hasPurchased ? (
+        <button className={`${styles.buyButton} ${styles.accessButton}`} onClick={handleAccessMasterclass}>
+          Перейти к мастер-классу
+        </button>
+      ) : (
+        <button className={styles.buyButton} onClick={handleAddToCart}>
+          Купить
+        </button>
+      )}
     </div>
   );
 };
