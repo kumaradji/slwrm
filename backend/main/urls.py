@@ -6,7 +6,7 @@ from .views import (
     UserDetailView, AvatarUpdateView, MessageListView, MessageCreateView, ConfirmPasswordResetView,
     CartListView, CartCreateView, TelegramWebhookView, LongPollingMessageView,
     CartRemoveView, verify_token, LogoutView, ResetChangePasswordView, ClientLogView, UserMasterclassesView,
-    CheckMasterclassAccessView
+    CheckMasterclassAccessView, PurchasedMasterclassesView, MasterclassPurchaseView, CheckMasterclassPurchaseView
 )
 
 urlpatterns = [
