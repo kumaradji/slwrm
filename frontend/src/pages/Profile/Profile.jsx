@@ -23,10 +23,6 @@ const Profile = () => {
   const [masterclasses, setMasterclasses] = useState([]);
   const [masterclassesLoading, setMasterclassesLoading] = useState(true);
 
-  // В начале компонента, после объявления states
-  console.log('👤 Текущий пользователь:', user);
-  console.log('🏷️ Группы пользователя:', user?.groups);
-
   const fetchUserDetails = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -62,35 +58,6 @@ const Profile = () => {
     }
   }, [fetchUserData, user]);
 
-  // // ✅ Улучшенная функция получения мастер-классов
-  // const fetchMasterclasses = useCallback(async () => {
-  //   setMasterclassesLoading(true);
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     if (!token) {
-  //       throw new Error('Токен не найден');
-  //     }
-  //
-  //     const response = await fetch('/api/masterclass/list/', {
-  //       headers: {
-  //         'Authorization': `Token ${token}`,
-  //       },
-  //     });
-  //
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-  //
-  //     const data = await response.json();
-  //     setMasterclasses(data.masterclasses || []);
-  //   } catch (error) {
-  //     logToServer(`Ошибка при получении мастер-классов: ${error.message}`, 'error');
-  //     setMasterclasses([]); // Устанавливаем пустой массив при ошибке
-  //   } finally {
-  //     setMasterclassesLoading(false);
-  //   }
-  // }, []);
-
   // ✅ Улучшенная функция получения мастер-классов
   const fetchMasterclasses = useCallback(async () => {
     setMasterclassesLoading(true);
@@ -111,25 +78,8 @@ const Profile = () => {
       }
 
       const data = await response.json();
-
-      // ДОБАВЬТЕ ЭТУ ОТЛАДКУ:
-      console.log('📦 Полученные мастер-классы:', data.masterclasses);
-      if (data.masterclasses && data.masterclasses.length > 0) {
-        data.masterclasses.forEach(mc => {
-          console.log(`Мастер-класс: "${mc.title}"`, {
-            slug: mc.slug,
-            has_access: mc.has_access,
-            required_group: mc.required_group,
-            price: mc.price
-          });
-        });
-      } else {
-        console.log('❌ Мастер-классы не найдены или пустой массив');
-      }
-
       setMasterclasses(data.masterclasses || []);
     } catch (error) {
-      console.error('❌ Ошибка при получении мастер-классов:', error);
       logToServer(`Ошибка при получении мастер-классов: ${error.message}`, 'error');
       setMasterclasses([]);
     } finally {

@@ -58,16 +58,6 @@ function App() {
     fetchUserData();
   }, [fetchUserData]);
 
-  // ДОБАВЬТЕ ЭТОТ useEffect ДЛЯ ОТЛАДКИ
-  useEffect(() => {
-    console.log('🔍 App.jsx - состояние:', {
-      isLoggedIn,
-      user: user,
-      userGroups: user?.groups,
-      location: window.location.pathname
-    });
-  }, [isLoggedIn, user]);
-
   return (
     <Router basename="/">
       <ScrollToTop />
@@ -89,23 +79,16 @@ function App() {
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/promo" element={<PromoPage />} />
 
-              {/*/!* Graphica роуты - ДОЛЖНЫ БЫТЬ ВЫШЕ masterclass *!/*/}
-              {/*<Route path="/graphica-promo" element={<GraphicaPromoPage />} />*/}
-              {/*<Route path="/graphica"*/}
-              {/*       element={<PrivateRoute element={<Graphica graphicaChapters={graphicaChapters} />}*/}
-              {/*                              requiredGroup="VIP2" />} />*/}
-              {/*<Route path="/graphica/:chapterId"*/}
-              {/*       element={<PrivateRoute element={<GraphicaContent graphicaChapters={graphicaChapters} />}*/}
-              {/*                              requiredGroup="VIP2" />} />*/}
-
-              {/* Graphica роуты - ДОЛЖНЫ БЫТЬ ВЫШЕ masterclass */}
+              {/* Graphica роуты - ЗАЩИЩЕНЫ для VIP2 */}
               <Route path="/graphica-promo" element={<GraphicaPromoPage />} />
               <Route path="/graphica"
-                     element={<Graphica graphicaChapters={graphicaChapters} />} />
+                     element={<PrivateRoute element={<Graphica graphicaChapters={graphicaChapters} />}
+                                            requiredGroup="VIP2" />} />
               <Route path="/graphica/:chapterId"
-                     element={<GraphicaContent graphicaChapters={graphicaChapters} />} />
+                     element={<PrivateRoute element={<GraphicaContent graphicaChapters={graphicaChapters} />}
+                                            requiredGroup="VIP2" />} />
 
-              {/* MarenGarden роуты */}
+              {/* MarenGarden роуты - ЗАЩИЩЕНЫ для VIP */}
               <Route path="/masterclass"
                      element={<PrivateRoute element={<MarenGarden marenGardenChapters={marenGardenChapters} />}
                                             requiredGroup="VIP" />} />
