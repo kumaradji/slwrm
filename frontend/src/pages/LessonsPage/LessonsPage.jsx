@@ -1,13 +1,42 @@
 // LessonsPage.jsx
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import {motion} from 'framer-motion';
 import styles from './LessonsPage.module.scss';
 import lessons from './LessonPage/Lessons';
 import {Helmet} from 'react-helmet';
+import { CartContext } from '../../../context/CartContext';
+import { useAuth } from '../../../context/AuthContext';
 
 export const LessonsPage = () => {
   const siteUrl = 'https://koltsovaecoprint.ru/';
+  const { user } = useAuth();
+  const { isMasterclassPurchased, loadPurchasedMasterclasses } = useContext(CartContext);
+  const [masterclassStatus, setMasterclassStatus] = useState({
+    colorBackground: false,
+    graphica: false
+  });
+
+  const MASTERCLASS_COLOR_BACKGROUND_ID = 43;
+  const MASTERCLASS_GRAPHICA_ID = 44;
+
+  useEffect(() => {
+    if (user) {
+      loadPurchasedMasterclasses();
+    }
+  }, [user, loadPurchasedMasterclasses]);
+
+  useEffect(() => {
+    if (user) {
+      const colorBackgroundPurchased = isMasterclassPurchased(MASTERCLASS_COLOR_BACKGROUND_ID);
+      const graphicaPurchased = isMasterclassPurchased(MASTERCLASS_GRAPHICA_ID);
+
+      setMasterclassStatus({
+        colorBackground: colorBackgroundPurchased,
+        graphica: graphicaPurchased
+      });
+    }
+  }, [user, isMasterclassPurchased]);
 
   const courseSchema = {
     '@context': 'https://schema.org',
@@ -36,6 +65,24 @@ export const LessonsPage = () => {
       url: `${siteUrl}/lesson/${lesson.id}`,
       image: `${siteUrl}${lesson.image}`,
     })),
+  };
+
+  const getMasterclassLink = (type) => {
+    if (type === 'colorBackground') {
+      return masterclassStatus.colorBackground ? '/masterclasses/color-background' : '/promo';
+    } else if (type === 'graphica') {
+      return masterclassStatus.graphica ? '/graphica' : '/graphica-promo';
+    }
+    return '#';
+  };
+
+  const getMasterclassText = (type) => {
+    if (type === 'colorBackground') {
+      return masterclassStatus.colorBackground ? "перейти к мастер-классу 'Цветной фон'" : "подробности о мастер-классе 'Цветной фон'";
+    } else if (type === 'graphica') {
+      return masterclassStatus.graphica ? "перейти к мастер-классу 'Графика'" : "подробности о мастер-классе 'Графика'";
+    }
+    return '';
   };
 
   return (
@@ -75,19 +122,19 @@ export const LessonsPage = () => {
         Откройте для себя магию экопринта с помощью базового курса, а все
         секреты профессионального мастерства ждут вас в мастер-классах{" "}
         <Link
-          to="/graphica-promo"
+          to={getMasterclassLink('graphica')}
           style={{color: '#7776B3'}}
-          title="Подробности о мастер-классе Графика"
-          aria-label="Узнать подробности о мастер-классе Графика"
+          title={getMasterclassText('graphica')}
+          aria-label={getMasterclassText('graphica')}
         >
           "Графика"
         </Link>{" "}
         и{" "}
         <Link
-          to="/promo"
+          to={getMasterclassLink('colorBackground')}
           style={{color: '#7776B3'}}
-          title="Подробности о мастер-классе Цветной фон"
-          aria-label="Узнать подробности о мастер-классе Цветной фон"
+          title={getMasterclassText('colorBackground')}
+          aria-label={getMasterclassText('colorBackground')}
         >
           "Цветной фон"
         </Link>.
