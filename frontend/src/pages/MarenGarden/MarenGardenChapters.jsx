@@ -258,12 +258,30 @@ const marenGardenChapters = [
   },
   {
     id: 13,
+    title: 'Экопринт на футболке. Графика',
+    content: (
+      <div key="chapter-13">
+        <h3>Экопринт на футболке. Графика</h3>
+        <div className={styles.masterclass__videoContainer}>
+          <video controls key="video-15">
+            <source
+              src="/videos/marengarden/Graphica_masterclass.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 14,
     title: 'Конспекты',
     content: <ConspectRedirect/>,
   },
 
   {
-    id: 14,
+    id: 15,
     title: 'Часто задаваемые вопросы',
     content: (
       <div key="chapter-15" className={styles.faqSection}>

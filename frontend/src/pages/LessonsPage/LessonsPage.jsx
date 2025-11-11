@@ -52,7 +52,7 @@ export const LessonsPage = () => {
         />
 
         {/* Open Graph */}
-        <meta property="og:title" content="Базовый курс по технике экопринт" />
+        <meta property="og:title" content="Базовый курс по технике экопринт"/>
         <meta
           property="og:description"
           content="Бесплатные уроки по технике экопринт от ДушуГрею."
@@ -61,8 +61,8 @@ export const LessonsPage = () => {
           property="og:image"
           content={`${siteUrl}/images/lessons-cover.jpg`}
         />
-        <meta property="og:url" content={`${siteUrl}/lessons`} />
-        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${siteUrl}/lessons`}/>
+        <meta property="og:type" content="website"/>
 
         {/* JSON-LD */}
         <script type="application/ld+json">
@@ -73,7 +73,24 @@ export const LessonsPage = () => {
       <h1>Базовый курс</h1>
       <p>
         Откройте для себя магию экопринта с помощью базового курса, а все
-        секреты профессионального мастерства ждут вас в полном мастер-классе.
+        секреты профессионального мастерства ждут вас в мастер-классах{" "}
+        <Link
+          to="/graphica-promo"
+          style={{color: '#7776B3'}}
+          title="Подробности о мастер-классе Графика"
+          aria-label="Узнать подробности о мастер-классе Графика"
+        >
+          "Графика"
+        </Link>{" "}
+        и{" "}
+        <Link
+          to="/promo"
+          style={{color: '#7776B3'}}
+          title="Подробности о мастер-классе Цветной фон"
+          aria-label="Узнать подробности о мастер-классе Цветной фон"
+        >
+          "Цветной фон"
+        </Link>.
       </p>
 
       <div className={styles.lessons__card}>
@@ -85,10 +102,10 @@ export const LessonsPage = () => {
               opacity: index < 2 ? 1 : 0,
               x: index % 2 === 0 ? '-100vw' : '100vw',
             }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ type: 'spring', stiffness: 360 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.8 }}
+            animate={{opacity: 1, x: 0}}
+            transition={{type: 'spring', stiffness: 360}}
+            whileInView={{opacity: 1, x: 0}}
+            viewport={{once: true, amount: 0.8}}
           >
             <Link to={`/lesson/${lesson.id}`}>
               <h2 className={styles.lessons__items_title}>{lesson.title}</h2>

@@ -1,17 +1,16 @@
 // GraphicaChapters.jsx
 import React from 'react';
-import styles from '../MarenGarden/MarenGarden.module.scss';
-import ConspectRedirect from "../MarenGarden/MarenGardenContent/ConspectPage/ConspectRedirect";
+import styles from './GraphicaChapters.module.scss';
 
 const graphicaChapters = [
   {
     id: 1,
     title: 'Льняная скатерть',
     content: (
-      <div key="chapter-7">
+      <div key="chapter-13">
         <h3>Льняная скатерть</h3>
         <div className={styles.masterclass__videoContainer}>
-          <video controls key="video-7">
+          <video controls key="video-13">
             <source
               src="/videos/marengarden/Lnanaya_skatert_bonus.mp4"
               type="video/mp4"
@@ -26,10 +25,10 @@ const graphicaChapters = [
     id: 2,
     title: 'Исправляем ошибки',
     content: (
-      <div key="chapter-8">
+      <div key="chapter-14">
         <h3>Исправляем ошибки</h3>
         <div className={styles.masterclass__videoContainer}>
-          <video controls key="video-8">
+          <video controls key="video-14">
             <source
               src="/videos/marengarden/Ispravlyaem_oshibki_bonus.mp4"
               type="video/mp4"
@@ -40,36 +39,62 @@ const graphicaChapters = [
       </div>
     ),
   },
-  // {
-  //   id: 3,
-  //   title: 'Окрашивание футболки листьями малины',
-  //   content: (
-  //     <div key="chapter-8">
-  //       <h3>Окрашивание футболки листьями малины</h3>
-  //       <div className={styles.masterclass__videoContainer}>
-  //         <video controls key="video-8">
-  //           <source
-  //             src="/videos/marengarden/FootbollColor.mp4"
-  //             type="video/mp4"
-  //           />
-  //           Your browser does not support the video tag.
-  //         </video>
-  //       </div>
-  //     </div>
-  //   ),
-  // },
+  {
+    id: 3,
+    title: 'Экопринт на футболке. Графика',
+    content: (
+      <div key="chapter-15">
+        <h3>Экопринт на футболке. Графика</h3>
+        <div className={styles.masterclass__videoContainer}>
+          <video controls key="video-15">
+            <source
+              src="/videos/marengarden/Graphica_masterclass.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    ),
+  },
   {
     id: 4,
-    title: 'Конспекты',
-    content: <ConspectRedirect/>,
-  },
+    title: 'Конспект',
+    content: (
+      <div key="conspect-graphica" className={styles.conspectItem}>
+        <h2>Конспект "Графика"</h2>
+        <p>Здесь вы можете ознакомиться с кратким конспектом и скачать его для печати.</p>
 
+        <div className={styles.iframeContainer}>
+          <iframe
+            title="Превью конспекта Графика"
+            src="https://drive.google.com/file/d/16n-r79FSDTSoo2bt2c2_kcwrQmLcHnaC/preview"
+            allow="autoplay"
+            style={{ width: '100%', height: '500px', border: 'none' }}
+          >
+          </iframe>
+        </div>
+
+        <h3>Скачайте файл, нажав на кнопку ниже.</h3>
+        <a
+          href="https://drive.google.com/uc?export=download&id=16n-r79FSDTSoo2bt2c2_kcwrQmLcHnaC"
+          className={styles.downloadButton}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Скачать конспект "Графика"
+        </a>
+      </div>
+    ),
+  },
   {
     id: 5,
     title: 'Часто задаваемые вопросы',
     content: (
-      <div key="chapter-15" className={styles.faqSection}>
+      <div key="chapter-17" className={styles.faqSection}>
         <h3>Часто задаваемые вопросы</h3>
+        {/* ... (Содержимое FAQ) ... */}
         <div className={styles.faqItem}>
           <p><strong>Вопрос:</strong> Как долго доступен мастер-класс?</p>
           <p><strong>Ответ:</strong> Доступ к мастер-классу предоставляется бессрочно.</p>

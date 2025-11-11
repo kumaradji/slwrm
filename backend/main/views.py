@@ -704,21 +704,21 @@ class UserMasterclassesView(APIView):
             'id': 1,
             'slug': 'marena-garden',
             'title': 'Мареновый сад',
-            'group': 'VIP',  # Группа для доступа
-            'description': 'Техника окрашивания мареной садовой',
+            'group': 'VIP',
+            'description': 'Мастер-класс "Цветной фон". Полный видео-курс по натуральному окрашиванию тканей растениями.',
             'price': 7000,
             'preview_image': '/images/masterclass-preview-1.jpg',
-            'videos_folder': 'marengarden',  # Папка в /videos/
+            'videos_folder': 'marengarden',
         },
         {
             'id': 2,
             'slug': 'graphica',
             'title': 'Графика',
             'group': 'VIP2',
-            'description': 'Мастер-класс по окрашиванию ткани из растительных волокон в технике экопринт',
-            'price': 3000,
+            'description': 'Мастер-класс по окрашиванию ткани из растительных волокон (лён, хлопок) в технике экопринт.',
+            'price': 2000,
             'preview_image': '/images/masterclass-preview-2.jpg',
-            'videos_folder': 'graphica',  # Новая папка в /videos/
+            'videos_folder': 'marengarden',
         },
         # Добавить третий мастер-класс когда будет готов:
         # {

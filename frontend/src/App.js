@@ -28,7 +28,7 @@ import MarenGarden from './pages/MarenGarden/MarenGarden';
 
 import Graphica from './pages/Graphica/Graphica';
 import GraphicaContent from './pages/Graphica/GraphicaContent/GraphicaContent';
-import graphicaChapters from './pages/Graphica/GraphicaChapters';
+import graphicaChapters from './pages/Graphica/GraphicaChaptersList/GraphicaChapters';
 import GraphicaPromoPage from './pages/Graphica/GraphicaPromoPage/GraphicaPromoPage';
 
 import MarenGardenContent from './pages/MarenGarden/MarenGardenContent/MarenGardenContent';

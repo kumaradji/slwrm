@@ -21,7 +21,7 @@ const LessonPage = () => {
 
   return (
     <div className={styles.lesson}>
-      <h1>{title}</h1>
+      <h1 className={styles.lesson__title}>{title}</h1>
       <div className={styles.lesson__content}>
         {component}
       </div>
@@ -31,7 +31,6 @@ const LessonPage = () => {
         </button>
       </div>
     </div>
-
   );
 };
 

@@ -83,17 +83,25 @@ const PromoPage = () => {
         <li>Уход за изделиями окрашенными растительными красителями</li>
         <li>Заключение</li>
         <li>Льняная скатерть (бонус)</li>
-        <li>Исправляем ошибки</li>
+        <li>Исправляем ошибки (бонус)</li>
         <li>Приготовление раствора индиго</li>
         <li>Кошениль</li>
         <li>Окрашивание ткани весенними листьями</li>
         <li>Обработка листьев танинами</li>
+        <li>Экопринт на футболке. Графика (бонус)</li>
         <li>Конспекты</li>
       </ol>
       <p>А в качестве бонуса, вы получите видео мастер-класс и конспект по теме "Графика", что позволит вам расширить
         свои навыки и вдохновиться новыми идеями в области окрашивания ткани.</p>
       <div className={styles.gallery}>
-        <Slider {...settings} autoPlay={true} autoPlayTime={6000} width="80%" height="700px" images={images}/>
+        <Slider
+          {...settings}
+          autoPlay={true}
+          autoPlayTime={6000}
+          width="80%"
+          height="700px"
+          images={images}
+        />
       </div>
       <button className={styles.buyButton} onClick={handleAddToCart}>Купить</button>
     </div>

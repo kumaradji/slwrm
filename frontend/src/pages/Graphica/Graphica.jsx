@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import styles from '../MarenGarden/MarenGarden.module.scss';
-import graphicaChapters from './GraphicaChapters';
+import graphicaChapters from './GraphicaChaptersList/GraphicaChapters';
 
 const Graphica = () => {
   const siteUrl = 'https://koltsovaecoprint.ru/';
@@ -46,8 +46,8 @@ const Graphica = () => {
       <h2>Мастер-класс "Графика"</h2>
       <p>
         Добро пожаловать в мастер-класс по созданию графических композиций в технике экопринт!
-        Здесь вы освоите искусство работы с растительными волокнами и научитесь создавать
-        сложные орнаменты и графические изображения на ткани.
+        Здесь вы освоите искусство работы с растительными волокнами и научитесь работать с различными типами растительных материалов для достижения максимальной выразительности,
+        создавать контрастные композиции и освоите графическое изображение в экопринте.
       </p>
 
       {/* Навигация по главам */}
@@ -64,10 +64,9 @@ const Graphica = () => {
               <div className={styles.chapterNumber}>{chapter.id}</div>
               <Link
                 to={`/graphica/${chapter.id}`}
-                className={styles.chapterLink}
+                className={styles.link}
               >
                 <h3>{chapter.title}</h3>
-                <p>Перейти к материалу →</p>
               </Link>
             </div>
           </motion.div>
@@ -75,12 +74,9 @@ const Graphica = () => {
       </div>
 
       {/* Блок с дополнительной информацией */}
-      <div className={styles.infoSection}>
-        <h3>О мастер-классе</h3>
+      <div>
         <p>
-          В этом мастер-классе мы сосредоточимся на создании четких графических линий,
-          геометрических patterns и сложных композиций. Вы научитесь работать с различными
-          типами растительных материалов для достижения максимальной выразительности.
+          Мастер-класс по созданию графических композиций в технике экопринт по окрашиванию натуральных тканей (лён, хлопок, шёлк, вискоза).
         </p>
       </div>
     </div>

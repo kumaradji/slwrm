@@ -333,40 +333,6 @@
 	}
 }
 
-// Контейнер для Telegram кнопки
-.telegramContainer {
-	text-align: center;
-}
-
-// Стили для Telegram кнопки
-.telegramButton {
-	@include button-style;
-	padding: 10px 20px;
-	background-color: var(--color-blue);
-	color: var(--color-main);
-	margin: 0 auto;
-	display: block;
-	font-size: 1.4rem;
-	width: 450px;
-	text-decoration: none;
-	text-align: center;
-
-	@include tablet {
-		font-size: 1.3rem;
-		width: 100%;
-	}
-
-	@include mobile {
-		font-size: 1.1rem;
-		width: 100%;
-	}
-
-	@include mobile-small {
-		font-size: 1.1rem;
-		width: 100%;
-	}
-}
-
 // Футер с заметкой
 .footerNote {
 	margin-top: 30px;
