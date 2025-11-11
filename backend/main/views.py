@@ -692,6 +692,111 @@ class EcoStaffCreateView(generics.CreateAPIView):
 
         return Response(ecostaff_serializer.data, status=status.HTTP_201_CREATED)
 
+class UserMasterclassesView(APIView):
+    """
+    Список мастер-классов с проверкой доступа пользователя
+    """
+    permission_classes = [IsAuthenticated]
+
+    # Конфигурация мастер-классов
+    MASTERCLASSES_CONFIG = [
+        {
+            'id': 1,
+            'slug': 'marena-garden',
+            'title': 'Мареновый сад',
+            'group': 'VIP',
+            'description': 'Мастер-класс "Цветной фон". Полный видео-курс по натуральному окрашиванию тканей растениями.',
+            'price': 7000,
+            'preview_image': '/images/masterclass-preview-1.jpg',
+            'videos_folder': 'marengarden',
+        },
+        {
+            'id': 2,
+            'slug': 'graphica',
+            'title': 'Графика',
+            'group': 'VIP2',
+            'description': 'Мастер-класс по окрашиванию ткани из растительных волокон (лён, хлопок) в технике экопринт.',
+            'price': 2000,
+            'preview_image': '/images/masterclass-preview-2.jpg',
+            'videos_folder': 'marengarden',
+        },
+        # Добавить третий мастер-класс когда будет готов:
+        # {
+        #     'id': 3,
+        #     'slug': 'indigo',
+        #     'title': 'Индиго',
+        #     'group': 'VIP3',
+        #     'description': 'Работа с натуральным индиго',
+        #     'price': 2800,
+        #     'preview_image': '/images/masterclass-preview-3.jpg',
+        #     'videos_folder': 'indigo',
+        # },
+    ]
+
+    def get(self, request):
+        """
+        Возвращает список мастер-классов с информацией о доступе
+        GET /api/masterclass/list/
+        """
+        user_groups = [group.name for group in request.user.groups.all()]
+
+        masterclasses = []
+        for mc in self.MASTERCLASSES_CONFIG:
+            has_access = mc['group'] in user_groups
+            masterclasses.append({
+                'id': mc['id'],
+                'slug': mc['slug'],
+                'title': mc['title'],
+                'description': mc['description'],
+                'price': mc['price'],
+                'preview_image': mc['preview_image'],
+                'has_access': has_access,
+                'required_group': mc['group']
+            })
+
+        return Response({
+            'masterclasses': masterclasses,
+            'user_groups': user_groups
+        })
+
+
+class CheckMasterclassAccessView(APIView):
+    """
+    Проверка доступа к конкретному мастер-классу
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, slug):
+        """
+        GET /api/masterclass/check-access/{slug}/
+        """
+        # Находим мастер-класс
+        masterclass = None
+        for mc in UserMasterclassesView.MASTERCLASSES_CONFIG:
+            if mc['slug'] == slug:
+                masterclass = mc
+                break
+
+        if not masterclass:
+            return Response(
+                {"has_access": False, "error": "Мастер-класс не найден"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Проверяем доступ
+        user_groups = [group.name for group in request.user.groups.all()]
+        has_access = masterclass['group'] in user_groups
+
+        return Response({
+            "has_access": has_access,
+            "required_group": masterclass['group'],
+            "user_groups": user_groups,
+            "masterclass": {
+                'slug': masterclass['slug'],
+                'title': masterclass['title'],
+            }
+        })
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

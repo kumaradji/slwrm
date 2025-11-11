@@ -1,5 +1,5 @@
 // galleries.js
-import { aboutHerbs, byForestRoads, outOfTime, forestFaires } from './images';
+import { aboutHerbs, byForestRoads, outOfTime, forestFaires, graphica_gallery } from './images';
 
 const formatDescription = (description) => {
   return description.split('\n').filter(paragraph => paragraph.trim() !== '').map((paragraph, index) => (
@@ -58,6 +58,17 @@ const galleries = [
     description: formatDescription('Одним из самых универсальных аксессуаров может быть шелковый платок или шарф. Он способен преобразить любой скучный наряд и стать особенным ярким аккордом в образе.\n' +
       '\n'),
     items: outOfTime.map((image, index) => ({
+      href: `#image${index + 1}`,
+      src: image.src,
+      alt: `Image ${index + 1}`
+    }))
+  },
+  {
+    id: 5,
+    title: 'Графика',
+    description: formatDescription('Графика на ткани. Растения, содержащие в своём составе танины и дубильные вещества, оставляют на ткани чёткий отпечаток. Как будто природа тонким пером с чернилами написала портрет каждого листочка.\n' +
+      '\n'),
+    items: graphica_gallery.map((image, index) => ({
       href: `#image${index + 1}`,
       src: image.src,
       alt: `Image ${index + 1}`

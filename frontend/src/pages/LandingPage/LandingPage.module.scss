@@ -1,3 +1,4 @@
+// LandingPage.module.scss
 @import '../../styles/media';
 @import '../../styles/variables';
 @import '../../styles/mixins';
@@ -132,7 +133,8 @@
 .landingPage__process,
 .landingPage__plants,
 .landingPage__lets_magic,
-.landingPage__bye {
+.landingPage__bye,
+.landingPage__masterclass {
 	padding: 14px 60px 0 60px;
 
 	@include desktop {
@@ -149,6 +151,40 @@
 
 	@include mobile-small {
 		padding: 14px 5px 0 5px;
+	}
+}
+
+.landingPage__masterclass {
+	margin: 2rem 0;
+	background: #f8f5f0; /* Светлый бежевый фон */
+	border-radius: 10px;
+	padding: 2rem 60px;
+	border: 1px solid #e8e0d5; /* Тонкая рамка в тон фону */
+
+	@include desktop {
+		padding: 2rem 40px;
+	}
+
+	@include tablet {
+		padding: 1.5rem 20px;
+		margin: 1.5rem 0;
+	}
+
+	@include mobile {
+		padding: 1rem 10px;
+		margin: 1rem 0;
+	}
+
+	h1 {
+		color: var(--color-dark-green);
+		margin-bottom: 1rem;
+		text-align: center;
+	}
+
+	p {
+		margin-bottom: 1rem;
+		line-height: 1.5;
+		text-align: left; /* Добавлено выравнивание по левому краю */
 	}
 }
 
@@ -173,6 +209,9 @@
 	@include button-style;
 	width: 400px;
 	font-size: 1.5rem;
+	margin: 1rem auto;
+	display: block;
+	text-align: center;
 
 	@include tablet {
 		font-size: 1.3rem;
@@ -187,5 +226,80 @@
 	@include mobile-small {
 		font-size: 1.3rem;
 		width: 100%;
+	}
+}
+
+.landingPage__bye {
+	text-align: left;
+	margin-top: 3rem;
+	padding-bottom: 3rem;
+
+	h1 {
+		color: var(--color-dark-green);
+		margin-bottom: 1rem;
+		text-align: center;
+	}
+
+	p {
+		margin-bottom: 1rem;
+		line-height: 1.5;
+		text-align: left;
+	}
+}
+
+/* Добавленные стили для выравнивания контента по левому краю */
+.landingPage__ecoprint,
+.landingPage__process,
+.landingPage__plants,
+.landingPage__lets_magic {
+	text-align: left;
+
+	h1, h2, h3 {
+		text-align: left;
+	}
+
+	p {
+		text-align: left;
+		line-height: 1.5;
+	}
+}
+
+/* Специфичный стиль для блока с мастер-классами */
+.masterclassContent {
+	text-align: left;
+
+	h1, h2, h3 {
+		text-align: left;
+	}
+
+	p {
+		text-align: left;
+		margin-bottom: 1rem;
+		line-height: 1.5;
+	}
+
+	ul, ol {
+		text-align: left;
+		margin-left: 1.5rem;
+		margin-bottom: 1rem;
+	}
+
+	li {
+		text-align: left;
+		margin-bottom: 0.5rem;
+		line-height: 1.4;
+	}
+}
+
+/* Дополнительные классы для гибкого управления выравниванием */
+.textLeft {
+	text-align: left !important;
+}
+
+.alignLeft {
+	text-align: left;
+
+	* {
+		text-align: left;
 	}
 }

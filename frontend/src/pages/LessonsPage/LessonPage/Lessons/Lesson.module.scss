@@ -1,5 +1,6 @@
 // Lesson.module.scss
 @import '../../../../styles/media';
+@import '../../../../styles/mixins';
 
 p {
 	margin-bottom: 20px;
@@ -22,6 +23,10 @@ p {
 			font-size: 14px;
 		}
 	}
+}
+
+.numberedList {
+	@include numbered-list;
 }
 
 .lesson {

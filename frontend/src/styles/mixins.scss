@@ -42,5 +42,27 @@
 	}
 }
 
+@mixin numbered-list {
+	list-style-type: decimal;
+	margin: 1rem 0;
+	padding-left: 2rem;
+	line-height: 1.1;
 
+	li {
+		margin-bottom: 0.5rem;
+		padding-left: 0.5rem;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	@include tablet {
+		padding-left: 1.5rem;
+	}
+
+	@include mobile {
+		padding-left: 1.2rem;
+	}
+}
 

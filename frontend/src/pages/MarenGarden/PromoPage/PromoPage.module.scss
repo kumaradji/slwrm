@@ -41,6 +41,10 @@
 		line-height: 1.3; /* Высота строки */
 	}
 
+	.numberedList {
+		@include numbered-list;
+	}
+
 	ol {
 		margin-bottom: 1.5rem; // Отступ внизу списка
 		padding-left: 10px;

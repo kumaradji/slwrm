@@ -1,4 +1,4 @@
-// Profile.jsx
+// Profile.jsx - УЛУЧШЕННАЯ ВЕРСИЯ
 import React, {useState, useEffect, useCallback} from 'react';
 import {useAuth} from '../../context/AuthContext';
 import {useNavigate, Link} from 'react-router-dom';
@@ -19,23 +19,37 @@ const Profile = () => {
   const [isProfileFetched, setIsProfileFetched] = useState(false);
   const [isAvatarSelected, setIsAvatarSelected] = useState(false);
 
+  // ✅ Состояние для мастер-классов
+  const [masterclasses, setMasterclasses] = useState([]);
+  const [masterclassesLoading, setMasterclassesLoading] = useState(true);
+
   const fetchUserDetails = useCallback(async () => {
     setIsLoading(true);
     try {
       await fetchUserData();
-      if (user) {
-        const avatarResponse = await fetch('/api/profile/avatar/', {
-          headers: {
-            'Authorization': `Token ${localStorage.getItem('token')}`,
-          },
-        });
 
-        if (avatarResponse.ok) {
-          const data = await avatarResponse.json();
-          setAvatarUrl(`${data.avatar}`);
-        } else {
-          logToServer(`Ошибка при получении аватара: ${avatarResponse.statusText}`, 'error');
-        }
+      // ✅ Добавлена проверка на наличие пользователя
+      if (!user) {
+        logToServer('Пользователь не авторизован при получении данных', 'error');
+        return;
+      }
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Токен не найден');
+      }
+
+      const avatarResponse = await fetch('/api/profile/avatar/', {
+        headers: {
+          'Authorization': `Token ${token}`,
+        },
+      });
+
+      if (avatarResponse.ok) {
+        const data = await avatarResponse.json();
+        setAvatarUrl(`${data.avatar}`);
+      } else {
+        logToServer(`Ошибка при получении аватара: ${avatarResponse.statusText}`, 'error');
       }
     } catch (error) {
       logToServer(`Ошибка при получении данных пользователя: ${error.message}`, 'error');
@@ -44,23 +58,69 @@ const Profile = () => {
     }
   }, [fetchUserData, user]);
 
+  // ✅ Улучшенная функция получения мастер-классов
+  const fetchMasterclasses = useCallback(async () => {
+    setMasterclassesLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Токен не найден');
+      }
+
+      const response = await fetch('/api/masterclass/list/', {
+        headers: {
+          'Authorization': `Token ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setMasterclasses(data.masterclasses || []);
+    } catch (error) {
+      logToServer(`Ошибка при получении мастер-классов: ${error.message}`, 'error');
+      setMasterclasses([]);
+    } finally {
+      setMasterclassesLoading(false);
+    }
+  }, []);
+
+  // ✅ Исправленный useEffect без бесконечного рендеринга
   useEffect(() => {
     if (!isProfileFetched) {
-      fetchUserDetails();
-      setIsProfileFetched(true);
+      const fetchData = async () => {
+        await fetchUserDetails();
+        await fetchMasterclasses();
+        setIsProfileFetched(true);
+      };
+      fetchData();
     }
-  }, [fetchUserDetails, isProfileFetched]);
+  }, [isProfileFetched]); // Убраны зависимости функций
 
   const handleLogout = () => {
     logout();
     navigate('/auth');
   };
 
-  const handleMasterclassAccess = (masterclass) => {
-    if (user?.groups?.includes('VIP')) {
-      navigate(`/masterclass`);
+  // ✅ Улучшенная функция перехода на мастер-класс
+  const handleMasterclassClick = (masterclass) => {
+    if (masterclass.has_access) {
+      // Специальная обработка для существующих мастер-классов
+      if (masterclass.slug === 'marena-garden') {
+        navigate('/masterclass');
+      } else if (masterclass.slug === 'graphica') {
+        navigate('/graphica');
+      } else {
+        navigate(`/masterclass/${masterclass.slug}`);
+      }
     } else {
-      setModalMessage('Доступ к этому мастер-классу закрыт. Пожалуйста, оплатите для доступа.');
+      setModalMessage(
+        `Доступ к мастер-классу "${masterclass.title}" закрыт.\n\n` +
+        `Для получения доступа необходимо быть в группе ${masterclass.required_group || 'VIP'}.\n\n` +
+        `Стоимость: ${masterclass.price || 'не указана'} ₽`
+      );
       setIsModalOpen(true);
     }
   };
@@ -68,59 +128,98 @@ const Profile = () => {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // ✅ Проверка типа файла
+      if (!file.type.startsWith('image/')) {
+        setModalMessage('Пожалуйста, выберите файл изображения');
+        setIsModalOpen(true);
+        return;
+      }
+
+      // ✅ Проверка размера файла (например, до 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setModalMessage('Размер файла не должен превышать 5MB');
+        setIsModalOpen(true);
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarUrl(reader.result);
         setAvatar(file);
         setIsAvatarSelected(true);
       };
+      reader.onerror = () => {
+        setModalMessage('Ошибка при чтении файла');
+        setIsModalOpen(true);
+      };
       reader.readAsDataURL(file);
     }
   };
 
   const handleAvatarUpload = async () => {
-    if (avatar) {
-      const formData = new FormData();
-      formData.append('avatar', avatar);
+    if (!avatar) return;
 
-      try {
-        const response = await fetch('/api/profile/avatar/', {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Token ${localStorage.getItem('token')}`,
-          },
-          body: formData,
-        });
+    const formData = new FormData();
+    formData.append('avatar', avatar);
 
-        if (response.ok) {
-          alert('Аватар успешно загружен.');
-          setIsAvatarSelected(false);
-          fetchUserDetails();
-        } else {
-          alert('Ошибка при загрузке аватара.');
-        }
-      } catch (error) {
-        setModalMessage('Ошибка при загрузке аватара.');
-        setIsModalOpen(true);
-        logToServer(`Ошибка при загрузке аватара: ${error.message}`, 'error');
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Токен не найден');
       }
+
+      const response = await fetch('/api/profile/avatar/', {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Token ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        setModalMessage('Аватар успешно загружен');
+        setIsAvatarSelected(false);
+        // ✅ Перезагружаем данные пользователя для обновления аватара
+        await fetchUserDetails();
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      setModalMessage('Ошибка при загрузке аватара');
+      setIsModalOpen(true);
+      logToServer(`Ошибка при загрузке аватара: ${error.message}`, 'error');
     }
   };
 
+  // ✅ Улучшенная обработка состояний загрузки
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return (
+      <div className={styles.profile}>
+        <div className={styles.loading}>Загрузка профиля...</div>
+      </div>
+    );
   }
 
   if (!user) {
-    return <div>Пользователь не найден. Пожалуйста, <Link to="/auth">войдите в систему</Link>.</div>;
+    return (
+      <div className={styles.profile}>
+        <div className={styles.error}>
+          Пользователь не найден. Пожалуйста, <Link to="/auth">войдите в систему</Link>.
+        </div>
+      </div>
+    );
   }
+
+  // ✅ Разделяем на доступные и недоступные мастер-классы
+  const availableMasterclasses = masterclasses.filter(mc => mc.has_access);
+  const lockedMasterclasses = masterclasses.filter(mc => !mc.has_access);
 
   return (
     <div className={styles.profile}>
       <Helmet>
         <title>ДушуГрею | Личный кабинет</title>
         <meta name="description" content="Личный кабинет пользователя сайта ДушуГрею"/>
-        <meta name="keywords" content="экопринт, личный кабинет, прифиль, ДушуГрею"/>
+        <meta name="keywords" content="экопринт, личный кабинет, профиль, ДушуГрею"/>
       </Helmet>
 
       <div className={styles.cardProfile}>
@@ -128,7 +227,7 @@ const Profile = () => {
         <div className={styles.profileInfo}>
           <img
             src={avatarUrl || defaultAvatar}
-            alt="User"
+            alt="Аватар пользователя"
             className={styles.userIcon}
             onError={(e) => {
               e.target.onerror = null;
@@ -141,6 +240,8 @@ const Profile = () => {
             <p className={styles.userName}><strong>Email:</strong> {user.email}</p>
           </div>
         </div>
+
+        {/* ✅ Убран дублирующий input */}
         <input
           type="file"
           accept="image/*"
@@ -148,6 +249,7 @@ const Profile = () => {
           style={{display: 'none'}}
           id="avatarUpload"
         />
+
         <div className={styles.textAvatarAddBlock}>
           {!avatarUrl && !isAvatarSelected ? (
             <label htmlFor="avatarUpload" className={styles.customFileUpload}>
@@ -162,13 +264,7 @@ const Profile = () => {
               Изменить аватар
             </label>
           )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            style={{display: 'none'}}
-            id="avatarUpload"
-          />
+
           <Link to="/change-password" className={styles.profile__link}>Изменить пароль</Link>
           <div onClick={handleLogout} className={styles.profile__logoutButton}>
             Выйти
@@ -176,16 +272,57 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* ✅ ОБНОВЛЕННЫЙ БЛОК: Мастер-классы */}
       <div className={styles.cardMasterClasses}>
-        <h3>Доступные мастер-классы</h3>
-        {user.groups?.includes('VIP') ? (
-          <ul>
-            <li onClick={() => handleMasterclassAccess('marena-garden')}>
-              <button className={styles.masterclass}>Цветной фон</button>
-            </li>
-          </ul>
+        <h3>Мастер-классы</h3>
+
+        {masterclassesLoading ? (
+          <p className={styles.loading}>Загрузка мастер-классов...</p>
         ) : (
-          <p>Нет доступных мастер-классов</p>
+          <>
+            {/* Доступные мастер-классы */}
+            {availableMasterclasses.length > 0 && (
+              <div className={styles.availableMasterclasses}>
+                <h4>Ваши мастер-классы</h4>
+                <ul>
+                  {availableMasterclasses.map((mc) => (
+                    <li key={mc.slug}>
+                      <button
+                        className={`${styles.masterclass} ${styles.masterclassAvailable}`}
+                        onClick={() => handleMasterclassClick(mc)}
+                      >
+                        ✅ {mc.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Недоступные мастер-классы */}
+            {lockedMasterclasses.length > 0 && (
+              <div className={styles.lockedMasterclasses}>
+                <h4>Другие мастер-классы</h4>
+                <ul>
+                  {lockedMasterclasses.map((mc) => (
+                    <li key={mc.slug}>
+                      <button
+                        className={`${styles.masterclass} ${styles.masterclassLocked}`}
+                        onClick={() => handleMasterclassClick(mc)}
+                      >
+                        🔒 {mc.title} — {mc.price || 'Цена не указана'} ₽
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Сообщение если нет мастер-классов */}
+            {masterclasses.length === 0 && !masterclassesLoading && (
+              <p className={styles.noMasterclasses}>Мастер-классы временно недоступны.</p>
+            )}
+          </>
         )}
       </div>
 
