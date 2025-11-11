@@ -210,9 +210,8 @@ const Profile = () => {
     );
   }
 
-  // ✅ Разделяем на доступные и недоступные мастер-классы
+  // ✅ Только доступные мастер-классы
   const availableMasterclasses = masterclasses.filter(mc => mc.has_access);
-  const lockedMasterclasses = masterclasses.filter(mc => !mc.has_access);
 
   return (
     <div className={styles.profile}>
@@ -272,7 +271,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* ✅ ОБНОВЛЕННЫЙ БЛОК: Мастер-классы */}
+      {/* ✅ ОБНОВЛЕННЫЙ БЛОК: Только доступные мастер-классы (просто названия) */}
       <div className={styles.cardMasterClasses}>
         <h3>Мастер-классы</h3>
 
@@ -280,10 +279,9 @@ const Profile = () => {
           <p className={styles.loading}>Загрузка мастер-классов...</p>
         ) : (
           <>
-            {/* Доступные мастер-классы */}
-            {availableMasterclasses.length > 0 && (
+            {/* Только доступные мастер-классы - просто названия */}
+            {availableMasterclasses.length > 0 ? (
               <div className={styles.availableMasterclasses}>
-                <h4>Ваши мастер-классы</h4>
                 <ul>
                   {availableMasterclasses.map((mc) => (
                     <li key={mc.slug}>
@@ -291,36 +289,14 @@ const Profile = () => {
                         className={`${styles.masterclass} ${styles.masterclassAvailable}`}
                         onClick={() => handleMasterclassClick(mc)}
                       >
-                        ✅ {mc.title}
+                        {mc.title}
                       </button>
                     </li>
                   ))}
                 </ul>
               </div>
-            )}
-
-            {/* Недоступные мастер-классы */}
-            {lockedMasterclasses.length > 0 && (
-              <div className={styles.lockedMasterclasses}>
-                <h4>Другие мастер-классы</h4>
-                <ul>
-                  {lockedMasterclasses.map((mc) => (
-                    <li key={mc.slug}>
-                      <button
-                        className={`${styles.masterclass} ${styles.masterclassLocked}`}
-                        onClick={() => handleMasterclassClick(mc)}
-                      >
-                        🔒 {mc.title} — {mc.price || 'Цена не указана'} ₽
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Сообщение если нет мастер-классов */}
-            {masterclasses.length === 0 && !masterclassesLoading && (
-              <p className={styles.noMasterclasses}>Мастер-классы временно недоступны.</p>
+            ) : (
+              <p className={styles.noMasterclasses}>У вас пока нет доступных мастер-классов.</p>
             )}
           </>
         )}
