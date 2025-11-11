@@ -6,9 +6,10 @@ from .models import CustomUser, Profile, Category, EcoStaff, Cart, EcoStaffImage
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    list_display = ('email', 'username', 'is_staff', 'is_active')
-    list_filter = ('is_staff', 'is_active')
-    search_fields = ('email', 'username')
+    # Добавляем get_groups в list_display
+    list_display = ('email', 'username', 'get_groups', 'is_staff', 'is_active')
+    list_filter = ('is_staff', 'is_active', 'groups')  # Добавляем группы в фильтры
+    search_fields = ('email', 'username', 'groups__name')  # Добавляем поиск по группам
     ordering = ('email',)
 
     fieldsets = (
@@ -24,6 +25,15 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'username', 'password1', 'password2'),
         }),
     )
+
+    def get_groups(self, obj):
+        """Возвращает строку с названиями групп пользователя"""
+        groups = obj.groups.all()
+        if groups:
+            return ", ".join([group.name for group in groups])
+        return "Нет групп"
+
+    get_groups.short_description = 'Группы'
 
 
 class EcoStaffImageInline(admin.TabularInline):
