@@ -5,8 +5,8 @@ import {motion} from 'framer-motion';
 import styles from './LessonsPage.module.scss';
 import lessons from './LessonPage/Lessons';
 import {Helmet} from 'react-helmet';
-import { CartContext } from '../../../context/CartContext';
-import { useAuth } from '../../../context/AuthContext';
+import { CartContext } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 
 export const LessonsPage = () => {
   const siteUrl = 'https://koltsovaecoprint.ru/';
