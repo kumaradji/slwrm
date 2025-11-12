@@ -1,5 +1,5 @@
 // GraphicaPromoPage.jsx
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { CartContext } from '../../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
@@ -9,9 +9,13 @@ import { logToServer } from "../../../services/logger";
 
 const GraphicaPromoPage = () => {
   const { user } = useAuth();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, isMasterclassPurchased, loadPurchasedMasterclasses } = useContext(CartContext);
   const [notification, setNotification] = useState('');
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const navigate = useNavigate();
+
+  const MASTERCLASS_ID = 44;
 
   const settings = {
     dots: false,
@@ -35,14 +39,45 @@ const GraphicaPromoPage = () => {
     { src: '/images/graphica/graphica_promo_11.jpg', alt: 'Графика 11' }
   ];
 
+  // --- ЛОГИКА ДОСТУПА ---
+
+  useEffect(() => {
+    // Загрузка списка купленных МК при авторизации
+    if (user) {
+      loadPurchasedMasterclasses();
+    }
+  }, [user, loadPurchasedMasterclasses]);
+
+  useEffect(() => {
+    // Проверка статуса покупки для данного МК
+    if (user) {
+      const purchased = isMasterclassPurchased(MASTERCLASS_ID);
+      setHasPurchased(purchased);
+    } else {
+      setHasPurchased(false);
+    }
+  }, [user, isMasterclassPurchased]);
+
+  // --- ЛОГИКА КНОПКИ ---
+
   const handleAddToCart = async () => {
     if (!user) {
-      navigate('/auth');
+      // Если пользователь не авторизован, перенаправляем на страницу входа
+      navigate('/login'); // Используем /login вместо /auth
       return;
     }
 
+    if (hasPurchased) {
+      setNotification('Вы уже приобрели этот мастер-класс');
+      setTimeout(() => setNotification(''), 3000);
+      return;
+    }
+
+    // Блокируем кнопку
+    setIsAdding(true);
+
     const masterClass = {
-      id: 44,
+      id: MASTERCLASS_ID,
       name: 'Мастер-класс по экопринту "Графика"',
       type: 'masterclass'
     };
@@ -50,11 +85,20 @@ const GraphicaPromoPage = () => {
     try {
       await addToCart(masterClass);
       setNotification('Мастер-класс добавлен в корзину');
-      setTimeout(() => setNotification(''), 3000);
     } catch (error) {
+      const errorMessage = error.message || 'Не удалось добавить мастер-класс в корзину.';
       logToServer(`Ошибка при добавлении мастер-класса в корзину: ${error.message}`, 'error');
-      alert(error.message || 'Не удалось добавить мастер-класс в корзину');
+      setNotification(errorMessage);
+    } finally {
+      // Снимаем блокировку и очищаем уведомление через 3 секунды
+      setIsAdding(false);
+      setTimeout(() => setNotification(''), 3000);
     }
+  };
+
+  const handleAccessMasterclass = () => {
+    // Путь к странице самого мастер-класса "Графика"
+    navigate('/masterclasses/graphica');
   };
 
   return (
@@ -111,9 +155,22 @@ const GraphicaPromoPage = () => {
         />
       </div>
 
-      <button className={styles.buyButton} onClick={handleAddToCart}>
-        Купить
-      </button>
+      {hasPurchased ? (
+        <button
+          className={`${styles.buyButton} ${styles.accessButton}`}
+          onClick={handleAccessMasterclass}
+        >
+          Перейти к мастер-классу
+        </button>
+      ) : (
+        <button
+          className={styles.buyButton}
+          onClick={handleAddToCart}
+          disabled={isAdding} // Блокировка кнопки во время добавления
+        >
+          {isAdding ? 'Добавление...' : 'Купить'}
+        </button>
+      )}
     </div>
   );
 };
