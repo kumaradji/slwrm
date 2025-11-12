@@ -37,13 +37,13 @@ urlpatterns = [
     path('long-polling/messages/', LongPollingMessageView.as_view(), name='long_polling_messages'),
 
     # === МАСТЕР-КЛАССЫ ===
-    path('api/masterclass/list/', UserMasterclassesView.as_view(), name='masterclass-list'),
-    path('api/masterclass/purchased/', PurchasedMasterclassesView.as_view(), name='purchased-masterclasses'),
-    path('api/masterclass/purchase/<int:masterclass_id>/', MasterclassPurchaseView.as_view(), name='purchase-masterclass'),
+    path('masterclass/list/', UserMasterclassesView.as_view(), name='masterclass-list'),
+    path('masterclass/purchased/', PurchasedMasterclassesView.as_view(), name='purchased-masterclasses'),
+    path('masterclass/purchase/<int:masterclass_id>/', MasterclassPurchaseView.as_view(), name='purchase-masterclass'),
 
     # Универсальная проверка доступа (два маршрута к одному view)
-    path('api/masterclass/check-access/<slug:slug>/', CheckMasterclassAccessView.as_view(), name='check-access-slug'),
-    path('api/masterclass/check-purchase/<int:masterclass_id>/', CheckMasterclassAccessView.as_view(), name='check-purchase-id'),
+    path('masterclass/check-access/<slug:slug>/', CheckMasterclassAccessView.as_view(), name='check-access-slug'),
+    path('masterclass/check-purchase/<int:masterclass_id>/', CheckMasterclassAccessView.as_view(), name='check-purchase-id'),
 
     # Корзина
     path('cart/', CartListView.as_view(), name='cart-list'),
