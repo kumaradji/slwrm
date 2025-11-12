@@ -30,7 +30,6 @@ from datetime import timedelta
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from django.db.models import Q
 
 logger = logging.getLogger('django')
 client_logger = logging.getLogger('client')
@@ -697,29 +696,69 @@ class CartListView(generics.ListAPIView):
         return Cart.objects.filter(user=self.request.user)
 
 
+# 1. Устанавливаем ID категории "Мастер-классы"
+MASTERCLASS_CATEGORY_ID = 5
+
+class CartListView(generics.ListAPIView):
+    serializer_class = CartSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
+
+
 class CartCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        logger.info(f"User {request.user.id}: Received request to add product to cart")
+        logger.info(f"User {request.user.id}: Received request to add item to cart")
         cart, created = Cart.objects.get_or_create(user=request.user)
-        product_id = request.data.get('product_id')
 
-        if not product_id:
-            logger.error(f"User {request.user.id}: Product ID is missing in the request")
-            return Response({"error": "Product ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+        # Получаем ID товара/МК (item_id или product_id, как в запросе)
+        item_id = request.data.get('item_id') or request.data.get('product_id')
+
+        if not item_id:
+            logger.error(f"User {request.user.id}: Item ID is missing in the request")
+            return Response({"error": "Item ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            product = EcoStaff.objects.get(id=product_id)
-            logger.info(f"User {request.user.id}: Product found: {product.title}")
+            # 2. Получаем товар (EcoStaff) по ID
+            product = EcoStaff.objects.get(id=item_id)
+            logger.info(f"User {request.user.id}: Item found: {product.title}")
+
+            # 3. Проверяем, является ли товар МАСТЕР-КЛАССОМ (по ID категории: 5)
+            if product.category_id == MASTERCLASS_CATEGORY_ID:
+
+                # Ищем конфигурацию мастер-класса по его ID (43 или 78)
+                masterclass_config = next(
+                    (mc for mc in UserMasterclassesView.MASTERCLASSES_CONFIG if mc['id'] == product.id),
+                    None
+                )
+
+                if masterclass_config:
+                    # 4. Проводим проверку доступа
+                    required_group = masterclass_config['group']
+                    user_groups = [group.name for group in request.user.groups.all()]
+
+                    if required_group in user_groups:
+                        logger.warning(f"User {request.user.id} already has access to masterclass {product.title}.")
+
+                        # Возвращаем ошибку 400, если доступ уже есть
+                        return Response(
+                            {"error": f"Вы уже приобрели мастер-класс '{product.title}' и имеете к нему доступ. Добавление в корзину невозможно."},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+            # 5. Если это обычный товар ИЛИ мастер-класс, к которому нет доступа: добавляем в корзину
             cart.add_item(product)
-            logger.info(f"User {request.user.id}: Product added to cart successfully")
-            return Response({"message": "Product added to cart"}, status=status.HTTP_201_CREATED)
+            logger.info(f"User {request.user.id}: Item added to cart successfully")
+            return Response({"message": f"'{product.title}' добавлен в корзину"}, status=status.HTTP_201_CREATED)
+
         except EcoStaff.DoesNotExist:
-            logger.error(f"User {request.user.id}: Product with ID {product_id} not found")
-            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+            logger.error(f"User {request.user.id}: Item with ID {item_id} not found")
+            return Response({"error": "Item not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger.error(f"User {request.user.id}: Error adding product to cart: {str(e)}")
+            logger.error(f"User {request.user.id}: Error processing item: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -832,7 +871,7 @@ class UserMasterclassesView(APIView):
             'videos_folder': 'color-background',
         },
         {
-            'id': 44,  # Совпадает с GraphicaPromoPage.jsx
+            'id': 78,  # Совпадает с GraphicaPromoPage.jsx
             'slug': 'graphica',
             'title': 'Графика',
             'group': 'VIP2',
