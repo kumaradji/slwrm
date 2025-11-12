@@ -15,7 +15,7 @@ const GraphicaPromoPage = () => {
   const [isAdding, setIsAdding] = useState(false);
   const navigate = useNavigate();
 
-  const MASTERCLASS_ID = 44;
+  const MASTERCLASS_ID = 78;
 
   const settings = {
     dots: false,
