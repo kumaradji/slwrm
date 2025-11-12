@@ -5,8 +5,9 @@ from .views import (
     UserProfileView, landing_page, category_list, category_detail, product_list, product_detail,
     UserDetailView, AvatarUpdateView, MessageListView, MessageCreateView, ConfirmPasswordResetView,
     CartListView, CartCreateView, TelegramWebhookView, LongPollingMessageView,
-    CartRemoveView, verify_token, LogoutView, ResetChangePasswordView, ClientLogView, UserMasterclassesView,
-    CheckMasterclassAccessView
+    CartRemoveView, verify_token, LogoutView, ResetChangePasswordView, ClientLogView,
+    PurchasedMasterclassesView, MasterclassPurchaseView, CheckMasterclassAccessView,
+    UserMasterclassesView,
 )
 
 urlpatterns = [
@@ -35,16 +36,20 @@ urlpatterns = [
     path('telegram-webhook/', TelegramWebhookView.as_view(), name='telegram-webhook'),
     path('long-polling/messages/', LongPollingMessageView.as_view(), name='long_polling_messages'),
 
-    path('masterclass/list/', UserMasterclassesView.as_view(), name='masterclass-list'),
-    path('masterclass/check-access/<slug:slug>/', CheckMasterclassAccessView.as_view(), name='check-access'),
+    # === МАСТЕР-КЛАССЫ ===
+    path('api/masterclass/list/', UserMasterclassesView.as_view(), name='masterclass-list'),
+    path('api/masterclass/purchased/', PurchasedMasterclassesView.as_view(), name='purchased-masterclasses'),
+    path('api/masterclass/purchase/<int:masterclass_id>/', MasterclassPurchaseView.as_view(), name='purchase-masterclass'),
 
-    # path('api/masterclass/purchased/', PurchasedMasterclassesView.as_view(), name='purchased-masterclasses'),
-    # path('api/masterclass/purchase/<int:masterclass_id>/', MasterclassPurchaseView.as_view(), name='purchase-masterclass'),
-    # path('api/masterclass/check-purchase/<int:masterclass_id>/', CheckMasterclassPurchaseView.as_view(), name='check-masterclass-purchase'),
+    # Универсальная проверка доступа (два маршрута к одному view)
+    path('api/masterclass/check-access/<slug:slug>/', CheckMasterclassAccessView.as_view(), name='check-access-slug'),
+    path('api/masterclass/check-purchase/<int:masterclass_id>/', CheckMasterclassAccessView.as_view(), name='check-purchase-id'),
 
+    # Корзина
     path('cart/', CartListView.as_view(), name='cart-list'),
     path('cart/create/', CartCreateView.as_view(), name='cart-create'),
     path('cart/remove/<int:item_id>/', CartRemoveView.as_view(), name='cart-remove'),
 
+    # Логи
     path('logs/', ClientLogView.as_view(), name='client-logs'),
 ]
