@@ -23,10 +23,10 @@ const graphicaChapters = [
   },
   {
     id: 2,
-    title: 'Исправляем ошибки',
+    title: 'Окрашивание палантина при помощи железной воды',
     content: (
       <div key="chapter-14">
-        <h3>Исправляем ошибки</h3>
+        <h3>Окрашивание палантина при помощи железной воды</h3>
         <div className={styles.masterclass__videoContainer}>
           <video controls key="video-14">
             <source
