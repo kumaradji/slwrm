@@ -270,47 +270,45 @@ class MasterclassPurchaseView(APIView):
             )
 
 
-class CheckMasterclassPurchaseView(APIView):
+class CheckMasterclassAccessView(APIView):
     """
-    Проверка покупки конкретного мастер-класса
+    Универсальная проверка доступа к мастер-классу
+    Поддерживает проверку как по slug, так и по ID
     """
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, masterclass_id):
+    def get(self, request, slug=None, masterclass_id=None):
         """
+        GET /api/masterclass/check-access/{slug}/
         GET /api/masterclass/check-purchase/{masterclass_id}/
-        Проверяет, купил ли пользователь конкретный мастер-класс
         """
-        user = request.user
-
-        # Находим мастер-класс
+        # Находим мастер-класс по slug ИЛИ id
         masterclass = None
         for mc in UserMasterclassesView.MASTERCLASSES_CONFIG:
-            if mc['id'] == masterclass_id:
+            if (slug and mc['slug'] == slug) or (masterclass_id and mc['id'] == masterclass_id):
                 masterclass = mc
                 break
 
         if not masterclass:
             return Response(
-                {"has_purchased": False, "error": "Мастер-класс не найден"},
+                {"has_access": False, "error": "Мастер-класс не найден"},
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # Проверяем принадлежность к группе
-        user_groups = [group.name for group in user.groups.all()]
-        has_purchased = masterclass['group'] in user_groups
+        # Проверяем доступ пользователя
+        user_groups = [group.name for group in request.user.groups.all()]
+        has_access = masterclass['group'] in user_groups
 
         return Response({
-            "has_purchased": has_purchased,
+            "has_access": has_access,
+            "required_group": masterclass['group'],
+            "user_groups": user_groups,
             "masterclass": {
                 'id': masterclass['id'],
+                'slug': masterclass['slug'],
                 'title': masterclass['title'],
-                'slug': masterclass['slug']
-            },
-            "required_group": masterclass['group'],
-            "user_groups": user_groups
+            }
         })
-
 
 class RefreshTokenView(APIView):
     permission_classes = [IsAuthenticated]
@@ -869,44 +867,6 @@ class UserMasterclassesView(APIView):
         return Response({
             'masterclasses': masterclasses,
             'user_groups': user_groups
-        })
-
-
-class CheckMasterclassAccessView(APIView):
-    """
-    Проверка доступа к конкретному мастер-классу
-    """
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, slug):
-        """
-        GET /api/masterclass/check-access/{slug}/
-        """
-        # Находим мастер-класс
-        masterclass = None
-        for mc in UserMasterclassesView.MASTERCLASSES_CONFIG:
-            if mc['slug'] == slug:
-                masterclass = mc
-                break
-
-        if not masterclass:
-            return Response(
-                {"has_access": False, "error": "Мастер-класс не найден"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        # Проверяем доступ
-        user_groups = [group.name for group in request.user.groups.all()]
-        has_access = masterclass['group'] in user_groups
-
-        return Response({
-            "has_access": has_access,
-            "required_group": masterclass['group'],
-            "user_groups": user_groups,
-            "masterclass": {
-                'slug': masterclass['slug'],
-                'title': masterclass['title'],
-            }
         })
 
 
