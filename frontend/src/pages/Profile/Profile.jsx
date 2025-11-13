@@ -104,16 +104,21 @@ const Profile = () => {
     navigate('/auth');
   };
 
-  // ✅ Улучшенная функция перехода на мастер-класс
+  // ✅ Исправленная функция перехода на мастер-класс
   const handleMasterclassClick = (masterclass) => {
     if (masterclass.has_access) {
-      // Специальная обработка для существующих мастер-классов
+      // Обрабатываем только существующие мастер-классы
       if (masterclass.slug === 'marena-garden') {
         navigate('/masterclass');
       } else if (masterclass.slug === 'graphica') {
         navigate('/graphica');
       } else {
-        navigate(`/masterclass/${masterclass.slug}`);
+        // Для любых других мастер-классов показываем сообщение
+        setModalMessage(
+          `Мастер-класс "${masterclass.title}" доступен!\n\n` +
+          `Обратитесь к администратору для настройки перехода.`
+        );
+        setIsModalOpen(true);
       }
     } else {
       setModalMessage(
