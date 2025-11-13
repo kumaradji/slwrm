@@ -1,4 +1,4 @@
-// Profile.jsx - УЛУЧШЕННАЯ ВЕРСИЯ
+// Profile.jsx - ИСПРАВЛЕННАЯ ВЕРСИЯ
 import React, {useState, useEffect, useCallback} from 'react';
 import {useAuth} from '../../context/AuthContext';
 import {useNavigate, Link} from 'react-router-dom';
@@ -19,7 +19,6 @@ const Profile = () => {
   const [isProfileFetched, setIsProfileFetched] = useState(false);
   const [isAvatarSelected, setIsAvatarSelected] = useState(false);
 
-  // ✅ Состояние для мастер-классов
   const [masterclasses, setMasterclasses] = useState([]);
   const [masterclassesLoading, setMasterclassesLoading] = useState(true);
 
@@ -28,7 +27,6 @@ const Profile = () => {
     try {
       await fetchUserData();
 
-      // ✅ Добавлена проверка на наличие пользователя
       if (!user) {
         logToServer('Пользователь не авторизован при получении данных', 'error');
         return;
@@ -58,7 +56,6 @@ const Profile = () => {
     }
   }, [fetchUserData, user]);
 
-  // ✅ Улучшенная функция получения мастер-классов
   const fetchMasterclasses = useCallback(async () => {
     setMasterclassesLoading(true);
     try {
@@ -78,6 +75,7 @@ const Profile = () => {
       }
 
       const data = await response.json();
+      console.log('📚 Загружены мастер-классы:', data.masterclasses);
       setMasterclasses(data.masterclasses || []);
     } catch (error) {
       logToServer(`Ошибка при получении мастер-классов: ${error.message}`, 'error');
@@ -87,7 +85,6 @@ const Profile = () => {
     }
   }, []);
 
-  // ✅ Исправленный useEffect без бесконечного рендеринга
   useEffect(() => {
     if (!isProfileFetched) {
       const fetchData = async () => {
@@ -97,26 +94,44 @@ const Profile = () => {
       };
       fetchData();
     }
-  }, [isProfileFetched]); // Убраны зависимости функций
+  }, [isProfileFetched]);
 
   const handleLogout = () => {
     logout();
     navigate('/auth');
   };
 
-  // ✅ Исправленная функция перехода на мастер-класс
+  // ✅ ИСПРАВЛЕННАЯ функция с правильным маппингом
   const handleMasterclassClick = (masterclass) => {
+    console.log('🔍 Клик по мастер-классу:', {
+      title: masterclass.title,
+      slug: masterclass.slug,
+      has_access: masterclass.has_access,
+      required_group: masterclass.required_group
+    });
+
     if (masterclass.has_access) {
-      // Обрабатываем только существующие мастер-классы
-      if (masterclass.slug === 'marena-garden') {
-        navigate('/masterclass');
-      } else if (masterclass.slug === 'graphica') {
-        navigate('/graphica');
+      // Маппинг slug мастер-классов на роуты
+      const masterclassRoutes = {
+        'marena-garden': '/masterclass',      // Мастер-класс "Цветной фон"
+        'graphica': '/graphica',              // Мастер-класс "Графика"
+        // Добавьте другие мастер-классы здесь по мере необходимости
+      };
+
+      const route = masterclassRoutes[masterclass.slug];
+
+      if (route) {
+        console.log('✅ Переход на роут:', route);
+        navigate(route);
       } else {
-        // Для любых других мастер-классов показываем сообщение
+        console.warn('⚠️ Роут не найден для slug:', masterclass.slug);
         setModalMessage(
           `Мастер-класс "${masterclass.title}" доступен!\n\n` +
-          `Обратитесь к администратору для настройки перехода.`
+          `⚠️ Страница мастер-класса находится в разработке.\n\n` +
+          `Технические данные:\n` +
+          `• Slug: ${masterclass.slug}\n` +
+          `• Требуемая группа: ${masterclass.required_group || 'не указана'}\n\n` +
+          `Обратитесь к администратору для настройки перехода на эту страницу.`
         );
         setIsModalOpen(true);
       }
@@ -133,14 +148,12 @@ const Profile = () => {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // ✅ Проверка типа файла
       if (!file.type.startsWith('image/')) {
         setModalMessage('Пожалуйста, выберите файл изображения');
         setIsModalOpen(true);
         return;
       }
 
-      // ✅ Проверка размера файла (например, до 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setModalMessage('Размер файла не должен превышать 5MB');
         setIsModalOpen(true);
@@ -184,7 +197,6 @@ const Profile = () => {
       if (response.ok) {
         setModalMessage('Аватар успешно загружен');
         setIsAvatarSelected(false);
-        // ✅ Перезагружаем данные пользователя для обновления аватара
         await fetchUserDetails();
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -196,7 +208,6 @@ const Profile = () => {
     }
   };
 
-  // ✅ Улучшенная обработка состояний загрузки
   if (isLoading) {
     return (
       <div className={styles.profile}>
@@ -215,7 +226,6 @@ const Profile = () => {
     );
   }
 
-  // ✅ Только доступные мастер-классы
   const availableMasterclasses = masterclasses.filter(mc => mc.has_access);
 
   return (
@@ -245,7 +255,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* ✅ Убран дублирующий input */}
         <input
           type="file"
           accept="image/*"
@@ -276,7 +285,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* ✅ ОБНОВЛЕННЫЙ БЛОК: Только доступные мастер-классы (просто названия) */}
       <div className={styles.cardMasterClasses}>
         <h3>Мастер-классы</h3>
 
@@ -284,7 +292,6 @@ const Profile = () => {
           <p className={styles.loading}>Загрузка мастер-классов...</p>
         ) : (
           <>
-            {/* Только доступные мастер-классы - просто названия */}
             {availableMasterclasses.length > 0 ? (
               <div className={styles.availableMasterclasses}>
                 <ul>
