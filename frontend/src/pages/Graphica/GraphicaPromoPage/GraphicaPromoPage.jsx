@@ -90,15 +90,9 @@ const GraphicaPromoPage = () => {
       logToServer(`Ошибка при добавлении мастер-класса в корзину: ${error.message}`, 'error');
       setNotification(errorMessage);
     } finally {
-      // Снимаем блокировку и очищаем уведомление через 3 секунды
       setIsAdding(false);
       setTimeout(() => setNotification(''), 3000);
     }
-  };
-
-  const handleAccessMasterclass = () => {
-    // Путь к странице самого мастер-класса "Графика"
-    navigate('/masterclasses/graphica');
   };
 
   return (
@@ -120,7 +114,6 @@ const GraphicaPromoPage = () => {
           растительного происхождения, также подойдёт и для шёлка, шерсти, вискозы и тканей с небольшим содержанием синтетики.
           Для этого способа окрашивания тканей не нужны дорогие экзотические красители, а только листья и доступные протравы.
         </p>
-
         <p>
           Вы научитесь окрашивать ткани без особых хлопот. Техника "графика" — отличное начало для погружения в увлекательный мир экопринта.
           Вы сможете окрасить большую скатерть, футболку, палантин или платок, применяя мои наработки.
@@ -167,14 +160,7 @@ const GraphicaPromoPage = () => {
         />
       </div>
 
-      {hasPurchased ? (
-        <button
-          className={`${styles.buyButton} ${styles.accessButton}`}
-          onClick={handleAccessMasterclass}
-        >
-          Перейти к мастер-классу
-        </button>
-      ) : (
+      {!hasPurchased && (
         <button
           className={styles.buyButton}
           onClick={handleAddToCart}
