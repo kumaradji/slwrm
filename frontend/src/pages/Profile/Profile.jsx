@@ -113,7 +113,8 @@ const Profile = () => {
     if (masterclass.has_access) {
       // Маппинг slug мастер-классов на роуты
       const masterclassRoutes = {
-        'marena-garden': '/masterclass',      // Мастер-класс "Цветной фон"
+        'color-background': '/masterclass',   // Мастер-класс "Цветной фон"
+        'marena-garden': '/masterclass',      // Альтернативный slug (на случай если изменится)
         'graphica': '/graphica',              // Мастер-класс "Графика"
         // Добавьте другие мастер-классы здесь по мере необходимости
       };
