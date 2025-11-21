@@ -77,8 +77,8 @@ const ShopPage = () => {
         return false; // Скрываем, так как пользователь уже в группе VIP
       }
       // ID 78 - "Графика" (требует группу VIP_2)
-      if (product.id === 78 && userGroups.includes('VIP_2')) {
-        return false; // Скрываем, так как пользователь уже в группе VIP_2
+      if (product.id === 78 && userGroups.includes('VIP2')) {
+        return false; // Скрываем, так как пользователь уже в группе VIP2
       }
       return true;
     });
