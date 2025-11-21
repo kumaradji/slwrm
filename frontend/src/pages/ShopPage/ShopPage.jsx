@@ -1,10 +1,11 @@
 // ShopPage.jsx
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Link} from 'react-router-dom';
 import styles from './ShopPage.module.scss';
 import {logToServer} from "../../services/logger";
 import Loader from '../../components/Loader/Loader';
 import {Helmet} from 'react-helmet';
+import {AuthContext} from '../../context/AuthContext';
 
 const ShopPage = () => {
   const [products, setProducts] = useState([]);
@@ -13,11 +14,13 @@ const ShopPage = () => {
   const [isBurgerCategoryMenuOpen, setIsBurgerCategoryMenuOpen] = useState(false);
   const [selectedCategoryName, setSelectedCategoryName] = useState("все категории");
   const [isLoading, setIsLoading] = useState(true);
+  const [userGroups, setUserGroups] = useState([]);
+  const {isLoggedIn} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true); // Показать индикатор загрузки
+        setIsLoading(true);
         const [productsResponse, categoriesResponse] = await Promise.all([
           fetch('/api/products/'),
           fetch('/api/categories/')
@@ -28,6 +31,23 @@ const ShopPage = () => {
 
         setProducts(productsData);
         setCategories(categoriesData);
+
+        // Получаем группы пользователя, если он авторизован
+        if (isLoggedIn) {
+          try {
+            const userResponse = await fetch('/api/user/', {
+              headers: {
+                'Authorization': `Token ${localStorage.getItem('token')}`
+              }
+            });
+            if (userResponse.ok) {
+              const userData = await userResponse.json();
+              setUserGroups(userData.groups || []);
+            }
+          } catch (error) {
+            logToServer(`Ошибка при получении данных пользователя: ${error.message}`, 'error');
+          }
+        }
       } catch (error) {
         logToServer(`Ошибка при получении данных: ${error.message}`, 'error');
       } finally {
@@ -36,7 +56,7 @@ const ShopPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [isLoggedIn]);
 
   const handleCategoryClick = (categoryId, categoryName) => {
     setSelectedCategory(categoryId);
@@ -44,12 +64,27 @@ const ShopPage = () => {
     setIsBurgerCategoryMenuOpen(false);
   };
 
-  const filteredProducts = selectedCategory
+  // Фильтрация товаров по категории
+  let filteredProducts = selectedCategory
     ? products.filter(product => product.category === selectedCategory)
     : products;
 
-  return (
+  // Фильтрация мастер-классов на основе групп пользователя
+  if (isLoggedIn && userGroups.length > 0) {
+    filteredProducts = filteredProducts.filter(product => {
+      // ID 43 - "Цветной фон" (требует группу VIP)
+      if (product.id === 43 && userGroups.includes('VIP')) {
+        return false; // Скрываем, так как пользователь уже в группе VIP
+      }
+      // ID 78 - "Графика" (требует группу VIP_2)
+      if (product.id === 78 && userGroups.includes('VIP_2')) {
+        return false; // Скрываем, так как пользователь уже в группе VIP_2
+      }
+      return true;
+    });
+  }
 
+  return (
     <div className={styles.shopContainer}>
       <Helmet>
         <title>ДушуГрею | Магазин изделий экопринта</title>
@@ -90,7 +125,6 @@ const ShopPage = () => {
           })}
         </script>
       </Helmet>
-
 
       {/* Десктопное меню категорий */}
       <div className={styles.categoriesWrapper}>
