@@ -142,5 +142,29 @@
 				font-size: 1.3rem;
 			}
 		}
+
+		.addToCartButton.inCart {
+			background-color: var(--color-blue);
+
+			&:hover {
+				background-color: var(--color-blue);
+				opacity: 0.9;
+			}
+
+			@include tablet {
+				width: 100%;
+				font-size: 1.3rem;
+			}
+
+			@include mobile {
+				width: 100%;
+				font-size: 1.3rem;
+			}
+
+			@include mobile-small {
+				width: 100%;
+				font-size: 1.3rem;
+			}
+		}
 	}
 }

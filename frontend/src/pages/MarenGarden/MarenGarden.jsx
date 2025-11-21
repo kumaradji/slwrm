@@ -81,17 +81,17 @@ const MarenGarden = ({ marenGardenChapters = [] }) => {
               opacity: index < 2 ? 1 : 0,
               x: index % 2 === 0 ? '-100vw' : '100vw',
             }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ type: 'spring', stiffness: 360 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.8 }}
+            animate={{opacity: 1, x: 0}}
+            transition={{type: 'spring', stiffness: 360}}
+            whileInView={{opacity: 1, x: 0}}
+            viewport={{once: true, amount: 0.8}}
           >
-            <div className={styles.chapterContent}>
-              <div className={styles.chapterNumber}>{chapter.id}</div>
-              <Link to={`/masterclass/${chapter.id}`} className={styles.link}>
+            <Link to={`/masterclass/${chapter.id}`} className={styles.link}>
+              <div className={styles.chapterContent}>
+                <div className={styles.chapterNumber}>{chapter.id}</div>
                 <h3>{chapter.title}</h3>
-              </Link>
-            </div>
+              </div>
+            </Link>
           </motion.div>
         ))}
       </div>

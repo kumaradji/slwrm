@@ -60,15 +60,15 @@ const Graphica = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <div className={styles.chapterContent}>
-              <div className={styles.chapterNumber}>{chapter.id}</div>
-              <Link
-                to={`/graphica/${chapter.id}`}
-                className={styles.link}
-              >
+            <Link
+              to={`/graphica/${chapter.id}`}
+              className={styles.link}
+            >
+              <div className={styles.chapterContent}>
+                <div className={styles.chapterNumber}>{chapter.id}</div>
                 <h3>{chapter.title}</h3>
-              </Link>
-            </div>
+              </div>
+            </Link>
           </motion.div>
         ))}
       </div>

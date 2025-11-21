@@ -13,6 +13,8 @@ const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [notification, setNotification] = useState('');
+  const [isInCart, setIsInCart] = useState(false);
+  const [checkingCart, setCheckingCart] = useState(true);
   const { addToCart } = useContext(CartContext);
   const { isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -38,14 +40,54 @@ const ProductDetail = () => {
     fetchProduct();
   }, [productId]);
 
+  useEffect(() => {
+    const checkIfInCart = async () => {
+      if (!isLoggedIn) {
+        setCheckingCart(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/cart/', {
+          headers: {
+            'Authorization': `Token ${localStorage.getItem('token')}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const cart = Array.isArray(data) ? data[0] : data;
+
+          if (cart && cart.items) {
+            const itemInCart = cart.items.some(item => item.id === parseInt(productId));
+            setIsInCart(itemInCart);
+          }
+        }
+      } catch (error) {
+        logToServer(`Ошибка при проверке корзины: ${error.message}`, 'error');
+      } finally {
+        setCheckingCart(false);
+      }
+    };
+
+    checkIfInCart();
+  }, [productId, isLoggedIn]);
+
   const handleAddToCart = () => {
-    if (isLoggedIn) {
-      addToCart(product);
-      setNotification('Товар добавлен в корзину');
-      setTimeout(() => setNotification(''), 3000);
-    } else {
+    if (!isLoggedIn) {
       navigate('/profile', { state: { from: location.pathname } });
+      return;
     }
+
+    if (isInCart) {
+      navigate('/cart');
+      return;
+    }
+
+    addToCart(product);
+    setNotification('Товар добавлен в корзину');
+    setIsInCart(true);
+    setTimeout(() => setNotification(''), 3000);
   };
 
   const renderContent = (content) => {
@@ -66,6 +108,13 @@ const ProductDetail = () => {
   const closeLightbox = () => {
     setLightboxOpen(false);
     setSelectedImageIndex(null);
+  };
+
+  const getButtonText = () => {
+    if (!isLoggedIn) return 'Войти для покупки';
+    if (checkingCart) return 'Проверка...';
+    if (isInCart) return 'Перейти в корзину';
+    return 'Добавить в корзину';
   };
 
   if (!product) return <div>Загрузка...</div>;
@@ -99,8 +148,12 @@ const ProductDetail = () => {
             {renderContent(product.content)}
             <p className={styles.productPrice}>Цена: {product.price} руб.</p>
           </div>
-          <button className={styles.addToCartButton} onClick={handleAddToCart}>
-            {isLoggedIn ? 'Добавить в корзину' : 'Войти для покупки'}
+          <button
+            className={`${styles.addToCartButton} ${isInCart ? styles.inCart : ''}`}
+            onClick={handleAddToCart}
+            disabled={checkingCart}
+          >
+            {getButtonText()}
           </button>
           <button onClick={handleGoBack} className={styles.backToShopButton}>
             Назад в магазин
