@@ -9,8 +9,15 @@ import Lesson06 from "./Lessons/Lesson06";
 import Lesson07 from "./Lessons/Lesson07";
 import Lesson08 from "./Lessons/Lesson08";
 import Lesson09 from "./Lessons/Lesson09";
+import Lesson10 from "./Lessons/Lesson10";
 
 const lessons = [
+  {
+    id: 10,
+    title: 'Что такое экопринт?',
+    image: '/images/lessons/lesson10_preview.jpeg',
+    component: <Lesson10 />
+  },
   {
     id: 1,
     title: 'Инструменты для экопринта',
