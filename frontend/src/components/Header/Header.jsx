@@ -10,11 +10,9 @@ import logo_black from '../../assets/logo_DushuGreu_black.png';
 import burger_menu_icon from '../../assets/icons/burger_menu_icon.png';
 import close_icon from '../../assets/icons/close_icon.png';
 import Telegram from '../../assets/icons/telegram_icon.png';
-import Whatsapp from '../../assets/icons/whatsapp_icon.png';
 import Telephone from '../../assets/icons/telephone_icon.png';
 import Email from '../../assets/icons/email_icon.png';
 import VK from '../../assets/icons/vk_icon.png';
-import CartButton from "../../pages/ShopPage/CartButton/CartButton";
 
 const Header = () => {
   const {isLoggedIn, user} = useAuth();
@@ -117,9 +115,6 @@ const Header = () => {
             </a>
             <a href="https://vk.com/ecoprint_koltsova" onClick={handleNavigate}>
               <img src={VK} alt="VK"/>
-            </a>
-            <a href="https://wa.me/79500423593" onClick={handleNavigate}>
-              <img src={Whatsapp} alt="Whatsapp"/>
             </a>
             <a href="tel:+79500423593" onClick={handleNavigate}>
               <img src={Telephone} alt="Telephone"/>
