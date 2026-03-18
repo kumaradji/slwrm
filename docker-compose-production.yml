@@ -58,7 +58,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
-    command: gunicorn soulwarm.wsgi:application --bind 0.0.0.0:8000
+#    command: gunicorn soulwarm.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn soulwarm.wsgi:application --bind 0.0.0.0:8000 --timeout 120 --workers 3
     deploy:
       placement:
         constraints: [ node.role == manager ]

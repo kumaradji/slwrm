@@ -1,4 +1,6 @@
 # views.py
+import threading
+
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from rest_framework.authtoken.models import Token
@@ -340,17 +342,23 @@ class UserRegistrationView(APIView):
 
             token, created = Token.objects.get_or_create(user=user)
 
-            try:
-                send_mail(
-                    'Новый пользователь зарегистрирован',
-                    f'Пользователь {user.username} зарегистрировался с email {user.email}.',
-                    'koltsovaecoprint@yandex.ru',
-                    ['kumaradji@me.com'],
-                    fail_silently=False,
-                )
-                logger.info(f'Admin notification sent for user: {user.username}')
-            except Exception as e:
-                logger.error(f'Error sending admin notification: {e}')
+            # Отправка письма в фоновом потоке — не блокирует воркер
+            def send_notification():
+                try:
+                    send_mail(
+                        'Новый пользователь зарегистрирован',
+                        f'Пользователь {user.username} зарегистрировался с email {user.email}.',
+                        'koltsovaecoprint@yandex.ru',
+                        ['kumaradji@me.com'],
+                        fail_silently=False,
+                    )
+                    logger.info(f'Admin notification sent for user: {user.username}')
+                except Exception as e:
+                    logger.error(f'Error sending admin notification: {e}')
+
+            thread = threading.Thread(target=send_notification)
+            thread.daemon = True
+            thread.start()
 
             return Response(
                 {"message": "Пользователь успешно зарегистрирован.", "token": token.key},
@@ -358,7 +366,6 @@ class UserRegistrationView(APIView):
             )
         logger.error(f'Registration errors: {serializer.errors}')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
