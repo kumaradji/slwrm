@@ -9,7 +9,6 @@ import useWindowSize from '../../hooks/useWindowSize';
 import logo_black from '../../assets/logo_DushuGreu_black.png';
 import burger_menu_icon from '../../assets/icons/burger_menu_icon.png';
 import close_icon from '../../assets/icons/close_icon.png';
-import Telegram from '../../assets/icons/telegram_icon.png';
 import Telephone from '../../assets/icons/telephone_icon.png';
 import Email from '../../assets/icons/email_icon.png';
 import VK from '../../assets/icons/vk_icon.png';
@@ -110,9 +109,6 @@ const Header = () => {
           </div>
           <Navbar closeMenu={closeMenu}/>
           <div className={styles.footer__social}>
-            <a href="https://t.me/nina_koltsova" onClick={handleNavigate}>
-              <img src={Telegram} alt="Telegram"/>
-            </a>
             <a href="https://vk.com/ecoprint_koltsova" onClick={handleNavigate}>
               <img src={VK} alt="VK"/>
             </a>
