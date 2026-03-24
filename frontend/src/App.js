@@ -11,7 +11,6 @@ import ChatButton from './components/ChatButton/ChatButton';
 import PrivacyPolicy from './components/PrivacyPolicy/PrivacyPolicy';
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ResetChangePassword from "./components/ResetChangePassword/ResetChangePassword";
-import ChatPage from "./components/ChatButton/ChatPage/ChatPage";
 import ChangePassword from './components/ChangePassword/ChangePassword';
 
 import Authorization from './pages/Authorization/Authorization';
@@ -76,7 +75,6 @@ function App() {
               <Route path="/lessons" element={<LessonsPage />} />
               <Route path="/lesson/:lessonId" element={<LessonPage />} />
               <Route path="/about" element={<AboutMePage />} />
-              <Route path="/chat" element={<ChatPage />} />
               <Route path="/promo" element={<PromoPage />} />
 
               {/* Graphica роуты - ЗАЩИЩЕНЫ для VIP2 */}

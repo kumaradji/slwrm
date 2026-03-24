@@ -1,21 +1,16 @@
-# models.py
 import os
 from django.db import models
 from PIL import Image
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.utils.crypto import get_random_string
 from transliterate import translit
 
 
 def user_directory_path(instance, filename):
-    # Файл будет загружен в MEDIA_ROOT/user_<id>/<filename>
     return f'user_{instance.user.id}/{filename}'
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
-        """
-        Создает и возвращает пользователя с email, username и паролем
-        """
         if not email:
             raise ValueError('Email обязателен для создания пользователя')
         if not username:
@@ -28,9 +23,6 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, username, password=None, **extra_fields):
-        """
-        Создает и возвращает суперпользователя с email, username и паролем
-        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
@@ -41,6 +33,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Суперпользователь должен иметь is_superuser=True.')
 
         return self.create_user(email, username, password, **extra_fields)
+
 
 class CustomUser(AbstractUser):
     username = models.CharField(
@@ -63,12 +56,12 @@ class CustomUser(AbstractUser):
     class Meta:
         app_label = 'main'
 
+
 class Profile(models.Model):
     user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        # Сохраним ссылку на старый аватар
         try:
             this = Profile.objects.get(id=self.id)
             if this.avatar != self.avatar:
@@ -78,7 +71,6 @@ class Profile(models.Model):
 
         super().save(*args, **kwargs)
 
-        # Обработка и сохранение нового аватара
         if self.avatar and hasattr(self.avatar, 'path'):
             try:
                 img = Image.open(self.avatar.path)
@@ -90,7 +82,6 @@ class Profile(models.Model):
                 print(f"Ошибка обработки аватара: {e}")
 
     def delete(self, *args, **kwargs):
-        # Удаляем файл аватара при удалении объекта
         if self.avatar:
             if os.path.isfile(self.avatar.path):
                 os.remove(self.avatar.path)
@@ -109,7 +100,6 @@ class Message(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     user_name = models.CharField(max_length=255, null=True, blank=True)
     content = models.TextField()
-    message_id = models.IntegerField(unique=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
 
@@ -121,6 +111,9 @@ class Message(models.Model):
     def __str__(self):
         return f"{self.user_name}: {self.content}"
 
+    class Meta:
+        ordering = ['timestamp']
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -131,12 +124,9 @@ class Category(models.Model):
 
 def upload_to(instance, filename):
     ext = filename.split('.')[-1]
-    # Транслитерация частей имени файла
     ecostaff_id = translit(str(instance.ecostaff.id), 'ru', reversed=True)
     ecostaff_title = translit(instance.ecostaff.title, 'ru', reversed=True)
     instance_id = translit(str(instance.id), 'ru', reversed=True)
-
-    # Создание имени файла
     filename = f"{ecostaff_id}_{ecostaff_title}_{instance_id}.{ext}"
     return os.path.join('shop/', filename)
 

@@ -1,10 +1,9 @@
-# urls.py в приложении main
 from django.urls import path
 from .views import (
     UserRegistrationView, UserLoginView, ResetPasswordView, ChangePasswordView,
     UserProfileView, landing_page, category_list, category_detail, product_list, product_detail,
     UserDetailView, AvatarUpdateView, MessageListView, MessageCreateView, ConfirmPasswordResetView,
-    CartListView, CartCreateView, TelegramWebhookView, LongPollingMessageView,
+    CartListView, CartCreateView, LongPollingMessageView,
     CartRemoveView, verify_token, LogoutView, ResetChangePasswordView, ClientLogView,
     PurchasedMasterclassesView, MasterclassPurchaseView, CheckMasterclassAccessView,
     UserMasterclassesView,
@@ -33,15 +32,12 @@ urlpatterns = [
 
     path('messages/', MessageListView.as_view(), name='message-list'),
     path('messages/create/', MessageCreateView.as_view(), name='message-create'),
-    path('telegram-webhook/', TelegramWebhookView.as_view(), name='telegram-webhook'),
     path('long-polling/messages/', LongPollingMessageView.as_view(), name='long_polling_messages'),
 
     # === МАСТЕР-КЛАССЫ ===
     path('masterclass/list/', UserMasterclassesView.as_view(), name='masterclass-list'),
     path('masterclass/purchased/', PurchasedMasterclassesView.as_view(), name='purchased-masterclasses'),
     path('masterclass/purchase/<int:masterclass_id>/', MasterclassPurchaseView.as_view(), name='purchase-masterclass'),
-
-    # Универсальная проверка доступа (два маршрута к одному view)
     path('masterclass/check-access/<slug:slug>/', CheckMasterclassAccessView.as_view(), name='check-access-slug'),
     path('masterclass/check-purchase/<int:masterclass_id>/', CheckMasterclassAccessView.as_view(), name='check-purchase-id'),
 

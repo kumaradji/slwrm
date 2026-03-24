@@ -1,4 +1,3 @@
-# views.py
 import threading
 
 from django.http import JsonResponse
@@ -21,7 +20,6 @@ from .models import Category, EcoStaff, Profile, Message, Cart, CustomUser
 from .serializers import UserRegistrationSerializer, EcoStaffSerializer, UserSerializer, ChangePasswordSerializer, \
     CategorySerializer, ProfileSerializer, MessageSerializer, CartSerializer, \
     EcoStaffImageSerializer, ResetChangePasswordSerializer
-import requests
 import logging
 import json
 from django.contrib.auth.tokens import default_token_generator, PasswordResetTokenGenerator
@@ -38,68 +36,28 @@ client_logger = logging.getLogger('client')
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class TelegramWebhookView(View):
-    def post(self, request, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            logger.debug(f"Webhook received data: {data}")
-            message = data.get('message')
-            if message:
-                chat_id = message['chat']['id']
-                text = message.get('text')
-                message_id = message.get('message_id')  # Get the message ID
-                user_id = message['from']['id']
-                user_name = message['from'].get('username', 'Unknown')
-                if text:
-                    # Check for duplicate message
-                    if Message.objects.filter(message_id=message_id).exists():
-                        return JsonResponse({"status": "ok", "message": "Duplicate message"})
-
-                    # Save the message if it's not from a bot and not a duplicate
-                    if not message.get('from', {}).get('is_bot'):
-                        is_admin = user_id == self.ADMIN_USER_ID
-                        Message.objects.create(
-                            user_name=user_name,
-                            content=text,
-                            is_admin=is_admin,
-                            message_id=message_id
-                        )
-                        return JsonResponse({"status": "ok"})
-            return JsonResponse({"status": "not ok"}, status=400)
-        except Exception as e:
-            logger.error(f"Error in webhook: {e}")
-            return JsonResponse({"status": "error", "message": str(e)}, status=500)
-
-
-@method_decorator(csrf_exempt, name='dispatch')
 class LongPollingMessageView(View):
     def get(self, request, *args, **kwargs):
         last_message_id = request.GET.get('last_message_id')
+        user = request.user
 
         try:
-            if last_message_id:
-                last_message_id = int(last_message_id)
-                new_messages = Message.objects.filter(id__gt=last_message_id).order_by('id')
+            # Администратор видит все сообщения, пользователь — только свои
+            if user.is_staff or user.is_superuser:
+                qs = Message.objects.all()
             else:
-                new_messages = Message.objects.all().order_by('id')
+                qs = Message.objects.filter(user=user)
 
-            messages_list = list(new_messages.values('id', 'user_name', 'content', 'timestamp', 'is_admin'))
+            if last_message_id:
+                qs = qs.filter(id__gt=int(last_message_id))
+
+            messages_list = list(qs.order_by('id').values(
+                'id', 'user_name', 'content', 'timestamp', 'is_admin'
+            ))
             return JsonResponse(messages_list, safe=False)
         except Exception as e:
             print(f"Error fetching new messages: {e}")
             return JsonResponse({'error': 'Something went wrong'}, status=500)
-
-
-@csrf_exempt
-def send_message(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        user_id = data['user_id']
-        text = data['text']
-        url = f'https://api.telegram.org/bot{settings.GENERAL_TELEGRAM_BOT_TOKEN}/sendMessage'
-        requests.post(url, data={'chat_id': user_id, 'text': text})
-        return JsonResponse({'status': 'ok'})
-    return JsonResponse({'status': 'error'}, status=400)
 
 
 @api_view(['POST'])
@@ -348,7 +306,7 @@ class UserRegistrationView(APIView):
                     send_mail(
                         'Новый пользователь зарегистрирован',
                         f'Пользователь {user.username} зарегистрировался с email {user.email}.',
-                        'koltsovaecoprint@yandex.ru',
+                        settings.DEFAULT_FROM_EMAIL,
                         ['kumaradji@me.com'],
                         fail_silently=False,
                     )
@@ -500,7 +458,7 @@ class ResetChangePasswordView(APIView):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
             user = CustomUser.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             user = None
 
         # Проверяем токен
@@ -509,7 +467,6 @@ class ResetChangePasswordView(APIView):
             user.set_password(new_password)
             user.save()
 
-            # Можно обновить токен или войти пользователя
             return Response({
                 "message": "Пароль успешно изменен",
             }, status=status.HTTP_200_OK)
@@ -533,7 +490,6 @@ class ResetPasswordView(APIView):
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-        # Изменяем URL на тот, который ведет на фронтенд
         reset_url = f"https://koltsovaecoprint.ru/reset-password/{uid}/{token}/"
 
         subject = 'Сброс пароля на сайте ДушуГрею'
@@ -553,7 +509,7 @@ class ResetPasswordView(APIView):
             send_mail(
                 subject,
                 message,
-                'koltsovaecoprint@yandex.ru',
+                settings.DEFAULT_FROM_EMAIL,
                 [user.email],
                 fail_silently=False,
             )
@@ -573,7 +529,6 @@ class ResetPasswordView(APIView):
         token = request.data.get('token')
         password = request.data.get('password')
 
-        # Проверка всех необходимых данных
         if not uid or not token or not password:
             return Response({"message": "Все поля (uid, token, password) обязательны."},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -590,7 +545,7 @@ class ResetPasswordView(APIView):
 
             return Response({"message": "Пароль успешно изменен."}, status=status.HTTP_200_OK)
 
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist:
             return Response({"message": "Пользователь не найден."}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"message": f"Ошибка: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
@@ -609,7 +564,7 @@ class ConfirmPasswordResetView(APIView):
             else:
                 return Response({"error": "Неверная ссылка для сброса пароля или срок действия истек"},
                                 status=status.HTTP_400_BAD_REQUEST)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             return Response({"error": "Недействительный идентификатор пользователя"},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -618,7 +573,7 @@ class ConfirmPasswordResetView(APIView):
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = CustomUser.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             return Response({"error": "Недействительный идентификатор пользователя"},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -627,9 +582,7 @@ class ConfirmPasswordResetView(APIView):
             if new_password:
                 user.set_password(new_password)
                 user.save()
-                # Очистка всех существующих токенов пользователя
                 Token.objects.filter(user=user).delete()
-                # Создание нового токена
                 new_token = Token.objects.create(user=user)
                 return Response({
                     "message": "Пароль успешно сброшен",
@@ -657,9 +610,15 @@ class UserDetailView(APIView):
 
 
 class MessageListView(generics.ListAPIView):
-    queryset = Message.objects.all().select_related('user').order_by('timestamp')
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        # Администратор видит все сообщения, обычный пользователь — только свои
+        if user.is_staff or user.is_superuser:
+            return Message.objects.all().select_related('user').order_by('timestamp')
+        return Message.objects.filter(user=user).order_by('timestamp')
 
 
 class MessageCreateView(generics.CreateAPIView):
@@ -669,21 +628,7 @@ class MessageCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         is_admin = self.request.user.is_staff or self.request.user.is_superuser
-        message_instance = serializer.save(user=self.request.user, is_admin=is_admin)
-        self.send_message_to_telegram(message_instance.content, self.request.user.username)
-
-    def send_message_to_telegram(self, message, username):
-        TELEGRAM_API_URL = f"https://api.telegram.org/bot{settings.GENERAL_TELEGRAM_BOT_TOKEN}/sendMessage"
-        GENERAL_CHAT_ID = settings.GENERAL_TELEGRAM_CHAT_ID
-
-        full_message = f"{username}: {message}"
-        response = requests.post(TELEGRAM_API_URL, json={
-            'chat_id': GENERAL_CHAT_ID,
-            'text': full_message,
-        })
-
-        if response.status_code != 200:
-            raise Exception('Error sending message to Telegram')
+        serializer.save(user=self.request.user, is_admin=is_admin)
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -706,13 +651,6 @@ class CartListView(generics.ListAPIView):
 # 1. Устанавливаем ID категории "Мастер-классы"
 MASTERCLASS_CATEGORY_ID = 5
 
-class CartListView(generics.ListAPIView):
-    serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
-
 
 class CartCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -721,7 +659,6 @@ class CartCreateView(APIView):
         logger.info(f"User {request.user.id}: Received request to add item to cart")
         cart, created = Cart.objects.get_or_create(user=request.user)
 
-        # Получаем ID товара/МК (item_id или product_id, как в запросе)
         item_id = request.data.get('item_id') or request.data.get('product_id')
 
         if not item_id:
@@ -729,34 +666,26 @@ class CartCreateView(APIView):
             return Response({"error": "Item ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # 2. Получаем товар (EcoStaff) по ID
             product = EcoStaff.objects.get(id=item_id)
             logger.info(f"User {request.user.id}: Item found: {product.title}")
 
-            # 3. Проверяем, является ли товар МАСТЕР-КЛАССОМ (по ID категории: 5)
             if product.category_id == MASTERCLASS_CATEGORY_ID:
-
-                # Ищем конфигурацию мастер-класса по его ID (43 или 78)
                 masterclass_config = next(
                     (mc for mc in UserMasterclassesView.MASTERCLASSES_CONFIG if mc['id'] == product.id),
                     None
                 )
 
                 if masterclass_config:
-                    # 4. Проводим проверку доступа
                     required_group = masterclass_config['group']
                     user_groups = [group.name for group in request.user.groups.all()]
 
                     if required_group in user_groups:
                         logger.warning(f"User {request.user.id} already has access to masterclass {product.title}.")
-
-                        # Возвращаем ошибку 400, если доступ уже есть
                         return Response(
                             {"error": f"Вы уже приобрели мастер-класс '{product.title}' и имеете к нему доступ. Добавление в корзину невозможно."},
                             status=status.HTTP_400_BAD_REQUEST
                         )
 
-            # 5. Если это обычный товар ИЛИ мастер-класс, к которому нет доступа: добавляем в корзину
             cart.add_item(product)
             logger.info(f"User {request.user.id}: Item added to cart successfully")
             return Response({"message": f"'{product.title}' добавлен в корзину"}, status=status.HTTP_201_CREATED)
@@ -865,10 +794,9 @@ class UserMasterclassesView(APIView):
     """
     permission_classes = [IsAuthenticated]
 
-    # ОБНОВЛЕННАЯ КОНФИГУРАЦИЯ МАСТЕР-КЛАССОВ
     MASTERCLASSES_CONFIG = [
         {
-            'id': 43,  # Совпадает с PromoPage.jsx
+            'id': 43,
             'slug': 'color-background',
             'title': 'Цветной фон',
             'group': 'VIP',
@@ -878,7 +806,7 @@ class UserMasterclassesView(APIView):
             'videos_folder': 'color-background',
         },
         {
-            'id': 78,  # Совпадает с GraphicaPromoPage.jsx
+            'id': 78,
             'slug': 'graphica',
             'title': 'Графика',
             'group': 'VIP2',
