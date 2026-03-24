@@ -1,7 +1,7 @@
 // TypingParagraphAnimation.jsx
 import React, { useState, useEffect } from 'react';
 
-const TypingParagraphAnimation = ({ text, speed = 50 }) => {
+const TypingParagraphAnimation = ({ text, speed = 20 }) => {
   const [displayedParagraphs, setDisplayedParagraphs] = useState([]);
   const paragraphs = text.split('\n\n');
 

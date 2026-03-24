@@ -15,6 +15,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import authenticate, update_session_auth_hash
 from django.contrib.auth.models import Group
+from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
 from .models import Category, EcoStaff, Profile, Message, Cart, CustomUser
 from .serializers import UserRegistrationSerializer, EcoStaffSerializer, UserSerializer, ChangePasswordSerializer, \
@@ -46,7 +47,7 @@ class LongPollingMessageView(View):
             if user.is_staff or user.is_superuser:
                 qs = Message.objects.all()
             else:
-                qs = Message.objects.filter(user=user)
+                qs = Message.objects.filter(Q(user=user) | Q(recipient=user, is_admin=True))
 
             if last_message_id:
                 qs = qs.filter(id__gt=int(last_message_id))
@@ -615,10 +616,13 @@ class MessageListView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        # Администратор видит все сообщения, обычный пользователь — только свои
+        # Администратор видит все сообщения
         if user.is_staff or user.is_superuser:
             return Message.objects.all().select_related('user').order_by('timestamp')
-        return Message.objects.filter(user=user).order_by('timestamp')
+        # Пользователь видит свои сообщения + ответы администратора адресованные ему
+        return Message.objects.filter(
+            Q(user=user) | Q(recipient=user, is_admin=True)
+        ).order_by('timestamp')
 
 
 class MessageCreateView(generics.CreateAPIView):
