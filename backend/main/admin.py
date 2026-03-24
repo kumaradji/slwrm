@@ -2,15 +2,18 @@
 from django.contrib import admin
 from django.db import models
 from django.contrib.auth.admin import UserAdmin
+from django.utils.html import format_html
+from django.utils import timezone
+from datetime import timedelta
 from .models import CustomUser, Profile, Category, EcoStaff, Cart, EcoStaffImage, Message
+
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    # Добавляем get_groups в list_display
-    list_display = ('email', 'username', 'get_groups', 'is_staff', 'is_active')
-    list_filter = ('is_staff', 'is_active', 'groups')  # Добавляем группы в фильтры
-    search_fields = ('email', 'username', 'groups__name')  # Добавляем поиск по группам
-    ordering = ('email',)
+    list_display = ('email', 'username', 'get_groups', 'is_staff', 'is_active', 'date_joined_display', 'is_new_badge')
+    list_filter = ('is_staff', 'is_active', 'groups', 'date_joined')
+    search_fields = ('email', 'username', 'groups__name')
+    ordering = ('-date_joined',)  # Новые пользователи вверху
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -27,13 +30,33 @@ class CustomUserAdmin(UserAdmin):
     )
 
     def get_groups(self, obj):
-        """Возвращает строку с названиями групп пользователя"""
         groups = obj.groups.all()
         if groups:
             return ", ".join([group.name for group in groups])
-        return "Нет групп"
-
+        return "—"
     get_groups.short_description = 'Группы'
+
+    def date_joined_display(self, obj):
+        """Дата и время регистрации в читаемом формате"""
+        return obj.date_joined.strftime('%d.%m.%Y %H:%M')
+    date_joined_display.short_description = 'Дата регистрации'
+    date_joined_display.admin_order_field = 'date_joined'
+
+    def is_new_badge(self, obj):
+        """Зелёный бейдж если пользователь зарегистрировался за последние 7 дней"""
+        if obj.date_joined >= timezone.now() - timedelta(days=7):
+            return format_html(
+                '<span style="'
+                'background: #27ae60;'
+                'color: white;'
+                'padding: 2px 10px;'
+                'border-radius: 10px;'
+                'font-size: 11px;'
+                'font-weight: bold;'
+                '">Новый</span>'
+            )
+        return '—'
+    is_new_badge.short_description = 'Статус'
 
 
 class EcoStaffImageInline(admin.TabularInline):
