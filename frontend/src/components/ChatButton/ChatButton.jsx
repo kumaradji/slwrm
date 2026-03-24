@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styles from './ChatButton.module.scss';
 import { FaComments, FaTimes } from 'react-icons/fa';
-import { logToServer } from "../../../services/logger";
+import { logToServer } from "../../services/logger";
 
 const ChatButton = () => {
   const [isOpen, setIsOpen] = useState(false);
