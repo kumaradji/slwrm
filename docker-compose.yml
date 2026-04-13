@@ -4,8 +4,8 @@ networks:
   soulwarm:
 
 services:
-  backend:
-    container_name: backend
+  django:
+    container_name: django
     build:
       context: .
       dockerfile: ./docker/dev/Django/Dockerfile

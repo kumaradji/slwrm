@@ -1,0 +1,57 @@
+networks:
+  soulwarm:
+    name: soulwarm
+    driver: bridge
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: ./docker/prod/Nginx/Dockerfile
+    restart: unless-stopped
+    networks:
+      - soulwarm
+    ports:
+      - '80:80'
+    volumes:
+      - ./:/app
+
+  react:
+    container_name: react
+    build:
+      context: .
+      dockerfile: ./docker/prod/React/Dockerfile
+    restart: unless-stopped
+    networks:
+      - soulwarm
+    volumes:
+      - ./frontend:/app/frontend
+    command: serve -s build -l 3000
+
+  django:
+    container_name: django
+    build:
+      context: .
+      dockerfile: ./docker/prod/Django/Dockerfile
+    restart: unless-stopped
+    networks:
+      - soulwarm
+    volumes:
+      - ./backend:/app/backend
+    env_file:
+      - ./backend/.env
+    command: gunicorn soulwarm.wsgi:application --bind 0.0.0.0:8000
+
+  db:
+    container_name: db
+    image: postgres:15.1-alpine
+    restart: unless-stopped
+    networks:
+      - soulwarm
+    volumes:
+      - /var/lib/postgresql:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB=soulwarm
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

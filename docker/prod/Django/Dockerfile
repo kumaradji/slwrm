@@ -35,10 +35,3 @@ WORKDIR /app/backend
 
 # Копируем весь проект в образ
 COPY ./backend .
-
-# Копируем entrypoint в образ для запуска
-COPY ./docker/production/Django/entrypoint.sh /app/backend/entrypoint.sh
-
-# Даем права и запускаем entrypoint внутри контейнера
-RUN chmod +x /app/backend/entrypoint.sh
-ENTRYPOINT ["/app/backend/entrypoint.sh"]
