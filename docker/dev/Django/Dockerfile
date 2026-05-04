@@ -16,9 +16,5 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем зависимости
-COPY ./backend/requirements.txt .
-RUN pip install -r requirements.txt
-
 # Копируем весь проект
 COPY ./backend .
