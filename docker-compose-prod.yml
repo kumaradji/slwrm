@@ -4,30 +4,33 @@ networks:
     driver: bridge
 
 services:
-  nginx:
-    container_name: nginx
-    build:
-      context: .
-      dockerfile: ./docker/prod/Nginx/Dockerfile
+#  nginx:
+#    container_name: nginx
+#    build:
+#      context: .
+#      dockerfile: ./docker/prod/Nginx/Dockerfile
+#    restart: unless-stopped
+#    networks:
+#      - soulwarm
+#    ports:
+#      - '80:80'
+#    volumes:
+#      - ./:/app
+
+  angie:
+    image: docker.angie.software/angie:1.11.4-minimal
+    container_name: angie
     restart: unless-stopped
     networks:
       - soulwarm
     ports:
       - '80:80'
+      - '443:443'
     volumes:
-      - ./:/app
-
-#  angie:
-#    image: docker.angie.software/angie:1.11.4-minimal
-#    container_name: angie
-#   restart: unless-stopped
-#    networks:
-#      - soulwarm
-#    volumes:
-#      - ./docker/prod/Angie/angie.conf:/etc/angie/angie.conf:ro
-#      - ./:/app
-#      - angie_certs:/etc/angie/certs
-#      - angie_logs:/var/log/angie
+     - ./docker/prod/Angie/angie.conf:/etc/angie/angie.conf:ro
+     - ./:/app
+     - angie_certs:/etc/angie/certs
+     - angie_logs:/var/log/angie
 
   react:
     container_name: react
@@ -68,6 +71,6 @@ services:
       - POSTGRES_USER=kumaradji
       - POSTGRES_PASSWORD=secret
 
-#volumes:
-#  angie_certs:
-#  angie_logs:
+volumes:
+  angie_certs:
+  angie_logs:
