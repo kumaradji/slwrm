@@ -14,8 +14,6 @@ COPY ./backend/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/backend/wheels -r requirements.txt
 
 FROM python:3.12-slim
-### Final image ###
-FROM python:3.10-slim
 
 # Установка необходимых пакетов в систему Linux
 RUN apt-get update && \
