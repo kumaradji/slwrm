@@ -3,7 +3,7 @@
 ## Описание
 Веб-приложение, созданное с использованием Django на серверной стороне и React на клиентской стороне. Проект включает в себя функциональность чатов для обычных пользователей и VIP-пользователей, а также мастер-классы и корзину для покупок.
 
-## При первом запуске проекта выполните команды
+## При запуске проекта локально выполните команды
 
 1. Перейдите в директорию backend:
 
@@ -22,18 +22,19 @@ cp .env.dev.example .env
 ```
 python -m venv venv
 source venv/bin/activate
-```
-
-4. Сгенерируйте secret key командой и вставьте его в .env-файл:
 
 ```
-python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-```
 
-5. Установите зависимости:
+4. Установите зависимости:
 
 ```
 pip install -r requirements.txt
+```
+
+5. Сгенерируйте secret key командой и вставьте его в .env-файл:
+
+```
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 
 6. Перейдите в корень проекта и соберите фронтенд:
@@ -48,47 +49,39 @@ npm run build
 7. Вернитесь в корень проекта и запустите проект с помощью Docker:
 
 ```
-make docker-up
+make dev-up
 ```
 
 8. Примените миграции для настройки базы данных:
 
 ```
-make migrate
+make dev-migrate
 ```
 
 9. Создайте суперпользователя для доступа к административной панели:
 
 ```
-make superuser
+make dev-superuser
 ```
 
 10. Для сборки статики Django выполните команду:
 
 ```
-make static
+make dev-static
 ```
 
-## Запуск и остановка проекта в Docker
+## Запуск и остановка проекта локально в Docker
 
 1. Запустите из корня проекта команду:
 
 ```
-make docker-up
+make dev-up
 ```
 
 2. Остановка всех сервисов:
 
 ```
-make docker-down
-```
-
-## Ручной деплой без CI/CD
-
-1. Для сборки и пуша контейнеров в Registry Selectel выполните команду:
-
-```
-make docker-prod
+make dev-down
 ```
 
 ## Лицензия

@@ -1,5 +1,5 @@
 ### Node.js ###
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Установка рабочей директории
 WORKDIR /app/frontend
@@ -15,13 +15,8 @@ COPY ./frontend .
 # Собираем билд
 RUN npm run build
 
-FROM node:18-alpine
+FROM node:20-alpine
 
-# Установка рабочей директории
-WORKDIR /app/frontend
-
-# Копируем из билда статическую сборку
-COPY --from=builder /app/frontend/build ./build
-
-# Запуск сервера React
 RUN npm install -g serve
+
+WORKDIR /app/frontend

@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 # Устанавливаем рабочую директорию
 WORKDIR /app/backend
@@ -15,10 +15,6 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-# Устанавливаем зависимости
-COPY ./backend/requirements.txt .
-RUN pip install -r requirements.txt
 
 # Копируем весь проект
 COPY ./backend .

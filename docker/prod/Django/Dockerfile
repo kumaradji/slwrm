@@ -1,5 +1,5 @@
 ### Python builder ###
-FROM python:3.10-slim AS builder
+FROM python:3.12-slim AS builder
 
 # Установка рабочей директории
 WORKDIR /app/backend
@@ -13,7 +13,7 @@ COPY ./backend/requirements.txt .
 # Устанавливаем зависимости
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/backend/wheels -r requirements.txt
 
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 # Установка необходимых пакетов в систему Linux
 RUN apt-get update && \
@@ -32,13 +32,3 @@ RUN pip install --no-cache /wheels/*
 
 # Установка рабочей директории
 WORKDIR /app/backend
-
-# Копируем весь проект в образ
-COPY ./backend .
-
-# Копируем entrypoint в образ для запуска
-COPY ./docker/production/Django/entrypoint.sh /app/backend/entrypoint.sh
-
-# Даем права и запускаем entrypoint внутри контейнера
-RUN chmod +x /app/backend/entrypoint.sh
-ENTRYPOINT ["/app/backend/entrypoint.sh"]
