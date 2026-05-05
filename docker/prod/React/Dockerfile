@@ -17,11 +17,6 @@ RUN npm run build
 
 FROM node:20-alpine
 
-# Установка рабочей директории
-WORKDIR /app/frontend
-
-# Копируем из билда статическую сборку
-COPY --from=builder /app/frontend/build ./build
-
-# Запуск сервера React
 RUN npm install -g serve
+
+WORKDIR /app/frontend
