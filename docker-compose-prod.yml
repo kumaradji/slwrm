@@ -17,6 +17,18 @@ services:
     volumes:
       - ./:/app
 
+#  angie:
+#    image: docker.angie.software/angie:1.11.4-minimal
+#    container_name: angie
+#   restart: unless-stopped
+#    networks:
+#      - soulwarm
+#    volumes:
+#      - ./docker/prod/Angie/angie.conf:/etc/angie/angie.conf:ro
+#      - ./:/app
+#      - angie_certs:/etc/angie/certs
+#      - angie_logs:/var/log/angie
+
   react:
     container_name: react
     build:
@@ -53,5 +65,9 @@ services:
       - /var/lib/postgresql:/var/lib/postgresql
     environment:
       - POSTGRES_DB=soulwarm
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=kumaradji
+      - POSTGRES_PASSWORD=secret
+
+#volumes:
+#  angie_certs:
+#  angie_logs:
