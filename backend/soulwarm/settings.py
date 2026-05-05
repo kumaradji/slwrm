@@ -97,7 +97,6 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
-    'https://31.129.42.105',
     'https://koltsovaecoprint.ru',
     'https://217.12.38.24',
     # 'http://127.0.0.1'

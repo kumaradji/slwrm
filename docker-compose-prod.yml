@@ -65,7 +65,7 @@ services:
     networks:
       - soulwarm
     volumes:
-      - /var/lib/postgresql:/var/lib/postgresql
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=soulwarm
       - POSTGRES_USER=kumaradji
