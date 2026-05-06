@@ -3,7 +3,6 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../../MarenGarden/MarenGardenContent/MarenGardenContent.module.scss';
 
-
 const GraphicaContent = ({ graphicaChapters = [] }) => {
   const { chapterId } = useParams();
   const navigate = useNavigate();

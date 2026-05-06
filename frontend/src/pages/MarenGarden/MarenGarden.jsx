@@ -1,7 +1,6 @@
 // MarenGarden.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import styles from './MarenGarden.module.scss';
 
@@ -38,8 +37,6 @@ const MarenGarden = ({ marenGardenChapters = [] }) => {
           name="keywords"
           content="экопринт, мастер-класс, цветной фон, ДушуГрею, ткани, окрашивание"
         />
-
-        {/* Open Graph */}
         <meta property="og:title" content='Мастер-класс "Цветной фон"' />
         <meta
           property="og:description"
@@ -51,8 +48,6 @@ const MarenGarden = ({ marenGardenChapters = [] }) => {
         />
         <meta property="og:url" content={`${siteUrl}/maren-garden`} />
         <meta property="og:type" content="website" />
-
-        {/* JSON-LD */}
         <script type="application/ld+json">
           {JSON.stringify(courseSchema)}
         </script>
@@ -71,20 +66,11 @@ const MarenGarden = ({ marenGardenChapters = [] }) => {
       <p>Этот мастер-класс лишь "вершина айсберга" бездонного океана экопринта.</p>
       <p>Экспериментируйте, творите, а я всегда помогу вам в этом.</p>
 
-      {/* Секция с главами мастер-класса */}
       <div className={styles.chapters}>
-        {marenGardenChapters.map((chapter, index) => (
-          <motion.div
+        {marenGardenChapters.map((chapter) => (
+          <div
             key={chapter.id}
             className={styles.chapter}
-            initial={{
-              opacity: index < 2 ? 1 : 0,
-              x: index % 2 === 0 ? '-100vw' : '100vw',
-            }}
-            animate={{opacity: 1, x: 0}}
-            transition={{type: 'spring', stiffness: 360}}
-            whileInView={{opacity: 1, x: 0}}
-            viewport={{once: true, amount: 0.8}}
           >
             <Link to={`/masterclass/${chapter.id}`} className={styles.link}>
               <div className={styles.chapterContent}>
@@ -92,24 +78,8 @@ const MarenGarden = ({ marenGardenChapters = [] }) => {
                 <h3>{chapter.title}</h3>
               </div>
             </Link>
-          </motion.div>
+          </div>
         ))}
-      </div>
-
-      <div>
-        <h3>Присоединяйтесь к нашей Telegram-группе!</h3>
-        <p>
-          Следите за новостями, получайте советы и делитесь своими успехами!
-          Общайтесь между собой и задавайте вопросы.
-        </p>
-        <div>
-          <Link
-            to="https://t.me/+5bbgmwAoKHs2Mzcy"
-            className={styles.telegramButton}
-          >
-            Перейти в группу Telegram
-          </Link>
-        </div>
       </div>
     </div>
   );
