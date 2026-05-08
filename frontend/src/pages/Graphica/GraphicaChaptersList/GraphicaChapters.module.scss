@@ -1,5 +1,7 @@
 // GraphicaChapters.module.scss
 
+// GraphicaChapters.module.scss
+
 @import '../../../styles/media';
 @import '../../../styles/variables';
 @import '../../../styles/mixins';
@@ -254,9 +256,7 @@
 	}
 }
 
-// GraphicaChapters.module.scss
-
-// ... остальные стили ...
+// Пошли дополнительные элементы
 
 .downloadButton {
 	@include button-style;
@@ -295,6 +295,16 @@
 	padding: 20px;
 	background-color: var(--color-main);
 
+	// Стили для ссылок внутри FAQ
+	a {
+		color: #007bff;
+		text-decoration: underline;
+		transition: color 0.2s ease;
+
+		&:hover {
+			color: var(--color-red);
+		}
+	}
 }
 
 .faqItem {

@@ -1,7 +1,6 @@
 // LessonsPage.jsx
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {motion} from 'framer-motion';
 import styles from './LessonsPage.module.scss';
 import lessons from './LessonPage/Lessons';
 import {Helmet} from 'react-helmet';
@@ -50,8 +49,6 @@ export const LessonsPage = () => {
           name="keywords"
           content="экопринт, уроки, мастер-класс, красота, природа, ткани, изделия, ДушуГрею"
         />
-
-        {/* Open Graph */}
         <meta property="og:title" content="Базовый курс по технике экопринт"/>
         <meta
           property="og:description"
@@ -63,8 +60,6 @@ export const LessonsPage = () => {
         />
         <meta property="og:url" content={`${siteUrl}/lessons`}/>
         <meta property="og:type" content="website"/>
-
-        {/* JSON-LD */}
         <script type="application/ld+json">
           {JSON.stringify(courseSchema)}
         </script>
@@ -94,18 +89,10 @@ export const LessonsPage = () => {
       </p>
 
       <div className={styles.lessons__card}>
-        {lessons.map((lesson, index) => (
-          <motion.div
+        {lessons.map((lesson) => (
+          <div
             key={lesson.id}
             className={styles.lessons__items}
-            initial={{
-              opacity: index < 2 ? 1 : 0,
-              x: index % 2 === 0 ? '-100vw' : '100vw',
-            }}
-            animate={{opacity: 1, x: 0}}
-            transition={{type: 'spring', stiffness: 360}}
-            whileInView={{opacity: 1, x: 0}}
-            viewport={{once: true, amount: 0.8}}
           >
             <Link to={`/lesson/${lesson.id}`}>
               <h2 className={styles.lessons__items_title}>{lesson.title}</h2>
@@ -120,7 +107,7 @@ export const LessonsPage = () => {
                 />
               </div>
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

@@ -1,7 +1,6 @@
 // Graphica.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import styles from '../MarenGarden/MarenGarden.module.scss';
 import graphicaChapters from './GraphicaChaptersList/GraphicaChapters';
@@ -50,15 +49,11 @@ const Graphica = () => {
         создавать контрастные композиции и освоите графическое изображение в экопринте.
       </p>
 
-      {/* Навигация по главам */}
       <div className={styles.chapters}>
-        {graphicaChapters.map((chapter, index) => (
-          <motion.div
+        {graphicaChapters.map((chapter) => (
+          <div
             key={chapter.id}
             className={styles.chapter}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
           >
             <Link
               to={`/graphica/${chapter.id}`}
@@ -69,11 +64,10 @@ const Graphica = () => {
                 <h3>{chapter.title}</h3>
               </div>
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
 
-      {/* Блок с дополнительной информацией */}
       <div>
         <p>
           Мастер-класс по созданию графических композиций в технике экопринт по окрашиванию натуральных тканей (лён, хлопок, шёлк, вискоза).
