@@ -295,11 +295,6 @@ const marenGardenChapters = [
           <p><strong>Ответ:</strong> Нет, видео доступны только для просмотра онлайн.</p>
         </div>
         <div className={styles.faqItem}>
-          <p><strong>Вопрос:</strong> Как задать вопрос автору?</p>
-          <p><strong>Ответ:</strong> Вы можете связаться со мной через форму обратной связи на сайте или через закрытую
-            группу в Telegram.</p>
-        </div>
-        <div className={styles.faqItem}>
           <p><strong>Вопрос:</strong> Где вы покупаете марену и индиго?</p>
           <p><strong>Ответ:</strong> Я покупаю у <a href="https://vk.com/id3666579" target="_blank"
                                                     rel="noopener noreferrer">Стаса</a> ферментированную марену с
