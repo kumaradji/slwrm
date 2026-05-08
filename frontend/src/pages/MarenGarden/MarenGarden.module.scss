@@ -256,6 +256,16 @@
 	padding: 20px;
 	background-color: var(--color-main);
 
+	// Стили для автоматической подсветки ссылок
+	a {
+		color: #007bff;
+		text-decoration: underline;
+		transition: color 0.2s ease;
+
+		&:hover {
+			color: var(--color-red);
+		}
+	}
 }
 
 .faqItem {
